@@ -3,7 +3,46 @@
   <head>
     <title>FT Games Homepage</title>
   </head>
-  <body><h1>Welcome to FT Games!</h1>
+  <body>
+    <div id="splash-screen">
+    <img src="images/splash.png" alt="Splash Screen">
+</div>
+
+<style>
+#splash-screen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    transition: opacity 0.5s ease;
+}
+
+#splash-screen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+</style>
+
+<script>
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        const splash = document.getElementById("splash-screen");
+        splash.style.opacity = "0";
+
+        setTimeout(() => {
+            splash.remove();
+        }, 500);
+    }, 3000);
+});
+</script>
+    
+    <h1>Welcome to FT Games!</h1>
     <br>
     <a href="http://www.ftgames.xyz/platformer_game">Play Platformer Game</a>
     <br>
