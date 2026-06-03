@@ -45,6 +45,52 @@ body.dark-mode #themeToggle {
   body {
     font-family: 'Montserrat', sans-serif;
 }
+.game-card-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    margin: 24px 0;
+}
+.game-card {
+    color: inherit;
+    text-decoration: none;
+    border: 1px solid #dddddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.game-card:hover,
+.game-card:focus {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+    transform: translateY(-4px);
+}
+.game-card-thumbnail {
+    background: #eeeeee;
+    height: 160px;
+    object-fit: cover;
+    width: 100%;
+}
+.game-card-content {
+    padding: 16px;
+}
+.game-card-title {
+    font-size: 20px;
+    margin: 0 0 8px;
+}
+.game-card-description {
+    line-height: 1.5;
+    margin: 0;
+}
+body.dark-mode .game-card {
+    border-color: #444444;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+body.dark-mode .game-card-thumbnail {
+    background: #333333;
+}
 #splash-screen {
     position: fixed;
     inset: 0;
@@ -139,12 +185,31 @@ button.addEventListener("click", () => {
 </script>
     
     <h1>Welcome to FT Games!</h1>
-    <br>
-    <a href="http://www.ftgames.xyz/platformer_game">Play Platformer Game</a>
-    <br>
-    <a href="http://www.ftgames.xyz/f111_game">Play F111 Game</a>
-    <br>
-      <a href="http://www.ftgames.xyz/scratch_playground">Play Scratch Playground</a>
+    <section class="game-card-grid" aria-label="Games">
+      <a class="game-card" href="http://www.ftgames.xyz/platformer_game">
+        <img class="game-card-thumbnail" src="placeholder-directory/platformer-game-thumbnail.png" alt="Platformer Game thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Platformer Game</h2>
+          <p class="game-card-description">Placeholder game description. Replace this with your Platformer Game description.</p>
+        </div>
+      </a>
+
+      <a class="game-card" href="http://www.ftgames.xyz/f111_game">
+        <img class="game-card-thumbnail" src="placeholder-directory/f111-game-thumbnail.png" alt="F111 Game thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">F111 Game</h2>
+          <p class="game-card-description">Placeholder game description. Replace this with your F111 Game description.</p>
+        </div>
+      </a>
+
+      <a class="game-card" href="http://www.ftgames.xyz/scratch_playground">
+        <img class="game-card-thumbnail" src="placeholder-directory/scratch-playground-thumbnail.png" alt="Scratch Playground thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Scratch Playground</h2>
+          <p class="game-card-description">Placeholder game description. Replace this with your Scratch Playground description.</p>
+        </div>
+      </a>
+    </section>
     <footer id="homebaseFooter">
     Powered by Homebase
 </footer>
