@@ -5,6 +5,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+<script async src="https://js.stripe.com/v3/buy-button.js"></script>
   </head>
   <body>
     <div id="splash-screen">
@@ -191,79 +192,97 @@ body.dark-mode .modal-content {
 
 <script>
 window.addEventListener("load", () => {
+
+    // Splash screen
     setTimeout(() => {
         const splash = document.getElementById("splash-screen");
-        splash.style.opacity = "0";
 
-        setTimeout(() => {
-            splash.remove();
-        }, 500);
+        if (splash) {
+            splash.style.opacity = "0";
+
+            setTimeout(() => {
+                splash.remove();
+            }, 500);
+        }
     }, 3000);
-});
 
-function setCookie(name, value, days) {
-    const date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    document.cookie =
-        name + "=" + value +
-        "; expires=" + date.toUTCString() +
-        "; path=/";
-}
+    // Cookies
+    function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
 
-function getCookie(name) {
-    const cookieName = name + "=";
-    const cookies = document.cookie.split(";");
+        document.cookie =
+            name + "=" + value +
+            "; expires=" + date.toUTCString() +
+            "; path=/";
+    }
 
-    for (let c of cookies) {
-        c = c.trim();
-        if (c.indexOf(cookieName) === 0) {
-            return c.substring(cookieName.length);
+    function getCookie(name) {
+        const cookieName = name + "=";
+        const cookies = document.cookie.split(";");
+
+        for (let c of cookies) {
+            c = c.trim();
+
+            if (c.indexOf(cookieName) === 0) {
+                return c.substring(cookieName.length);
+            }
+        }
+
+        return "";
+    }
+
+    // Theme button
+    const themeButton = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        if (theme === "dark") {
+            document.body.classList.add("dark-mode");
+            themeButton.textContent = "☀️";
+        } else {
+            document.body.classList.remove("dark-mode");
+            themeButton.textContent = "🌙";
         }
     }
 
-    return "";
-}
+    const savedTheme = getCookie("theme");
+    applyTheme(savedTheme === "dark" ? "dark" : "light");
 
-const button = document.getElementById("themeToggle");
+    themeButton.addEventListener("click", () => {
+        if (document.body.classList.contains("dark-mode")) {
+            applyTheme("light");
+            setCookie("theme", "light", 365);
+        } else {
+            applyTheme("dark");
+            setCookie("theme", "dark", 365);
+        }
+    });
 
-function applyTheme(theme) {
-    if (theme === "dark") {
-        document.body.classList.add("dark-mode");
-        button.textContent = "☀️";
+    // Support popup
+    const supportButton = document.getElementById("supportButton");
+    const supportModal = document.getElementById("supportModal");
+    const closeModal = document.getElementById("closeModal");
+
+    if (supportButton && supportModal && closeModal) {
+
+        supportButton.addEventListener("click", () => {
+            supportModal.style.display = "flex";
+        });
+
+        closeModal.addEventListener("click", () => {
+            supportModal.style.display = "none";
+        });
+
+        supportModal.addEventListener("click", (e) => {
+            if (e.target === supportModal) {
+                supportModal.style.display = "none";
+            }
+        });
+
     } else {
-        document.body.classList.remove("dark-mode");
-        button.textContent = "🌙";
+        console.error("Support modal elements not found");
     }
-}
 
-const savedTheme = getCookie("theme");
-applyTheme(savedTheme === "dark" ? "dark" : "light");
-
-button.addEventListener("click", () => {
-    if (document.body.classList.contains("dark-mode")) {
-        applyTheme("light");
-        setCookie("theme", "light", 365);
-    } else {
-        applyTheme("dark");
-        setCookie("theme", "dark", 365);
-    }
-});
-const supportButton = document.getElementById("supportButton");
-const supportModal = document.getElementById("supportModal");
-const closeModal = document.getElementById("closeModal");
-
-supportButton.addEventListener("click", () => {
-    supportModal.style.display = "flex";
-});
-
-closeModal.addEventListener("click", () => {
-    supportModal.style.display = "none";
-});
-
-supportModal.addEventListener("click", (e) => {
-    if (e.target === supportModal) {
-        supportModal.style.display = "none";
-    }
 });
 </script>
     
