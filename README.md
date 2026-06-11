@@ -17,5 +17,4 @@ Pretty self explanatory, chat with the community or us via the chats in discussi
 Basically a big instruction manual for all our games, plus stuff about them!
 
 
-
 Hope this helps, explorer!
