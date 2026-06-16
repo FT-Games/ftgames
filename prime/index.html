@@ -1,1 +1,109 @@
-// WIP
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FT Prime Members</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin:0;
+    background:black;
+    color:gold;
+    font-family:Montserrat;
+}
+
+.navbar {
+    position:fixed;
+    top:0;
+    width:100%;
+    display:flex;
+    gap:20px;
+    padding:15px;
+    background:#111;
+    border-bottom:1px solid gold;
+}
+
+.navbar a {
+    color:gold;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.content {
+    padding-top:80px;
+    text-align:center;
+}
+
+.box {
+    margin-top:40px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR (placeholders for later pages) -->
+<div class="navbar">
+    <a href="/prime/index.html">Home</a>
+    <a href="#">Games</a>
+    <a href="#">Updates</a>
+    <a href="#">Profile</a>
+</div>
+
+<div class="content">
+    <h1>👑 FT Prime</h1>
+    <div class="box">
+        <p>Loading members area...</p>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAEyiQE_6KdvJ47g7CdVAL6XrQXX56V3MQ",
+    authDomain: "ft-games-prime.firebaseapp.com",
+    projectId: "ft-games-prime",
+    storageBucket: "ft-games-prime.firebasestorage.app",
+    messagingSenderId: "887277428440",
+    appId: "1:887277428440:web:132b0b41e1bd3ca9fe81ad"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+onAuthStateChanged(auth, async (user) => {
+
+    // NOT LOGGED IN → go login page
+    if (!user) {
+        window.location.href = "/prime/login.html";
+        return;
+    }
+
+    // CHECK FIRESTORE
+    const ref = doc(db, "users", user.uid);
+    const snap = await getDoc(ref);
+    const data = snap.data();
+
+    // NOT PRIME → go subscribe page
+    if (!data || data.prime !== true) {
+        window.location.href = "/prime-subscribe.html";
+        return;
+    }
+
+    // PRIME USER → show content
+    document.querySelector(".box").innerHTML = `
+        <h2>Welcome to FT Prime 👑</h2>
+        <p>You now have access to exclusive content.</p>
+    `;
+});
+</script>
+
+</body>
+</html>
