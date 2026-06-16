@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FT Prime</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    color: gold;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.container {
+    max-width: 800px;
+    padding: 40px;
+}
+
+.crown {
+    font-size: 80px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+.description {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    margin-top: 30px;
+    color: #ffd700;
+}
+
+.features {
+    margin-top: 25px;
+    font-size: 1.1rem;
+    line-height: 2;
+}
+
+stripe-buy-button {
+    display: inline-block;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="crown">👑</div>
+
+    <h1>FT Prime</h1>
+
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+
+    <stripe-buy-button
+      buy-button-id="buy_btn_1TiqD0GCnoRB5b5R4Ur10aBW"
+      publishable-key="pk_live_51TfX1NGCnoRB5b5RLmWVpY0oQKf9LBZeHL4DP3ENz2ytEmHmPWuAq7XpEJIBZ66QMdzLy2ji89NT7plkDDyTI4Pm00tppv5RSV"
+    >
+    </stripe-buy-button>
+
+    <div class="description">
+        Unlock the ultimate FT Games experience with FT Prime. Start with 7 days free!
+    </div>
+
+    <div class="features"><
+        🚀 Early Access to New Games<br>
+        👑 Exclusive Games Access<br>
+        📨 Priority Suggestion Box<br>
+        💙 Support us so we can make more amazing games
+    </div>
+
+</div>
+
+</body>
+</html>
