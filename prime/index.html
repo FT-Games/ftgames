@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FT Prime Login</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: #000;
+            color: gold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 450px;
+            border: 2px solid gold;
+            padding: 35px;
+            text-align: center;
+        }
+
+        .crown {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            color: #ccc;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            background: #111;
+            border: 1px solid gold;
+            color: white;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            background: gold;
+            color: black;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        #status {
+            margin-top: 15px;
+            color: white;
+            word-break: break-word;
+            min-height: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="crown">👑</div>
+
+    <h1>FT Prime</h1>
+
+    <div class="subtitle">
+        Login or create your FT Prime account
+    </div>
+
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password (6+ characters)">
+
+    <button onclick="signup()">Create Account</button>
+    <button onclick="login()">Login</button>
+    <button onclick="logout()">Logout</button>
+
+    <p id="status"></p>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAEyiQE_6KdvJ47g7CdVAL6XrQXX56V3MQ",
+    authDomain: "ft-games-prime.firebaseapp.com",
+    projectId: "ft-games-prime",
+    storageBucket: "ft-games-prime.firebasestorage.app",
+    messagingSenderId: "887277428440",
+    appId: "1:887277428440:web:132b0b41e1bd3ca9fe81ad",
+    measurementId: "G-TT0RD8XG0Y"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const status = document.getElementById("status");
+
+window.signup = async () => {
+    try {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        status.textContent = "Creating account...";
+
+        await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+        status.textContent = "✅ Account created successfully!";
+    } catch (error) {
+        status.textContent = "❌ " + error.message;
+        console.error(error);
+    }
+};
+
+window.login = async () => {
+    try {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        status.textContent = "Logging in...";
+
+        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+        status.textContent = "✅ Login successful!";
+    } catch (error) {
+        status.textContent = "❌ " + error.message;
+        console.error(error);
+    }
+};
+
+window.logout = async () => {
+    try {
+        await signOut(auth);
+        status.textContent = "👋 Logged out.";
+    } catch (error) {
+        status.textContent = "❌ " + error.message;
+        console.error(error);
+    }
+};
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        login();
+    }
+});
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        status.innerHTML = `
+            👑 Logged in as<br>
+            ${user.email}
+        `;
+
+        setTimeout(() => {
+            window.location.href = "/prime/";
+        }, 1000);
+    }
+});
+</script>
+
+</body>
+</html>
