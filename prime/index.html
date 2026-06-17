@@ -14,34 +14,6 @@ if (session) {
     history.replaceState({}, "", window.location.pathname);
 }
 </script>
-  <script>
-(async () => {
-    const session = localStorage.getItem("ftprime_session");
-
-    if (!session) {
-        window.location.href =
-            "https://ftgames.tybridges44.workers.dev/login";
-        return;
-    }
-
-    const res = await fetch(
-        "https://ftgames.tybridges44.workers.dev/verify",
-        {
-            headers: {
-                Authorization: session
-            }
-        }
-    );
-
-    const data = await res.json();
-
-    if (!data.loggedIn || !data.prime) {
-        localStorage.removeItem("ftprime_session");
-        window.location.href =
-            "https://ftgames.tybridges44.workers.dev/login";
-    }
-})();
-</script>
   <style>
     body {
       margin: 0;
@@ -112,37 +84,96 @@ if (session) {
 
 <script>
 async function checkAuth() {
-  const session = localStorage.getItem("ftprime_session");
+  const loading = document.getElementById("loading");
 
-  if (!session) {
-    window.location.href = "https://ftgames.tybridges44.workers.dev/login";
-    return;
-  }
+  try {
+    const session = localStorage.getItem("ftprime_session");
 
-  const res = await fetch("https://ftgames.tybridges44.workers.dev/verify", {
-    headers: {
-      Authorization: session
+    if (!session) {
+      loading.innerHTML = `
+        <h2>No Session Found</h2>
+        <p>Redirecting to login...</p>
+      `;
+
+      setTimeout(() => {
+        location.href =
+          "https://ftgames.tybridges44.workers.dev/login";
+      }, 2000);
+
+      return;
     }
-  });
 
-  const data = await res.json();
+    loading.innerHTML = `
+      <h2>Session Found</h2>
+      <p>Contacting FT Prime...</p>
+    `;
 
-  if (!data.loggedIn || !data.prime) {
-    localStorage.removeItem("ftprime_session");
-    window.location.href = "https://ftgames.tybridges44.workers.dev/login";
-    return;
+    const res = await fetch(
+      "https://ftgames.tybridges44.workers.dev/verify",
+      {
+        headers: {
+          Authorization: session
+        }
+      }
+    );
+
+    loading.innerHTML = `
+      <h2>Worker Responded</h2>
+      <p>Status: ${res.status}</p>
+    `;
+
+    const text = await res.text();
+
+    loading.innerHTML = `
+      <h2>Worker Response</h2>
+      <pre style="max-width:90vw;overflow:auto;">${text}</pre>
+    `;
+
+    let data;
+
+    try {
+      data = JSON.parse(text);
+    } catch {
+      return;
+    }
+
+    if (!data.loggedIn || !data.prime) {
+      loading.innerHTML = `
+        <h2>Not Prime</h2>
+        <p>Redirecting...</p>
+      `;
+
+      localStorage.removeItem("ftprime_session");
+
+      setTimeout(() => {
+        location.href =
+          "https://ftgames.tybridges44.workers.dev/login";
+      }, 2000);
+
+      return;
+    }
+
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("content").style.display = "block";
+
+    document.getElementById("status").innerText =
+      "FT Prime ACTIVE ✅";
+
+    document.getElementById("userText").innerText =
+      "Welcome " + (data.username || data.userId);
+
+  } catch (err) {
+    loading.innerHTML = `
+      <h2>ERROR</h2>
+      <pre style="max-width:90vw;overflow:auto;">${err}</pre>
+    `;
   }
-
-  document.getElementById("loading").style.display = "none";
-  document.getElementById("content").style.display = "block";
-
-  document.getElementById("status").innerText = "FT Prime ACTIVE ✅";
-  document.getElementById("userText").innerText = "User ID: " + data.userId;
 }
 
 function logout() {
   localStorage.removeItem("ftprime_session");
-  window.location.href = "https://ftgames.tybridges44.workers.dev/login";
+  location.href =
+    "https://ftgames.tybridges44.workers.dev/login";
 }
 
 checkAuth();
