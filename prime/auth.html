@@ -1,28 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Authorising...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FT Prime – Authenticating…</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+
+        body {
+            background: #000;
+            color: gold;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 90%;
+            max-width: 480px;
+            border: 2px solid gold;
+            padding: 48px 40px;
+            text-align: center;
+        }
+
+        .crown { font-size: 56px; margin-bottom: 18px; }
+
+        h1 { font-size: 1.75rem; margin-bottom: 12px; }
+
+        p { color: rgba(255, 255, 255, 0.8); line-height: 1.6; margin-top: 8px; }
+
+        .error-title { color: #ff4444; }
+
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid rgba(255, 215, 0, 0.25);
+            border-top-color: gold;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 24px auto 8px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
-    <h1>Logging you in...</h1>
+<div class="card">
+    <div class="crown">👑</div>
+    <h1 id="title">Authenticating…</h1>
+    <div class="spinner" id="spinner"></div>
+    <p id="message">Please wait while we verify your Discord account.</p>
+</div>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const code = params.get("code");
+<script>
+    const WORKER_URL = "https://ftgames.tybridges44.workers.dev";
 
-        if(code) {
-            document.body.innerHTML = `
-                <h1>Discord Login Successful</h1>
-                <p>Authorization code received.</p>
-                <p>${code}</p>
-            `;
+    function showError(msg) {
+        document.getElementById("title").textContent = "Authentication Failed";
+        document.getElementById("title").classList.add("error-title");
+        document.getElementById("spinner").style.display = "none";
+        document.getElementById("message").textContent =
+            msg + " Redirecting to login…";
+        setTimeout(() => { location.href = "/prime/login.html"; }, 3000);
+    }
+
+    (function init() {
+        const params        = new URLSearchParams(window.location.search);
+        const code          = params.get("code");
+        const oauthError    = params.get("error");
+        const returnedState = params.get("state");
+
+        // Verify the state token to prevent CSRF attacks.
+        // The state was generated in login.html and stored in sessionStorage.
+        const savedState = sessionStorage.getItem("oauth_state");
+        sessionStorage.removeItem("oauth_state");
+
+        if (oauthError) {
+            showError("Discord authorization was denied.");
+            return;
         }
-        else {
-            document.body.innerHTML = `
-                <h1>Login Failed</h1>
-                <p>No authorization code found.</p>
-            `;
+
+        if (!code) {
+            showError("No authorization code received from Discord.");
+            return;
         }
-    </script>
+
+        // Only enforce state check when login.html generated one.
+        // (If the user navigated directly, savedState is null – skip check.)
+        if (savedState && returnedState !== savedState) {
+            showError("Security check failed. Please try logging in again.");
+            return;
+        }
+
+        // Hand the code to the Cloudflare Worker to exchange it for a session.
+        // The worker will redirect the browser back to /prime/index.html?session=…
+        // Never log or display the OAuth code in the page.
+        location.href = WORKER_URL + "/callback?code=" + encodeURIComponent(code);
+    })();
+</script>
 </body>
 </html>

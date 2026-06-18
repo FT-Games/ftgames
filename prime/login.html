@@ -30,7 +30,7 @@ body {
     width: 90%;
     max-width: 500px;
     border: 2px solid gold;
-    padding: 40px;
+    padding: 48px 40px;
     text-align: center;
 }
 
@@ -46,22 +46,33 @@ h1 {
 
 p {
     color: white;
-    margin-bottom: 25px;
-    line-height: 1.5;
+    margin-bottom: 30px;
+    line-height: 1.6;
 }
 
 .discord-btn {
     display: inline-block;
     background: gold;
-    color: #5865F2;
+    color: #000;
     text-decoration: none;
-    font-weight: bold;
-    padding: 15px 30px;
+    font-weight: 700;
+    padding: 15px 32px;
     font-size: 18px;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s;
 }
 
 .discord-btn:hover {
-    opacity: 0.9;
+    opacity: 0.85;
+}
+
+.error-msg {
+    display: none;
+    margin-top: 16px;
+    color: #ff4444;
+    font-size: 0.875rem;
 }
 </style>
 </head>
@@ -73,16 +84,57 @@ p {
     <h1>FT Prime</h1>
 
     <p>
-        Login with Discord to access FT Prime content and subscriber perks.
+        Login with Discord to access FT Prime content and exclusive subscriber perks.
     </p>
 
-    <a
-        class="discord-btn"
-        href="https://discord.com/oauth2/authorize?client_id=1516700008508948572&response_type=code&redirect_uri=https%3A%2F%2Fftgames.xyz%2Fprime%2Fauth.html&scope=identify"
-    >
+    <button class="discord-btn" onclick="loginWithDiscord()">
         Login with Discord
-    </a>
+    </button>
+
+    <p class="error-msg" id="errorMsg"></p>
 </div>
+
+<script>
+    // Show any error returned by the OAuth flow
+    (function checkError() {
+        const params = new URLSearchParams(window.location.search);
+        const err = params.get("error");
+        if (err) {
+            const el = document.getElementById("errorMsg");
+            const messages = {
+                oauth_denied:   "Authorization was denied. Please try again.",
+                token_exchange: "Login failed during token exchange. Please try again.",
+                user_fetch:     "Could not retrieve your Discord profile. Please try again.",
+            };
+            el.textContent = messages[err] || "An error occurred. Please try again.";
+            el.style.display = "block";
+            // Clean the error from the URL
+            history.replaceState({}, "", window.location.pathname);
+        }
+    })();
+
+    function loginWithDiscord() {
+        // Generate a random state token for CSRF protection
+        const stateBytes = new Uint8Array(16);
+        crypto.getRandomValues(stateBytes);
+        const state = Array.from(stateBytes)
+            .map((b) => b.toString(16).padStart(2, "0"))
+            .join("");
+
+        // Persist state so auth.html can verify it after the redirect
+        sessionStorage.setItem("oauth_state", state);
+
+        const params = new URLSearchParams({
+            client_id:     "1516700008508948572",
+            response_type: "code",
+            redirect_uri:  "https://ftgames.xyz/prime/auth.html",
+            scope:         "identify",
+            state:         state,
+        });
+
+        location.href = "https://discord.com/oauth2/authorize?" + params.toString();
+    }
+</script>
 
 </body>
 </html>

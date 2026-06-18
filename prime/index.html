@@ -1,182 +1,348 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FT Prime</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+
   <script>
-// Save session from URL
-const params = new URLSearchParams(window.location.search);
-const session = params.get("session");
+    // Capture session from URL before any rendering, then strip it from the
+    // address bar so the token is never exposed in the browser history.
+    (function captureSession() {
+      const params  = new URLSearchParams(window.location.search);
+      const session = params.get("session");
+      if (session) {
+        localStorage.setItem("ftprime_session", session);
+        history.replaceState({}, "", window.location.pathname);
+      }
+    })();
+  </script>
 
-if (session) {
-    localStorage.setItem("ftprime_session", session);
-
-    // Remove session from URL
-    history.replaceState({}, "", window.location.pathname);
-}
-</script>
   <style>
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    /* ── Base ──────────────────────────────────────────────── */
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f0f14;
-      color: white;
+      font-family: 'Montserrat', sans-serif;
+      background: #090909;
+      color: #fff;
+      min-height: 100vh;
     }
 
-    .loading {
+    /* ── Navigation ────────────────────────────────────────── */
+    .prime-nav {
       display: flex;
-      height: 100vh;
-      justify-content: center;
       align-items: center;
-      flex-direction: column;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+      background: #0d0d0d;
+      border-bottom: 2px solid gold;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    .card {
-      display: none;
-      padding: 40px;
+    .nav-logo {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: gold;
+      letter-spacing: 1px;
+      text-decoration: none;
     }
 
-    .title {
-      font-size: 40px;
-      font-weight: bold;
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
     }
 
-    .sub {
-      opacity: 0.7;
-      margin-top: 10px;
+    .nav-link {
+      color: rgba(255, 215, 0, 0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s;
     }
 
-    .box {
-      margin-top: 30px;
-      padding: 20px;
-      background: #1a1a24;
-      border-radius: 10px;
+    .nav-link:hover, .nav-link.active {
+      color: gold;
     }
 
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      border: none;
-      background: #ff3b7a;
-      color: white;
-      border-radius: 8px;
+    .nav-logout {
+      background: transparent;
+      border: 1px solid gold;
+      color: gold;
+      padding: 7px 18px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
       cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      letter-spacing: 0.5px;
     }
+
+    .nav-logout:hover {
+      background: gold;
+      color: #000;
+    }
+
+    /* ── Loading overlay ───────────────────────────────────── */
+    #loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 64px);
+      gap: 20px;
+    }
+
+    .spinner {
+      width: 52px;
+      height: 52px;
+      border: 3px solid rgba(255, 215, 0, 0.2);
+      border-top-color: gold;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #loading h2 { color: gold; font-size: 1.3rem; }
+    #loading p  { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+
+    /* ── Main content ──────────────────────────────────────── */
+    #content {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, gold, #B8860B);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 900;
+      color: gold;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 48px;
+    }
+
+    /* ── Info cards ────────────────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .info-card {
+      background: #111118;
+      border: 1px solid rgba(255,215,0,0.2);
+      padding: 28px 24px;
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+
+    .info-card:hover { border-color: gold; }
+
+    .card-icon  { font-size: 2rem; margin-bottom: 12px; }
+    .card-title { font-size: 1rem; font-weight: 700; color: gold; margin-bottom: 8px; }
+    .card-text  { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+    /* ── Welcome banner ────────────────────────────────────── */
+    .welcome-banner {
+      background: linear-gradient(135deg, #1a1400 0%, #111118 100%);
+      border: 1px solid rgba(255,215,0,0.35);
+      padding: 28px 32px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid gold;
+      background: #1a1a24;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .welcome-text   { font-size: 1.3rem; font-weight: 700; color: gold; }
+    .welcome-status { font-size: 0.85rem; color: rgba(255,255,255,0.55); margin-top: 4px; }
+
+    .status-active { color: #4ade80; font-weight: 600; }
   </style>
 </head>
 
 <body>
 
-<div class="loading" id="loading">
-  <h2>Verifying FT Prime...</h2>
+<!-- ── Navigation ─────────────────────────────────────────────────────────── -->
+<nav class="prime-nav">
+  <a class="nav-logo" href="/prime/index.html">👑 FT Prime</a>
+  <div class="nav-links">
+    <a class="nav-link active" href="/prime/index.html">Home</a>
+    <a class="nav-link" href="/prime/games.html">Exclusive Games</a>
+    <button class="nav-logout" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<!-- ── Loading state ──────────────────────────────────────────────────────── -->
+<div id="loading">
+  <div class="spinner"></div>
+  <h2>Verifying FT Prime…</h2>
+  <p id="loadingMsg">Checking your subscription status.</p>
 </div>
 
-<div class="card" id="content">
-  <div class="title">FT Prime Dashboard</div>
-  <div class="sub" id="userText">Welcome</div>
+<!-- ── Authenticated content ─────────────────────────────────────────────── -->
+<main id="content">
 
-  <div class="box">
-    <h3>Prime Status</h3>
-    <p id="status">Checking...</p>
+  <div class="welcome-banner">
+    <div class="avatar" id="avatarEl">👤</div>
+    <div>
+      <div class="welcome-text" id="welcomeText">Welcome back!</div>
+      <div class="welcome-status">
+        Status: <span class="status-active">FT Prime Active ✅</span>
+      </div>
+    </div>
   </div>
 
-  <button onclick="logout()">Logout</button>
-</div>
+  <div class="hero-badge">Members Area</div>
+  <h1 class="hero-title">Your Prime Dashboard</h1>
+  <p class="hero-subtitle">Everything you need, all in one place.</p>
+
+  <div class="cards-grid">
+    <div class="info-card">
+      <div class="card-icon">🎮</div>
+      <div class="card-title">Exclusive Games</div>
+      <div class="card-text">
+        Access the full library of Prime-only games, updated regularly with new titles.
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="card-icon">⭐</div>
+      <div class="card-title">Prime Perks</div>
+      <div class="card-text">
+        Enjoy early access, subscriber badges, and special Discord roles.
+      </div>
+    </div>
+    <div class="info-card">
+      <div class="card-icon">🏆</div>
+      <div class="card-title">Leaderboards</div>
+      <div class="card-text">
+        Compete with other Prime members on exclusive high-score leaderboards.
+      </div>
+    </div>
+  </div>
+
+</main>
 
 <script>
-async function checkAuth() {
-  const loading = document.getElementById("loading");
+  const WORKER_URL = "https://ftgames.tybridges44.workers.dev";
 
-  try {
+  async function checkAuth() {
+    const loadingEl  = document.getElementById("loading");
+    const loadingMsg = document.getElementById("loadingMsg");
+
     const session = localStorage.getItem("ftprime_session");
 
     if (!session) {
-      loading.innerHTML = `
-        <h2>No Session Found</h2>
-        <p>Redirecting to login...</p>
-      `;
-
-      setTimeout(() => {
-        location.href =
-          "https://ftgames.tybridges44.workers.dev/login";
-      }, 2000);
-
+      loadingMsg.textContent = "No session found. Redirecting to login…";
+      setTimeout(() => { location.href = "/prime/login.html"; }, 1500);
       return;
     }
-
-    loading.innerHTML = `
-      <h2>Session Found</h2>
-      <p>Contacting FT Prime...</p>
-    `;
-
-    const res = await fetch(
-      "https://ftgames.tybridges44.workers.dev/verify",
-      {
-        headers: {
-          Authorization: session
-        }
-      }
-    );
-
-    loading.innerHTML = `
-      <h2>Worker Responded</h2>
-      <p>Status: ${res.status}</p>
-    `;
-
-    const text = await res.text();
-
-    loading.innerHTML = `
-      <h2>Worker Response</h2>
-      <pre style="max-width:90vw;overflow:auto;">${text}</pre>
-    `;
-
-    let data;
 
     try {
-      data = JSON.parse(text);
-    } catch {
-      return;
+      const res = await fetch(`${WORKER_URL}/verify`, {
+        headers: { Authorization: `****** },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.loggedIn || !data.prime) {
+        // Session invalid or user is not prime – clear and redirect
+        localStorage.removeItem("ftprime_session");
+        loadingMsg.textContent = "Session expired or access denied. Redirecting…";
+        setTimeout(() => { location.href = "/prime/login.html"; }, 1500);
+        return;
+      }
+
+      // Show content
+      loadingEl.style.display = "none";
+      document.getElementById("content").style.display = "block";
+
+      document.getElementById("welcomeText").textContent =
+        "Welcome back, " + (data.username || "Prime Member") + "!";
+
+      // Set Discord avatar if available
+      if (data.avatar && data.userId) {
+        const avatarEl  = document.getElementById("avatarEl");
+        const avatarImg = document.createElement("img");
+        avatarImg.src = `https://cdn.discordapp.com/avatars/${data.userId}/${data.avatar}.png?size=64`;
+        avatarImg.alt = data.username || "Avatar";
+        avatarEl.innerHTML = "";
+        avatarEl.appendChild(avatarImg);
+      }
+
+    } catch (err) {
+      document.getElementById("loadingMsg").textContent =
+        "Could not reach the server. Please try again later.";
+      console.error("Auth check failed:", err);
     }
-
-    if (!data.loggedIn || !data.prime) {
-      loading.innerHTML = `
-        <h2>Not Prime</h2>
-        <p>Redirecting...</p>
-      `;
-
-      localStorage.removeItem("ftprime_session");
-
-      setTimeout(() => {
-        location.href =
-          "https://ftgames.tybridges44.workers.dev/login";
-      }, 2000);
-
-      return;
-    }
-
-    document.getElementById("loading").style.display = "none";
-    document.getElementById("content").style.display = "block";
-
-    document.getElementById("status").innerText =
-      "FT Prime ACTIVE ✅";
-
-    document.getElementById("userText").innerText =
-      "Welcome " + (data.username || data.userId);
-
-  } catch (err) {
-    loading.innerHTML = `
-      <h2>ERROR</h2>
-      <pre style="max-width:90vw;overflow:auto;">${err}</pre>
-    `;
   }
-}
 
-function logout() {
-  localStorage.removeItem("ftprime_session");
-  location.href =
-    "https://ftgames.tybridges44.workers.dev/login";
-}
+  async function logout() {
+    const session = localStorage.getItem("ftprime_session");
 
-checkAuth();
+    // Notify the worker to invalidate the server-side session
+    if (session) {
+      try {
+        await fetch(`${WORKER_URL}/logout`, {
+          method:  "POST",
+          headers: { Authorization: `****** },
+        });
+      } catch {
+        /* best-effort – clear locally regardless */
+      }
+    }
+
+    localStorage.removeItem("ftprime_session");
+    location.href = "/";
+  }
+
+  checkAuth();
 </script>
 
 </body>
