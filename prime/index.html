@@ -286,7 +286,7 @@
 
     try {
       const res = await fetch(`${WORKER_URL}/verify`, {
-        headers: { Authorization: `****** },
+        headers: { Authorization: "Bearer " + session },
       });
 
       const data = await res.json();
@@ -331,7 +331,7 @@
       try {
         await fetch(`${WORKER_URL}/logout`, {
           method:  "POST",
-          headers: { Authorization: `****** },
+          headers: { Authorization: "Bearer " + session },
         });
       } catch {
         /* best-effort – clear locally regardless */

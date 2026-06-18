@@ -91,10 +91,12 @@
             return;
         }
 
-        // Only enforce state check when login.html generated one.
-        // (If the user navigated directly, savedState is null – skip check.)
-        if (savedState && returnedState !== savedState) {
-            showError("Security check failed. Please try logging in again.");
+        // Always require a valid state token.
+        // The state was generated and stored in sessionStorage by login.html.
+        // If there is no saved state (e.g. the user navigated here directly),
+        // refuse the request so that CSRF attacks cannot succeed.
+        if (!savedState || returnedState !== savedState) {
+            showError("Security check failed. Please start the login process from the login page.");
             return;
         }
 

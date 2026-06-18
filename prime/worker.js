@@ -104,7 +104,7 @@ async function handleCallback(request, env) {
 
   // 2. Fetch Discord user profile
   const userRes = await fetch(`${DISCORD_API}/users/@me`, {
-    headers: { Authorization: `****** },
+    headers: { Authorization: "Bearer " + accessToken },
   });
 
   if (!userRes.ok) {

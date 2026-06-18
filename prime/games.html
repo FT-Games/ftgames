@@ -361,7 +361,7 @@
         <div class="game-desc">
           Construct and defend a mighty aerial fortress floating above the clouds. 
           Manage resources, train troops, and repel waves of enemy airships 
-          in this addictive tower-defence strategy game.
+          in this addictive tower-defense strategy game.
         </div>
         <a class="play-btn" href="#">Play Now</a>
       </div>
@@ -421,7 +421,7 @@
 
     try {
       const res  = await fetch(`${WORKER_URL}/verify`, {
-        headers: { Authorization: `****** },
+        headers: { Authorization: "Bearer " + session },
       });
       const data = await res.json();
 
@@ -448,7 +448,7 @@
       try {
         await fetch(`${WORKER_URL}/logout`, {
           method:  "POST",
-          headers: { Authorization: `****** },
+          headers: { Authorization: "Bearer " + session },
         });
       } catch {
         /* best-effort */
