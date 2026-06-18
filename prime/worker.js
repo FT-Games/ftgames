@@ -11,6 +11,18 @@
  *   GET  /callback  → exchange Discord code for session, redirect to prime home
  *   GET  /verify    → validate session token, return user info + prime status
  *   POST /logout    → delete session from KV
+ *
+ * OAuth redirect URI architecture:
+ *   Discord sends the authorization code to REDIRECT_URI (auth.html).
+ *   auth.html verifies the CSRF state token, then forwards the code to this
+ *   worker's /callback endpoint.  The REDIRECT_URI constant below is used
+ *   only in the token-exchange POST body — Discord requires it to exactly
+ *   match the URI used in the original authorization request.
+ *
+ * Granting Prime access:
+ *   By default, authenticated users are NOT prime.  To grant a user access,
+ *   set a KV key  prime:<discordUserId>  to the string "true".
+ *   To revoke access, delete the key or set it to "false".
  */
 
 const DISCORD_API    = "https://discord.com/api/v10";
@@ -115,14 +127,15 @@ async function handleCallback(request, env) {
   const user = await userRes.json();
 
   // 3. Determine prime status
-  //    By default every authenticated user is prime.
-  //    To restrict access, set a KV key  prime:<userId>  to "false".
-  let isPrime = true;
+  //    Default is NOT prime — access must be explicitly granted.
+  //    To grant a user Prime access, set a KV key  prime:<userId>  to "true".
+  //    To revoke access, delete the key or set it to "false".
+  let isPrime = false;
   try {
     const override = await env.SESSIONS.get(`prime:${user.id}`);
     if (override !== null) isPrime = override === "true";
   } catch {
-    /* KV unavailable – keep default */
+    /* KV unavailable – keep default (deny) */
   }
 
   // 4. Create a secure random session and persist it (7-day TTL)
@@ -139,10 +152,14 @@ async function handleCallback(request, env) {
     expirationTtl: 604800, // 7 days in seconds
   });
 
-  // 5. Send the session token to the client via a redirect
-  //    index.html reads ?session= from the URL, stores it in localStorage,
-  //    then strips it from the address bar immediately.
-  return Response.redirect(`${PRIME_HOME}?session=${sessionId}`, 302);
+  // 5. Send the session token to the client via a redirect.
+  //    We use a URL fragment (#session=…) instead of a query string (?session=…)
+  //    because fragments are never sent over the network — they are processed
+  //    entirely by the browser.  This means the token never appears in server
+  //    access logs or Cloudflare request logs.
+  //    index.html reads location.hash, stores the token in localStorage, then
+  //    strips the fragment from the address bar with history.replaceState.
+  return Response.redirect(`${PRIME_HOME}#session=${sessionId}`, 302);
 }
 
 /** GET /verify  – validate session and return user info. */
