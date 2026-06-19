@@ -1,12 +1,8 @@
 name = "ftgames"
-main = "prime/worker.js"
+main = "worker.js"
 compatibility_date = "2026-06-19"
-
-# If your dashboard worker is on workers.dev, keep workers_dev = true (default).
-# If you route via a custom domain/route, define routes here instead.
 workers_dev = true
 
-# KV binding used in your code
 [[kv_namespaces]]
 binding = "SESSIONS"
-id = "YOUR_KV_NAMESPACE_ID"
+id = "39ab223e440a46a8bc894e7236b3a59f"
