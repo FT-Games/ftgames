@@ -6,16 +6,29 @@
   const PRIME_HOME = "/prime/index.html";
 
   function captureSessionFromHash() {
-    if (!window.location.hash) return null;
+    const hash = window.location.hash || "";
 
-    const params = new URLSearchParams(window.location.hash.slice(1));
-    const session = params.get("session");
+    if (hash) {
+      const params = new URLSearchParams(hash.slice(1));
+      const session = params.get("session");
 
-    if (!session) return null;
+      if (session) {
+        localStorage.setItem(STORAGE_KEY, session);
+        sessionStorage.removeItem(STORAGE_KEY); // legacy cleanup
+        history.replaceState({}, "", window.location.pathname + window.location.search);
+        return session;
+      }
+    }
 
-    localStorage.setItem(STORAGE_KEY, session);
-    history.replaceState({}, "", window.location.pathname + window.location.search);
-    return session;
+    // Legacy fallback: some pages stored the session in sessionStorage and already cleared the hash.
+    const legacySession = sessionStorage.getItem(STORAGE_KEY);
+    if (legacySession) {
+      localStorage.setItem(STORAGE_KEY, legacySession);
+      sessionStorage.removeItem(STORAGE_KEY);
+      return legacySession;
+    }
+
+    return null;
   }
 
   function getSession() {
