@@ -71,7 +71,7 @@
       font-family: inherit;
       font-size: 0.85rem;
       font-weight: 700;
-      cursor: default;
+      cursor: pointer;
       transition: background 0.2s, color 0.2s;
       letter-spacing: 0.5px;
     }
@@ -350,10 +350,11 @@
 <script src="/prime/common.js"></script>
 <script>
   ftPrime.captureSessionFromHash();
+  window.logout = () => ftPrime.logout();
 
   async function checkAuth() {
     const loadingMsg = document.getElementById("loadingMsg");
-    const session    = sessionStorage.getItem("ftprime_session");
+    const session    = ftPrime.getSession();
 
     if (!session) {
       loadingMsg.textContent = "No session found. Redirecting to login…";
@@ -397,24 +398,6 @@
       loadingMsg.textContent = "Could not reach the server. Please try again later.";
       console.error("Auth check failed:", err);
     }
-  }
-
-  async function logout() {
-    const session = sessionStorage.getItem("ftprime_session");
-
-    if (session) {
-      try {
-        await fetch(`${WORKER_URL}/logout`, {
-          method:  "POST",
-          headers: { Authorization: "Bearer " + session },
-        });
-      } catch {
-        /* best-effort */
-      }
-    }
-
-    sessionStorage.removeItem("ftprime_session");
-    location.href = "/";
   }
 
   checkAuth();

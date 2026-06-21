@@ -276,6 +276,7 @@
 <script src="/prime/common.js"></script>
 <script>
   ftPrime.captureSessionFromHash();
+  window.logout = () => ftPrime.logout();
 
   async function checkAuth() {
     const loadingEl  = document.getElementById("loading");
@@ -340,25 +341,6 @@
         "Could not reach the server. Please try again later.";
       console.error("Auth check failed:", err);
     }
-  }
-
-  async function logout() {
-    const session = sessionStorage.getItem("ftprime_session");
-
-    // Notify the worker to invalidate the server-side session
-    if (session) {
-      try {
-        await fetch(`${WORKER_URL}/logout`, {
-          method:  "POST",
-          headers: { Authorization: "Bearer " + session },
-        });
-      } catch {
-        /* best-effort – clear locally regardless */
-      }
-    }
-
-    sessionStorage.removeItem("ftprime_session");
-    location.href = "/";
   }
 
   checkAuth();
