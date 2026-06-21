@@ -71,7 +71,7 @@
       font-family: inherit;
       font-size: 0.85rem;
       font-weight: 700;
-      cursor: pointer;
+      cursor: default;
       transition: background 0.2s, color 0.2s;
       letter-spacing: 0.5px;
     }
@@ -136,7 +136,25 @@
     .hero-subtitle {
       font-size: 1.05rem;
       color: rgba(255,255,255,0.55);
-      margin-bottom: 48px;
+      margin-bottom: 28px;
+    }
+
+    .status-banner {
+      background: linear-gradient(135deg, #1a1400 0%, #111118 100%);
+      border: 1px solid rgba(255,215,0,0.35);
+      padding: 22px 24px;
+      margin-bottom: 36px;
+    }
+
+    .status-banner h2 {
+      font-size: 1.2rem;
+      color: gold;
+      margin-bottom: 10px;
+    }
+
+    .status-banner p {
+      color: rgba(255,255,255,0.68);
+      line-height: 1.7;
     }
 
     /* ── Game cards grid ───────────────────────────────────── */
@@ -227,39 +245,17 @@
       flex: 1;
     }
 
-    .play-btn {
-      display: inline-block;
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
       margin-top: 18px;
-      padding: 10px 24px;
-      background: transparent;
-      border: 1px solid rgba(255,215,0,0.5);
+      padding: 8px 12px;
+      border: 1px solid rgba(255,215,0,0.4);
       color: gold;
-      font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      letter-spacing: 0.4px;
       align-self: flex-start;
-    }
-
-    .play-btn:hover {
-      background: gold;
-      border-color: gold;
-      color: #000;
-    }
-
-    /* Coming-soon state */
-    .game-card.coming-soon .play-btn {
-      opacity: 0.45;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    .game-card.coming-soon .play-btn::after {
-      content: " — Soon";
     }
   </style>
 </head>
@@ -272,6 +268,7 @@
   <div class="nav-links">
     <a class="nav-link" href="/prime/index.html">Home</a>
     <a class="nav-link active" href="/prime/games.html">Exclusive Games</a>
+    <a class="nav-link" href="/prime/subscribe.html">Subscribe</a>
     <button class="nav-logout" onclick="logout()">Logout</button>
   </div>
 </nav>
@@ -289,146 +286,107 @@
   <div class="hero-badge">Exclusive</div>
   <h1 class="hero-title">Prime Games</h1>
   <p class="hero-subtitle">
-    Hand-picked games available exclusively to FT Prime subscribers.
-    New titles added every month.
+    The FT Prime library is being prepared now.
+    This page now only shows live roadmap items instead of broken placeholder launches.
   </p>
+
+  <section class="status-banner">
+    <h2>Subscriber-only drops are coming soon</h2>
+    <p>
+      Your Prime login is working. As new subscriber-only releases go live, they will appear here with working launch links.
+    </p>
+  </section>
 
   <div class="games-grid">
 
-    <!-- Card 1 -->
     <div class="game-card">
       <div class="game-thumb">
-        🗡️
+        🚀
         <span class="prime-tag">Prime</span>
       </div>
       <div class="game-info">
-        <div class="game-genre">RPG</div>
-        <div class="game-title">Golden Quest</div>
+        <div class="game-genre">In Progress</div>
+        <div class="game-title">Subscriber Launch Queue</div>
         <div class="game-desc">
-          Embark on an epic adventure through a procedurally generated world. 
-          Craft weapons, battle mythical creatures, and uncover ancient secrets 
-          in this sprawling role-playing experience.
+          The next FT Prime exclusives will be published here once they are ready for release.
         </div>
-        <a class="play-btn" href="#">Play Now</a>
+        <div class="status-chip">Awaiting first release</div>
       </div>
     </div>
 
-    <!-- Card 2 -->
     <div class="game-card">
       <div class="game-thumb">
-        🏎️
+        💬
         <span class="prime-tag">Prime</span>
       </div>
       <div class="game-info">
-        <div class="game-genre">Racing</div>
-        <div class="game-title">Prime Racer</div>
+        <div class="game-genre">Discord</div>
+        <div class="game-title">Role-Gated Access</div>
         <div class="game-desc">
-          Tear through six Prime-exclusive tracks at blistering speed. 
-          Unlock new cars, tune your engine, and climb the subscriber-only 
-          leaderboard in this high-octane arcade racer.
+          Your FT Prime Discord role is checked before this page unlocks, so future game launches can be published here safely.
         </div>
-        <a class="play-btn" href="#">Play Now</a>
+        <div class="status-chip">Verification live</div>
       </div>
     </div>
 
-    <!-- Card 3 -->
     <div class="game-card">
       <div class="game-thumb">
-        🏰
+        👑
         <span class="prime-tag">Prime</span>
       </div>
       <div class="game-info">
-        <div class="game-genre">Dungeon Crawler</div>
-        <div class="game-title">Dungeon Delver</div>
+        <div class="game-genre">Members</div>
+        <div class="game-title">Prime Benefits</div>
         <div class="game-desc">
-          Descend into infinite procedurally generated dungeons. 
-          Every run is unique — discover rare loot, dodge deadly traps, 
-          and see how deep you can go before the darkness claims you.
+          Prime access is active for this Discord account. Keep an eye on this page for the first playable FT Prime release.
         </div>
-        <a class="play-btn" href="#">Play Now</a>
-      </div>
-    </div>
-
-    <!-- Card 4 -->
-    <div class="game-card">
-      <div class="game-thumb">
-        ✈️
-        <span class="prime-tag">Prime</span>
-      </div>
-      <div class="game-info">
-        <div class="game-genre">Strategy</div>
-        <div class="game-title">Sky Fortress</div>
-        <div class="game-desc">
-          Construct and defend a mighty aerial fortress floating above the clouds. 
-          Manage resources, train troops, and repel waves of enemy airships 
-          in this addictive tower-defense strategy game.
-        </div>
-        <a class="play-btn" href="#">Play Now</a>
-      </div>
-    </div>
-
-    <!-- Card 5 -->
-    <div class="game-card">
-      <div class="game-thumb">
-        ⚡
-        <span class="prime-tag">Prime</span>
-      </div>
-      <div class="game-info">
-        <div class="game-genre">Multiplayer</div>
-        <div class="game-title">Neon Arena</div>
-        <div class="game-desc">
-          Step into the neon-lit arena and battle other Prime members 
-          in real-time competitive matches. Master unique abilities, 
-          build your loadout, and rise through the exclusive ranked ladder.
-        </div>
-        <a class="play-btn" href="#">Play Now</a>
-      </div>
-    </div>
-
-    <!-- Card 6 — Coming Soon -->
-    <div class="game-card coming-soon">
-      <div class="game-thumb">
-        🧩
-        <span class="prime-tag">Prime</span>
-      </div>
-      <div class="game-info">
-        <div class="game-genre">Puzzle</div>
-        <div class="game-title">Puzzle Vault</div>
-        <div class="game-desc">
-          Over 200 mind-bending puzzles spanning logic, pattern recognition, 
-          and spatial reasoning — all exclusive to Prime members. 
-          New puzzle packs drop weekly.
-        </div>
-        <a class="play-btn" href="#">Play Now</a>
+        <div class="status-chip">Active member</div>
       </div>
     </div>
 
   </div>
 </main>
 
+<script src="/prime/common.js"></script>
 <script>
-  const WORKER_URL = "https://ftgames.tybridges44.workers.dev";
+  ftPrime.captureSessionFromHash();
 
   async function checkAuth() {
     const loadingMsg = document.getElementById("loadingMsg");
-    const session    = localStorage.getItem("ftprime_session");
+    const session    = ftPrime.getSession();
 
     if (!session) {
       loadingMsg.textContent = "No session found. Redirecting to login…";
-      setTimeout(() => { location.href = "/prime/login.html"; }, 1500);
+      setTimeout(() => { location.href = ftPrime.LOGIN_PAGE; }, 1500);
       return;
     }
 
     try {
-      const res  = await fetch(`${WORKER_URL}/verify`, {
-        headers: { Authorization: "Bearer " + session },
-      });
-      const data = await res.json();
+      const result = await ftPrime.verifySession();
+      const data = result.data || {};
 
-      if (!res.ok || !data.loggedIn || !data.prime) {
-        localStorage.removeItem("ftprime_session");
-        loadingMsg.textContent = "Session expired or access denied. Redirecting…";
-        setTimeout(() => { location.href = "/prime/login.html"; }, 1500);
+      if (!result.ok && result.status === 401) {
+        ftPrime.clearSession();
+        loadingMsg.textContent = "Session expired. Redirecting to login…";
+        setTimeout(() => { location.href = ftPrime.LOGIN_PAGE; }, 1500);
+        return;
+      }
+
+      if (!result.ok) {
+        loadingMsg.textContent = "Could not verify your subscription right now. Please try again later.";
+        return;
+      }
+
+      if (!data.loggedIn) {
+        ftPrime.clearSession();
+        loadingMsg.textContent = "No active Prime session found. Redirecting…";
+        setTimeout(() => { location.href = ftPrime.LOGIN_PAGE; }, 1500);
+        return;
+      }
+
+      if (!data.prime) {
+        loadingMsg.textContent = "Your FT Prime role is not active yet. Redirecting to subscribe…";
+        setTimeout(() => { location.href = "/prime/subscribe.html?status=not_subscribed"; }, 1500);
         return;
       }
 
@@ -442,21 +400,7 @@
   }
 
   async function logout() {
-    const session = localStorage.getItem("ftprime_session");
-
-    if (session) {
-      try {
-        await fetch(`${WORKER_URL}/logout`, {
-          method:  "POST",
-          headers: { Authorization: "Bearer " + session },
-        });
-      } catch {
-        /* best-effort */
-      }
-    }
-
-    localStorage.removeItem("ftprime_session");
-    location.href = "/";
+    await ftPrime.logout();
   }
 
   checkAuth();

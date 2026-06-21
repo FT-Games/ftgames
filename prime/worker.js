@@ -4,6 +4,9 @@
  * Required environment bindings (set in Cloudflare dashboard or wrangler.toml):
  *   DISCORD_CLIENT_ID     – your Discord application client ID
  *   DISCORD_CLIENT_SECRET – your Discord application client secret
+ *   DISCORD_BOT_TOKEN     – bot token used to read guild membership
+ *   DISCORD_GUILD_ID      – Discord server that contains the Prime role
+ *   DISCORD_PRIME_ROLE_ID – role ID granted by the Ko-fi Discord integration
  *   SESSIONS              – KV namespace binding for session storage
  *
  * Endpoints:
@@ -19,16 +22,17 @@
  *   only in the token-exchange POST body — Discord requires it to exactly
  *   match the URI used in the original authorization request.
  *
- * Granting Prime access:
- *   By default, authenticated users are NOT prime.  To grant a user access,
- *   set a KV key  prime:<discordUserId>  to the string "true".
- *   To revoke access, delete the key or set it to "false".
+ * Prime access:
+ *   Prime is granted when the authenticated Discord account is a member of the
+ *   configured guild and has the configured Prime role. Ko-fi is expected to
+ *   manage that role assignment.
  */
 
 const DISCORD_API    = "https://discord.com/api/v10";
 const REDIRECT_URI   = "https://ftgames.xyz/prime/auth.html";
 const PRIME_HOME     = "https://ftgames.xyz/prime/index.html";
 const LOGIN_PAGE     = "https://ftgames.xyz/prime/login.html";
+const SUBSCRIBE_PAGE = "https://ftgames.xyz/prime/subscribe.html";
 const ALLOWED_ORIGIN = "https://ftgames.xyz";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -65,6 +69,47 @@ function extractToken(authHeader = "") {
   return authHeader.startsWith("Bearer ")
     ? authHeader.slice(7).trim()
     : authHeader.trim();
+}
+
+function normalizePathname(pathname) {
+  if (pathname === "/prime") return "/";
+  if (pathname.startsWith("/prime/")) return pathname.slice("/prime".length);
+  return pathname;
+}
+
+async function fetchPrimeMember(userId, env) {
+  if (!env.DISCORD_BOT_TOKEN || !env.DISCORD_GUILD_ID || !env.DISCORD_PRIME_ROLE_ID) {
+    throw new Error("Missing Discord Prime role bindings");
+  }
+
+  const memberRes = await fetch(
+    `${DISCORD_API}/guilds/${env.DISCORD_GUILD_ID}/members/${userId}`,
+    {
+      headers: {
+        Authorization: `Bot ${env.DISCORD_BOT_TOKEN}`,
+      },
+    }
+  );
+
+  if (memberRes.status === 404) {
+    return null;
+  }
+
+  if (!memberRes.ok) {
+    throw new Error(`Guild member lookup failed with status ${memberRes.status}`);
+  }
+
+  return memberRes.json();
+}
+
+async function checkPrimeRole(userId, env) {
+  const member = await fetchPrimeMember(userId, env);
+
+  if (!member || !Array.isArray(member.roles)) {
+    return false;
+  }
+
+  return member.roles.includes(env.DISCORD_PRIME_ROLE_ID);
 }
 
 // ── Route handlers ────────────────────────────────────────────────────────────
@@ -126,16 +171,13 @@ async function handleCallback(request, env) {
 
   const user = await userRes.json();
 
-  // 3. Determine prime status
-  //    Default is NOT prime — access must be explicitly granted.
-  //    To grant a user Prime access, set a KV key  prime:<userId>  to "true".
-  //    To revoke access, delete the key or set it to "false".
+  // 3. Determine prime status from the subscriber Discord role.
   let isPrime = false;
   try {
-    const override = await env.SESSIONS.get(`prime:${user.id}`);
-    if (override !== null) isPrime = override === "true";
-  } catch {
-    /* KV unavailable – keep default (deny) */
+    isPrime = await checkPrimeRole(user.id, env);
+  } catch (error) {
+    console.error("Prime role lookup failed:", error);
+    return Response.redirect(`${LOGIN_PAGE}?error=role_check`, 302);
   }
 
   // 4. Create a secure random session and persist it (7-day TTL)
@@ -144,7 +186,6 @@ async function handleCallback(request, env) {
     userId:    user.id,
     username:  user.username,
     avatar:    user.avatar,
-    prime:     isPrime,
     createdAt: Date.now(),
   });
 
@@ -159,7 +200,11 @@ async function handleCallback(request, env) {
   //    access logs or Cloudflare request logs.
   //    index.html reads location.hash, stores the token in localStorage, then
   //    strips the fragment from the address bar with history.replaceState.
-  return Response.redirect(`${PRIME_HOME}#session=${sessionId}`, 302);
+  const redirectTarget = isPrime
+    ? `${PRIME_HOME}#session=${sessionId}`
+    : `${SUBSCRIBE_PAGE}?status=not_subscribed#session=${sessionId}`;
+
+  return Response.redirect(redirectTarget, 302);
 }
 
 /** GET /verify  – validate session and return user info. */
@@ -198,10 +243,22 @@ async function handleVerify(request, env) {
     );
   }
 
+  let isPrime = false;
+  try {
+    isPrime = await checkPrimeRole(session.userId, env);
+  } catch (error) {
+    console.error("Prime role re-check failed:", error);
+    return jsonResponse(
+      { loggedIn: true, error: "role_check_failed" },
+      503,
+      origin
+    );
+  }
+
   return jsonResponse(
     {
       loggedIn:  true,
-      prime:     session.prime,
+      prime:     isPrime,
       userId:    session.userId,
       username:  session.username,
       avatar:    session.avatar,
@@ -234,6 +291,7 @@ async function handleLogout(request, env) {
 export default {
   async fetch(request, env) {
     const { pathname } = new URL(request.url);
+    const routePath    = normalizePathname(pathname);
     const origin       = request.headers.get("Origin") || "";
 
     // Global CORS pre-flight
@@ -244,10 +302,10 @@ export default {
       });
     }
 
-    if (pathname === "/login")    return handleLogin(env);
-    if (pathname === "/callback") return handleCallback(request, env);
-    if (pathname === "/verify")   return handleVerify(request, env);
-    if (pathname === "/logout")   return handleLogout(request, env);
+    if (routePath === "/login")    return handleLogin(env);
+    if (routePath === "/callback") return handleCallback(request, env);
+    if (routePath === "/verify")   return handleVerify(request, env);
+    if (routePath === "/logout")   return handleLogout(request, env);
 
     return new Response("Not Found", { status: 404 });
   },

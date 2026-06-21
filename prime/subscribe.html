@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FT Prime – Subscribe</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Montserrat", sans-serif;
+      background: #090909;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .prime-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+      background: #0d0d0d;
+      border-bottom: 2px solid gold;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: gold;
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-link {
+      color: rgba(255, 215, 0, 0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: gold;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 24px 72px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, gold, #b8860b);
+      color: #000;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-size: clamp(2.6rem, 6vw, 4rem);
+      font-weight: 900;
+      color: gold;
+      line-height: 1.08;
+      margin-bottom: 14px;
+    }
+
+    .hero-subtitle {
+      max-width: 760px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.68);
+      margin-bottom: 34px;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 44px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 24px;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    .primary-btn {
+      background: gold;
+      border: 1px solid gold;
+      color: #000;
+    }
+
+    .secondary-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 215, 0, 0.45);
+      color: gold;
+    }
+
+    .primary-btn:hover,
+    .secondary-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .status-panel {
+      margin-bottom: 36px;
+      padding: 24px 28px;
+      background: linear-gradient(135deg, #1a1400 0%, #111118 100%);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .status-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255, 215, 0, 0.7);
+      margin-bottom: 10px;
+    }
+
+    .status-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: gold;
+      margin-bottom: 10px;
+    }
+
+    .status-text {
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .status-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .status-button {
+      min-height: 44px;
+      padding: 0 20px;
+      border: 1px solid rgba(255, 215, 0, 0.5);
+      background: transparent;
+      color: gold;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .status-button:hover {
+      background: gold;
+      color: #000;
+      border-color: gold;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .step-card {
+      background: #111118;
+      border: 1px solid rgba(255, 215, 0, 0.18);
+      padding: 26px 24px;
+      transition: border-color 0.2s;
+    }
+
+    .step-card:hover {
+      border-color: gold;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 215, 0, 0.45);
+      color: gold;
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .step-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: gold;
+      margin-bottom: 10px;
+    }
+
+    .step-text {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    @media (max-width: 720px) {
+      .prime-nav {
+        height: auto;
+        padding: 18px 20px;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .nav-links {
+        gap: 18px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      main {
+        padding-top: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<nav class="prime-nav">
+  <a class="nav-logo" href="/prime/index.html">👑 FT Prime</a>
+  <div class="nav-links">
+    <a class="nav-link active" href="/prime/subscribe.html">Subscribe</a>
+    <a class="nav-link" href="/prime/login.html">Login</a>
+    <a class="nav-link" href="/">FT Games</a>
+  </div>
+</nav>
+
+<main>
+  <div class="hero-badge">FT Prime</div>
+  <h1 class="hero-title">Subscribe with Ko-fi, unlock with Discord.</h1>
+  <p class="hero-subtitle">
+    Buy FT Prime through Ko-fi, let your Discord role sync, then sign in with Discord so the site can verify your FT Prime role and unlock the Prime pages.
+  </p>
+
+  <div class="cta-row">
+    <a class="primary-btn" href="https://ko-fi.com/ftgames" target="_blank" rel="noopener noreferrer">Subscribe</a>
+    <a class="secondary-btn" href="/prime/login.html">Login with Discord</a>
+  </div>
+
+  <section class="status-panel" id="statusPanel">
+    <div class="status-label">Access status</div>
+    <h2 class="status-title" id="statusTitle">Ready to get FT Prime?</h2>
+    <p class="status-text" id="statusText">
+      Subscribe on Ko-fi first. Once your Discord role is active, use Login with Discord and we will verify access automatically.
+    </p>
+    <div class="status-actions">
+      <button class="status-button" id="refreshAccessButton" type="button">Check access</button>
+      <button class="status-button" id="logoutButton" type="button">Logout</button>
+    </div>
+  </section>
+
+  <section class="steps-grid" aria-label="Subscription steps">
+    <article class="step-card">
+      <div class="step-number">1</div>
+      <h2 class="step-title">Subscribe on Ko-fi</h2>
+      <p class="step-text">
+        Use the Ko-fi checkout to start your FT Prime subscription.
+      </p>
+    </article>
+
+    <article class="step-card">
+      <div class="step-number">2</div>
+      <h2 class="step-title">Wait for Discord role sync</h2>
+      <p class="step-text">
+        Ko-fi updates your Discord role. Make sure you are connected to the correct Discord account.
+      </p>
+    </article>
+
+    <article class="step-card">
+      <div class="step-number">3</div>
+      <h2 class="step-title">Sign in to FT Prime</h2>
+      <p class="step-text">
+        Login with Discord and the FT Prime worker will verify the role before granting access.
+      </p>
+    </article>
+  </section>
+</main>
+
+<script src="/prime/common.js"></script>
+<script>
+  ftPrime.captureSessionFromHash();
+
+  const statusTitle = document.getElementById("statusTitle");
+  const statusText = document.getElementById("statusText");
+  const refreshAccessButton = document.getElementById("refreshAccessButton");
+  const logoutButton = document.getElementById("logoutButton");
+
+  function setStatus(title, text) {
+    statusTitle.textContent = title;
+    statusText.textContent = text;
+  }
+
+  async function refreshAccessStatus() {
+    const session = ftPrime.getSession();
+
+    if (!session) {
+      setStatus(
+        "No active Prime session",
+        "Subscribe on Ko-fi, then use Login with Discord after your FT Prime Discord role has been added."
+      );
+      refreshAccessButton.textContent = "Login with Discord";
+      return;
+    }
+
+    refreshAccessButton.disabled = true;
+    refreshAccessButton.textContent = "Checking...";
+
+    try {
+      const result = await ftPrime.verifySession();
+      const data = result.data || {};
+
+      if (!result.ok && result.status === 401) {
+        ftPrime.clearSession();
+        setStatus(
+          "Your session expired",
+          "Login with Discord again after your FT Prime role has synced."
+        );
+        refreshAccessButton.textContent = "Login with Discord";
+        return;
+      }
+
+      if (!result.ok) {
+        setStatus(
+          "We could not verify Prime access",
+          "The verification service is unavailable right now. Please wait a moment and try again."
+        );
+        refreshAccessButton.textContent = "Check access";
+        return;
+      }
+
+      if (data.prime) {
+        setStatus(
+          `Welcome, ${data.username || "Prime member"}!`,
+          "Your FT Prime role is active. Redirecting to the Prime dashboard now."
+        );
+        window.location.href = ftPrime.PRIME_HOME;
+        return;
+      }
+
+      setStatus(
+        `Signed in as ${data.username || "your Discord account"}`,
+        "We found your login, but the FT Prime Discord role is not active on this account yet. If you just subscribed, give Ko-fi a moment to sync the role and check again."
+      );
+      refreshAccessButton.textContent = "Check access";
+    } catch (error) {
+      console.error("Prime access refresh failed:", error);
+      setStatus(
+        "We could not reach the verification service",
+        "Please try again in a moment."
+      );
+      refreshAccessButton.textContent = "Check access";
+    } finally {
+      refreshAccessButton.disabled = false;
+    }
+  }
+
+  refreshAccessButton.addEventListener("click", () => {
+    if (!ftPrime.getSession()) {
+      window.location.href = ftPrime.LOGIN_PAGE;
+      return;
+    }
+
+    refreshAccessStatus();
+  });
+
+  logoutButton.addEventListener("click", () => {
+    if (!ftPrime.getSession()) {
+      ftPrime.clearSession();
+      setStatus(
+        "Session cleared",
+        "Use Login with Discord once your FT Prime role is ready."
+      );
+      return;
+    }
+
+    ftPrime.logout();
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("status") === "not_subscribed") {
+    setStatus(
+      "Your Discord role is not active yet",
+      "You are signed in, but this Discord account does not currently have the FT Prime role. Subscribe on Ko-fi or wait for the role sync, then check access again."
+    );
+  }
+
+  refreshAccessStatus();
+</script>
+</body>
+</html>

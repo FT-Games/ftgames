@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ftgames",
+  "main": "worker.js",
   "compatibility_date": "2026-06-19",
   "observability": {
     "enabled": true

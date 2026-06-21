@@ -60,7 +60,7 @@
 </div>
 
 <script>
-    const WORKER_URL = "https://ftgames.tybridges44.workers.dev";
+    const WORKER_URL = "https://ftgames.tybridges44.workers.dev/prime";
 
     function showError(msg) {
         document.getElementById("title").textContent = "Authentication Failed";
@@ -102,7 +102,8 @@
         }
 
         // Hand the code to the Cloudflare Worker to exchange it for a session.
-        // The worker will redirect the browser back to /prime/index.html?session=…
+        // The worker will redirect the browser back to the Prime pages with the
+        // session token stored in the URL fragment.
         // Never log or display the OAuth code in the page.
         location.href = WORKER_URL + "/callback?code=" + encodeURIComponent(code);
     })();
