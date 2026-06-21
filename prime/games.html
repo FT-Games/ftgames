@@ -353,7 +353,7 @@
 
   async function checkAuth() {
     const loadingMsg = document.getElementById("loadingMsg");
-    const session    = ftPrime.getSession();
+    const session    = sessionStorage.getItem("ftprime_session");
 
     if (!session) {
       loadingMsg.textContent = "No session found. Redirecting to login…";
@@ -400,7 +400,21 @@
   }
 
   async function logout() {
-    await ftPrime.logout();
+    const session = sessionStorage.getItem("ftprime_session");
+
+    if (session) {
+      try {
+        await fetch(`${WORKER_URL}/logout`, {
+          method:  "POST",
+          headers: { Authorization: "Bearer " + session },
+        });
+      } catch {
+        /* best-effort */
+      }
+    }
+
+    sessionStorage.removeItem("ftprime_session");
+    location.href = "/";
   }
 
   checkAuth();

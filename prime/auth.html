@@ -105,7 +105,11 @@
         // The worker will redirect the browser back to the Prime pages with the
         // session token stored in the URL fragment.
         // Never log or display the OAuth code in the page.
-        location.href = WORKER_URL + "/callback?code=" + encodeURIComponent(code);
+        // Strip the code/state from the address bar before navigating so they
+        // are not saved in browser history, then use replace() so this callback
+        // page itself does not add a history entry.
+        history.replaceState({}, "", window.location.pathname);
+        location.replace(WORKER_URL + "/callback?code=" + encodeURIComponent(code));
     })();
 </script>
 </body>

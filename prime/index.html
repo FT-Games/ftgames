@@ -9,6 +9,23 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
 
+  <script>
+    // Capture session from URL fragment before any rendering.
+    // Using a fragment (#session=…) instead of a query string (?session=…)
+    // means the token is never sent to the server and never appears in logs.
+    // Strip it from the address bar immediately so it is not stored in
+    // browser history or visible after page load.
+    (function captureSession() {
+      if (!window.location.hash) return;
+      const params  = new URLSearchParams(window.location.hash.slice(1));
+      const session = params.get("session");
+      if (session) {
+        sessionStorage.setItem("ftprime_session", session);
+        history.replaceState({}, "", window.location.pathname);
+      }
+    })();
+  </script>
+
   <style>
     /* ── Reset ─────────────────────────────────────────────── */
     *, *::before, *::after {
@@ -326,7 +343,22 @@
   }
 
   async function logout() {
-    await ftPrime.logout();
+    const session = sessionStorage.getItem("ftprime_session");
+
+    // Notify the worker to invalidate the server-side session
+    if (session) {
+      try {
+        await fetch(`${WORKER_URL}/logout`, {
+          method:  "POST",
+          headers: { Authorization: "Bearer " + session },
+        });
+      } catch {
+        /* best-effort – clear locally regardless */
+      }
+    }
+
+    sessionStorage.removeItem("ftprime_session");
+    location.href = "/";
   }
 
   checkAuth();
