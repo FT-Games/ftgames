@@ -61,7 +61,7 @@
 </div>
 
 <script>
-    const CALLBACK_URL = new URL("/prime/callback", window.location.origin).toString();
+    const CALLBACK_URL = new URL("/prime", window.location.origin).toString();
 
     function showError(msg) {
         document.getElementById("title").textContent = "Authentication Failed";

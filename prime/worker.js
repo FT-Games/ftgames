@@ -290,7 +290,8 @@ async function handleLogout(request, env) {
 
 export default {
   async fetch(request, env) {
-    const { pathname } = new URL(request.url);
+    const url           = new URL(request.url);
+    const { pathname }  = url;
     const routePath    = normalizePathname(pathname);
     const origin       = request.headers.get("Origin") || "";
 
@@ -302,6 +303,15 @@ export default {
       });
     }
 
+    if (
+      request.method === "GET" &&
+      routePath === "/" &&
+      (url.searchParams.has("code") || url.searchParams.has("error"))
+    ) {
+      return handleCallback(request, env);
+    }
+
+    if (routePath === "/")         return Response.redirect(LOGIN_PAGE, 302);
     if (routePath === "/login")    return Response.redirect(LOGIN_PAGE, 302);
     if (routePath === "/callback") return handleCallback(request, env);
     if (routePath === "/verify")   return handleVerify(request, env);
