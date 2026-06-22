@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/prime/origin.js"></script>
 <title>FT Prime Login</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -129,6 +130,7 @@ p {
     })();
 
     function loginWithDiscord() {
+        const redirectUri = new URL("/prime/auth.html", window.location.origin).toString();
         // Generate a random state token for CSRF protection
         const stateBytes = new Uint8Array(16);
         crypto.getRandomValues(stateBytes);
@@ -142,7 +144,7 @@ p {
         const params = new URLSearchParams({
             client_id:     "1516700008508948572",
             response_type: "code",
-            redirect_uri:  "https://ftgames.xyz/prime/auth.html",
+            redirect_uri:  redirectUri,
             scope:         "identify",
             state:         state,
         });

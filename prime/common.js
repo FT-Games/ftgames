@@ -1,5 +1,5 @@
 (function initFtPrime() {
-  const WORKER_URL = "https://ftgames.tybridges44.workers.dev/prime";
+  const WORKER_URL = new URL("/prime", window.location.origin).toString();
   const STORAGE_KEY = "ftprime_session";
   const LOGIN_PAGE = "/prime/login.html";
   const SUBSCRIBE_PAGE = "/prime/subscribe.html";

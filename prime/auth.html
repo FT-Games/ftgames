@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/prime/origin.js"></script>
     <meta name="referrer" content="no-referrer">
     <title>FT Prime – Authenticating…</title>
 
@@ -60,7 +61,7 @@
 </div>
 
 <script>
-    const WORKER_URL = "https://ftgames.tybridges44.workers.dev/prime";
+    const CALLBACK_URL = new URL("/prime/callback", window.location.origin).toString();
 
     function showError(msg) {
         document.getElementById("title").textContent = "Authentication Failed";
@@ -109,7 +110,7 @@
         // are not saved in browser history, then use replace() so this callback
         // page itself does not add a history entry.
         history.replaceState({}, "", window.location.pathname);
-        location.replace(WORKER_URL + "/callback?code=" + encodeURIComponent(code));
+        location.replace(CALLBACK_URL + "?code=" + encodeURIComponent(code));
     })();
 </script>
 </body>
