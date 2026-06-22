@@ -140,6 +140,8 @@ p {
 
         // Persist state so auth.html can verify it after the redirect
         sessionStorage.setItem("oauth_state", state);
+        document.cookie = "ftprime_oauth_state=" + encodeURIComponent(state) +
+            "; Path=/prime; Max-Age=600; Secure; SameSite=Lax";
 
         const params = new URLSearchParams({
             client_id:     "1516700008508948572",

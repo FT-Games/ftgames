@@ -34,6 +34,7 @@ const PRIME_HOME     = "https://ftgames.xyz/prime/index.html";
 const LOGIN_PAGE     = "https://ftgames.xyz/prime/login.html";
 const SUBSCRIBE_PAGE = "https://ftgames.xyz/prime/subscribe.html";
 const ALLOWED_ORIGIN = "https://ftgames.xyz";
+const STATE_COOKIE   = "ftprime_oauth_state";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -75,6 +76,32 @@ function normalizePathname(pathname) {
   if (pathname === "/prime") return "/";
   if (pathname.startsWith("/prime/")) return pathname.slice("/prime".length);
   return pathname;
+}
+
+function readCookie(cookieHeader = "", name) {
+  const needle = `${name}=`;
+  const cookie = cookieHeader
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(needle));
+
+  if (!cookie) return "";
+
+  try {
+    return decodeURIComponent(cookie.slice(needle.length));
+  } catch {
+    return "";
+  }
+}
+
+function redirectWithCookieClear(target, status = 302) {
+  return new Response(null, {
+    status,
+    headers: {
+      Location: target,
+      "Set-Cookie": `${STATE_COOKIE}=; Path=/prime; Max-Age=0; Secure; SameSite=Lax`,
+    },
+  });
 }
 
 async function fetchPrimeMember(userId, env) {
@@ -132,10 +159,12 @@ function handleLogin(env) {
 async function handleCallback(request, env) {
   const url   = new URL(request.url);
   const code  = url.searchParams.get("code");
+  const state = url.searchParams.get("state");
   const error = url.searchParams.get("error");
+  const cookieState = readCookie(request.headers.get("Cookie") || "", STATE_COOKIE);
 
-  if (error || !code) {
-    return Response.redirect(`${LOGIN_PAGE}?error=oauth_denied`, 302);
+  if (error || !code || !state || !cookieState || state !== cookieState) {
+    return redirectWithCookieClear(`${LOGIN_PAGE}?error=oauth_denied`, 302);
   }
 
   // 1. Exchange authorization code for Discord access token
@@ -153,7 +182,7 @@ async function handleCallback(request, env) {
 
   if (!tokenRes.ok) {
     console.error("Token exchange failed:", await tokenRes.text());
-    return Response.redirect(`${LOGIN_PAGE}?error=token_exchange`, 302);
+    return redirectWithCookieClear(`${LOGIN_PAGE}?error=token_exchange`, 302);
   }
 
   const tokens      = await tokenRes.json();
@@ -166,7 +195,7 @@ async function handleCallback(request, env) {
 
   if (!userRes.ok) {
     console.error("User fetch failed:", await userRes.text());
-    return Response.redirect(`${LOGIN_PAGE}?error=user_fetch`, 302);
+    return redirectWithCookieClear(`${LOGIN_PAGE}?error=user_fetch`, 302);
   }
 
   const user = await userRes.json();
@@ -177,7 +206,7 @@ async function handleCallback(request, env) {
     isPrime = await checkPrimeRole(user.id, env);
   } catch (error) {
     console.error("Prime role lookup failed:", error);
-    return Response.redirect(`${LOGIN_PAGE}?error=role_check`, 302);
+    return redirectWithCookieClear(`${LOGIN_PAGE}?error=role_check`, 302);
   }
 
   // 4. Create a secure random session and persist it (7-day TTL)
@@ -204,7 +233,7 @@ async function handleCallback(request, env) {
     ? `${PRIME_HOME}#session=${sessionId}`
     : `${SUBSCRIBE_PAGE}?status=not_subscribed#session=${sessionId}`;
 
-  return Response.redirect(redirectTarget, 302);
+  return redirectWithCookieClear(redirectTarget, 302);
 }
 
 /** GET /verify  – validate session and return user info. */
@@ -297,6 +326,7 @@ export default {
     const hasCode = url.searchParams.has("code");
     const hasState = url.searchParams.has("state");
     const hasError = url.searchParams.has("error");
+    // /prime serves both as the worker base URL and as the callback handoff URL.
     const isOAuthCallbackRequest =
       request.method === "GET" &&
       ((hasCode && hasState) || hasError);
