@@ -146,7 +146,7 @@ function handleLogin(request, env) {
   const url = new URL(request.url);
   const state = url.searchParams.get("state") || "";
 
-  if (!/^[a-f0-9]{32}$/i.test(state)) {
+  if (!/^[a-f0-9]{32}$/.test(state)) {
     return Response.redirect(`${LOGIN_PAGE}?error=oauth_state`, 302);
   }
 
@@ -181,7 +181,7 @@ async function handleCallback(request, env) {
     return redirectWithCookieClear(`${LOGIN_PAGE}?error=oauth_state`, 302);
   }
   if (state !== cookieState) {
-    return redirectWithCookieClear(`${LOGIN_PAGE}?error=oauth_denied`, 302);
+    return redirectWithCookieClear(`${LOGIN_PAGE}?error=oauth_state`, 302);
   }
 
   // 1. Exchange authorization code for Discord access token
@@ -346,7 +346,8 @@ export default {
     // /prime serves both as the worker base URL and as the callback handoff URL.
     const isOAuthCallbackRequest =
       request.method === "GET" &&
-      ((hasCode && hasState) || hasError);
+      (hasCode || hasError) &&
+      hasState;
 
     // Global CORS pre-flight
     if (request.method === "OPTIONS") {

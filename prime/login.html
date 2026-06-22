@@ -117,11 +117,11 @@ p {
         if (err) {
             const el = document.getElementById("errorMsg");
             const messages = {
-                oauth_denied:   "Authorization was denied. Please try again.",
+                oauth_denied: "Authorization was denied. Please try again.",
                 token_exchange: "Login failed during token exchange. Please try again.",
-                user_fetch:     "Could not retrieve your Discord profile. Please try again.",
-                role_check:     "We could not verify your FT Prime Discord role. Please try again.",
-                oauth_state:    "Security check failed before Discord login. Please try again.",
+                user_fetch: "Could not retrieve your Discord profile. Please try again.",
+                role_check: "We could not verify your FT Prime Discord role. Please try again.",
+                oauth_state: "Security check failed before Discord login. Please try again.",
             };
             el.textContent = messages[err] || "An error occurred. Please try again.";
             el.style.display = "block";
