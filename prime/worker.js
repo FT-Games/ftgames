@@ -166,7 +166,7 @@ function handleLogin(request, env) {
     status: 302,
     headers: {
       Location: `https://discord.com/oauth2/authorize?${params}`,
-      "Set-Cookie": `${STATE_COOKIE}=${encodeURIComponent(state)}; Path=/prime; Max-Age=600; HttpOnly; Secure; SameSite=Strict`,
+      "Set-Cookie": `${STATE_COOKIE}=${encodeURIComponent(state)}; Path=/prime/oauth; Max-Age=600; HttpOnly; Secure; SameSite=Strict`,
     },
   });
 }
@@ -356,10 +356,18 @@ export default {
     }
 
     // /oauth/* avoids collisions with static asset paths when using worker assets.
-    if (routePath === "/oauth/callback" || routePath === "/callback" || (routePath === "/" && isOAuthCallbackRequest)) {
+    if (routePath === "/oauth/callback") {
       return handleCallback(request, env);
     }
-    if (request.method === "GET" && hasState && (routePath === "/oauth/login" || routePath === "/" || routePath === "/login")) {
+    if (routePath === "/oauth/login" && request.method === "GET" && hasState) {
+      return handleLogin(request, env);
+    }
+
+    // Legacy routes retained for backward compatibility.
+    if (routePath === "/callback" || (routePath === "/" && isOAuthCallbackRequest)) {
+      return handleCallback(request, env);
+    }
+    if (request.method === "GET" && hasState && routePath === "/login") {
       return handleLogin(request, env);
     }
     if (routePath === "/" || routePath === "/login") return Response.redirect(LOGIN_PAGE, 302);
