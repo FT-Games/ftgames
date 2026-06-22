@@ -139,7 +139,6 @@ p {
 
     function loginWithDiscord() {
         const redirectUri = new URL("/prime/auth.html", window.location.origin).toString();
-
         // Generate a random state token for CSRF protection
         const stateBytes = new Uint8Array(16);
         crypto.getRandomValues(stateBytes);
