@@ -3,28 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function enforcePrimeOrigin() {
+      const canonicalOrigin = "https://ftgames.xyz";
+      const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+      if (!isLocalHost && window.location.origin !== canonicalOrigin) {
+        window.location.replace(canonicalOrigin + window.location.pathname + window.location.search + window.location.hash);
+      }
+    })();
+  </script>
   <title>FT Prime</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
-
-  <script>
-    // Capture session from URL fragment before any rendering.
-    // Using a fragment (#session=…) instead of a query string (?session=…)
-    // means the token is never sent to the server and never appears in logs.
-    // Strip it from the address bar immediately so it is not stored in
-    // browser history or visible after page load.
-    (function captureSession() {
-      if (!window.location.hash) return;
-      const params  = new URLSearchParams(window.location.hash.slice(1));
-      const session = params.get("session");
-      if (session) {
-        sessionStorage.setItem("ftprime_session", session);
-        history.replaceState({}, "", window.location.pathname);
-      }
-    })();
-  </script>
 
   <style>
     /* ── Reset ─────────────────────────────────────────────── */

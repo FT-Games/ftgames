@@ -303,6 +303,7 @@ export default {
     }
 
     if (routePath === "/login")    return Response.redirect(LOGIN_PAGE, 302);
+    if (routePath === "/callback") return handleCallback(request, env);
     if (routePath === "/verify")   return handleVerify(request, env);
     if (routePath === "/logout")   return handleLogout(request, env);
 
