@@ -141,18 +141,29 @@ async function checkPrimeRole(userId, env) {
 
 // ── Route handlers ────────────────────────────────────────────────────────────
 
-/** GET /login  – redirect straight to Discord OAuth (server-driven flow). */
-function handleLogin(env) {
+/** GET /login?state=…  – set state cookie and redirect to Discord OAuth. */
+function handleLogin(request, env) {
+  const url = new URL(request.url);
+  const state = url.searchParams.get("state") || "";
+
+  if (!/^[a-f0-9]{32}$/i.test(state)) {
+    return Response.redirect(`${LOGIN_PAGE}?error=oauth_state`, 302);
+  }
+
   const params = new URLSearchParams({
     client_id:     env.DISCORD_CLIENT_ID,
     response_type: "code",
     redirect_uri:  REDIRECT_URI,
     scope:         "identify",
+    state,
   });
-  return Response.redirect(
-    `https://discord.com/oauth2/authorize?${params}`,
-    302
-  );
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: `https://discord.com/oauth2/authorize?${params}`,
+      "Set-Cookie": `${STATE_COOKIE}=${encodeURIComponent(state)}; Path=/prime; Max-Age=600; HttpOnly; Secure; SameSite=Lax`,
+    },
+  });
 }
 
 /** GET /callback?code=…  – exchange code → access token → user → session. */
@@ -163,7 +174,13 @@ async function handleCallback(request, env) {
   const error = url.searchParams.get("error");
   const cookieState = readCookie(request.headers.get("Cookie") || "", STATE_COOKIE);
 
-  if (error || !code || !state || !cookieState || state !== cookieState) {
+  if (error || !code) {
+    return redirectWithCookieClear(`${LOGIN_PAGE}?error=oauth_denied`, 302);
+  }
+  if (!state || !cookieState) {
+    return redirectWithCookieClear(`${LOGIN_PAGE}?error=oauth_state`, 302);
+  }
+  if (state !== cookieState) {
     return redirectWithCookieClear(`${LOGIN_PAGE}?error=oauth_denied`, 302);
   }
 
@@ -341,6 +358,9 @@ export default {
 
     if (routePath === "/callback" || (routePath === "/" && isOAuthCallbackRequest)) {
       return handleCallback(request, env);
+    }
+    if (routePath === "/login" && request.method === "GET" && hasState) {
+      return handleLogin(request, env);
     }
     if (routePath === "/" || routePath === "/login") return Response.redirect(LOGIN_PAGE, 302);
     if (routePath === "/verify") return handleVerify(request, env);

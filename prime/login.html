@@ -121,6 +121,7 @@ p {
                 token_exchange: "Login failed during token exchange. Please try again.",
                 user_fetch:     "Could not retrieve your Discord profile. Please try again.",
                 role_check:     "We could not verify your FT Prime Discord role. Please try again.",
+                oauth_state:    "Security check failed before Discord login. Please try again.",
             };
             el.textContent = messages[err] || "An error occurred. Please try again.";
             el.style.display = "block";
@@ -130,7 +131,6 @@ p {
     })();
 
     function loginWithDiscord() {
-        const redirectUri = new URL("/prime/auth.html", window.location.origin).toString();
         // Generate a random state token for CSRF protection
         const stateBytes = new Uint8Array(16);
         crypto.getRandomValues(stateBytes);
@@ -140,18 +140,9 @@ p {
 
         // Persist state so auth.html can verify it after the redirect
         sessionStorage.setItem("oauth_state", state);
-        document.cookie = "ftprime_oauth_state=" + encodeURIComponent(state) +
-            "; Path=/prime; Max-Age=600; Secure; SameSite=Lax";
-
-        const params = new URLSearchParams({
-            client_id:     "1516700008508948572",
-            response_type: "code",
-            redirect_uri:  redirectUri,
-            scope:         "identify",
-            state:         state,
-        });
-
-        location.href = "https://discord.com/oauth2/authorize?" + params.toString();
+        const loginUrl = new URL("/prime/login", window.location.origin);
+        loginUrl.searchParams.set("state", state);
+        location.href = loginUrl.toString();
     }
 </script>
 
