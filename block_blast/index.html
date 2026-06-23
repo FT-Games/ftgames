@@ -143,36 +143,71 @@
     
   </style>
   <meta name="theme-color" content="#000000">
+  /* ===========================
+   FTGames Navigation Buttons
+=========================== */
+
+.ft-btn{
+    position:fixed;
+    bottom:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    padding:14px 28px;
+
+    background:rgba(17,17,17,.95);
+    border:2px solid #00e5ff;
+    border-radius:999px;
+
+    color:#fff;
+    text-decoration:none;
+
+    font-family:'Segoe UI',Arial,sans-serif;
+    font-size:15px;
+    font-weight:700;
+
+    cursor:pointer;
+    user-select:none;
+    z-index:999999;
+
+    backdrop-filter:blur(12px);
+
+    transition:
+        transform .2s ease,
+        background .25s ease,
+        box-shadow .25s ease,
+        color .25s ease;
+}
+
+.home-btn{
+    left:20px;
+}
+
+.instructions-btn{
+    right:20px;
+}
+
+.ft-btn:hover{
+    background:linear-gradient(90deg,#00e5ff,#00ff99);
+    color:#000;
+    transform:translateY(-3px) scale(1.04);
+    box-shadow:0 0 22px rgba(0,255,170,.35);
+}
+
+.ft-btn:active{
+    transform:scale(.98);
+}
   
 </head>
 <body>
-    <a href="https://ftgames.xyz/games"
-   style="
-      position:fixed;
-      top:925;
-      right:0;
-      color:white;
-      font-size:12px;
-      font-family:Arial,sans-serif;
-      text-decoration:none;
-      z-index:999999;
-      padding:2px 4px;
-   ">
-   Back to Homepage
+    <a href="https://ftgames.xyz/games" class="ft-btn home-btn">
+    🏠 Back to Homepage
 </a>
-   <div id="instructionsButton"
-     style="
-        position:fixed;
-        top:925;
-        left:0;
-        color:white;
-        font-size:12px;
-        font-family:Arial,sans-serif;
-        cursor:pointer;
-        z-index:999999;
-        padding:2px 4px;
-     ">
-     Instructions
+
+<div id="instructionsButton" class="ft-btn instructions-btn">
+    📖 Instructions
 </div>
   <div id="app"></div>
 
