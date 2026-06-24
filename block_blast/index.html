@@ -140,11 +140,47 @@
     .sc-monitor-row-value-editing .sc-monitor-row-value-outer {
       background-color: #e25b27;
     }
-#instructionsButton:hover,
-a[href="https://ftgames.xyz/games"]:hover{
+    #homeButton,
+#instructionsButton{
+    position:fixed;
+    top:10px;
+    z-index:999999;
+
+    padding:10px 18px;
+    border-radius:14px;
+
+    background:rgba(20,20,30,.92);
+    border:2px solid #00e5ff;
+
+    color:#fff;
+    font-family:Arial,sans-serif;
+    font-size:15px;
+    font-weight:700;
+    text-decoration:none;
+    cursor:pointer;
+
+    box-shadow:
+        0 0 10px rgba(0,229,255,.35),
+        inset 0 0 8px rgba(0,229,255,.15);
+
+    transition:.25s ease;
+    user-select:none;
+}
+
+#homeButton{
+    right:10px;
+}
+
+#instructionsButton{
+    left:10px;
+}
+
+#homeButton:hover,
+#instructionsButton:hover{
     background:linear-gradient(90deg,#00e5ff,#00ff99);
-    color:#000 !important;
-    box-shadow:0 0 18px rgba(0,255,170,.4);
+    color:#000;
+    box-shadow:0 0 18px rgba(0,255,170,.45);
+    transform:translateY(-2px);
 }
   </style>
   <meta name="theme-color" content="#000000">
