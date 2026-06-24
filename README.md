@@ -1,4 +1,4 @@
-[![LICENSE](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/TyCoInnovations/ftgames/blob/main/LICENSE.txt)
+[![LICENSE](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/TyCoInnovations/ftgames/blob/main/LICENSE.md)
 
 # Welcome to the ftgames repository!
 This is the code used for the FT Games website, here's a lil' map to help you navigate it.
