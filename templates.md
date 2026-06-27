@@ -8,6 +8,9 @@ These are injected into new code for better user experience and accessibility. M
 
 [Favicon Code](#favicon-code)
 
+## Tips & Tricks
+- Make sure to test your code before commiting, you can do that using [ScriptView](https://ftgames.xyz/scriptview). Our dedicated HTML test viewer.
+
 ## Instructions and Back to Homepage Buttons
 These are injected into new game imports for accessibility and user experience. These scripts need to be injected into any new game added to FT Games.
 ### Styling (Paste just before `</style>`)
