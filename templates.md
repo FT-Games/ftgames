@@ -72,6 +72,79 @@ These are injected into new game imports for accessibility and user experience. 
   });
 </script>
 ```
+## Instructions Page Code
+This is a template for an instructions page. You need this for every game.
+```
+<div style="position:relative;font-family:'Segoe UI',Arial,sans-serif;background:#000000;color:#ffffff;text-align:center;line-height:1.8;max-width:900px;margin:auto;padding:30px;border-radius:20px;">
+
+    <!-- FTGames Logo -->
+    <img src="../images/favicon.png"
+         alt="FTGames Logo"
+         style="
+            position:absolute;
+            top:15px;
+            left:15px;
+            width:60px;
+            height:auto;
+            opacity:.95;
+            user-select:none;
+         ">
+
+    <span style="font-size:46px;font-weight:900;background:linear-gradient(90deg,#00e5ff,#00ff99,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+        😊 GAME 😊
+    </span>
+
+    <br><br>
+
+    <div style="display:inline-block;background:#111111;border:2px solid #00e5ff;border-radius:18px;padding:20px 40px;box-shadow:0 0 25px rgba(0,229,255,.35);">
+
+        <span style="font-size:28px;font-weight:800;color:#00e5ff;">
+            🎮 CONTROLS
+        </span>
+
+        <br><br>
+
+        😊 <b>Control 1</b> — Does this<br>
+        😊 <b>Control 2</b> — Does that<br>
+        😊 <b>Control 3</b> — Does something sus
+
+    </div>
+
+    <br><br><br>
+
+    <span style="font-size:28px;font-weight:800;color:#7cffcb;">
+        ⚡ HOW TO PLAY
+    </span>
+
+    <br><br>
+
+    😊 Do this<br>
+    😊 Do that<br>
+    😊 Don't forget to do this too<br>
+    😊 You don't wanna do this<br>
+    😊 Btw do this too
+
+    <br><br><br>
+
+    <span style="font-size:28px;font-weight:800;color:#ffda44;">
+        ⭐ TIPS
+    </span>
+
+    <br><br>
+
+    😊 TIP 1<br>
+    😊 TIP 2<br>
+    😊 TIP 3<br>
+    😊 TIP 4
+
+    <br><br><br>
+
+    <div style="display:inline-block;padding:18px 35px;border-radius:999px;background:linear-gradient(90deg,#00e5ff,#00ff99);color:#000000;font-size:22px;font-weight:900;box-shadow:0 0 35px rgba(0,255,170,.45);">
+        OBJECTIVE 1 • OBJECTIVE 2 • OBJECTIVE 3
+    </div>
+
+</div>
+```
 ## Favicon Code (Paste just below `<head>`)
 This makes our logo show up in tabs on browsers. It's required on every page.
 ```
