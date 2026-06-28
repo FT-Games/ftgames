@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Game Instructions</title>
+  <title>2D Platformer</title>
   <style>
     body {
       margin: 0;
@@ -48,6 +48,35 @@
       font-size: 16px;
       color: #e6e6e6;
     }
+
+    .play-button-wrap {
+      text-align: center;
+      margin: 8px 0 24px;
+    }
+
+    .play-button {
+      display: inline-block;
+      padding: 14px 32px;
+      background: #00e5ff;
+      color: #0f0f12;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 2px solid #00c4db;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+      box-shadow: 0 8px 20px rgba(0, 229, 255, 0.25);
+    }
+
+    .play-button:hover {
+      background: #33ebff;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0, 229, 255, 0.32);
+    }
+
+    .play-button:active {
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -67,6 +96,10 @@
         <strong>Step 2:</strong> Click on the last "cartridge" in the game select menu to start the game.
       </p>
     </section>
+
+    <div class="play-button-wrap">
+      <a class="play-button" href="https://share.google/KetUWtnXki1S3O1zJ" target="_blank" rel="noopener noreferrer">PLAY</a>
+    </div>
   </div>
 </body>
 </html>
