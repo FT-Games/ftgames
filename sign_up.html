@@ -4,6 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Registration Form</title>
+ <style>
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0A0A0A 0%, #5B21B6 50%, #111827 100%);
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+    padding: 20px;
+}
+
+form {
+    width: 100%;
+    max-width: 450px;
+
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 18px;
+
+    padding: 35px;
+
+    box-shadow: 0 0 30px rgba(124,58,237,0.25);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 2rem;
+}
+
+p {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+
+    padding: 12px 15px;
+
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+
+    background: rgba(255,255,255,0.08);
+    color: white;
+
+    font-size: 1rem;
+
+    transition: 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+
+    border-color: #7C3AED;
+
+    box-shadow: 0 0 15px rgba(124,58,237,0.6);
+}
+
+input::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    margin-right: 6px;
+}
+
+button {
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #2d7cff;
+    color: white;
+
+    font-size: 1.1rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s ease;
+
+    box-shadow: 0 0 20px rgba(45,124,255,0.4);
+}
+
+button:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 25px rgba(45,124,255,0.7),
+        0 0 50px rgba(45,124,255,0.3);
+}
+
+a {
+    color: #9B7CFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 500px) {
+    form {
+        padding: 25px;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+}
+  </style>
 </head>
 <body>
 
