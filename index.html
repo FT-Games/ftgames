@@ -553,49 +553,6 @@ footer a:hover{
     });
     </script>
 
-<script>
-(function(){
-  // Favorites for ftgames (site-wide). Stored in localStorage under key "ftgames:favorites".
-  const STORAGE_KEY = 'ftgames:favorites';
-
-  function getFavorites(){
-    try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch(e){return []}
-  }
-  function saveFavorites(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
-  function isFav(id){ return getFavorites().includes(id); }
-  function toggleFavorite(id){ const fav=getFavorites(); const i=fav.indexOf(id); if(i>-1) fav.splice(i,1); else fav.push(id); saveFavorites(fav); updateStars(); renderFavorites(); }
-
-  function updateStars(){ document.querySelectorAll('.fav-star').forEach(btn=>{ const id=btn.dataset.gameId; btn.textContent=isFav(id)?'★':'☆'; btn.classList.toggle('active', isFav(id)); }); }
-
-  function initStarsOnCards(){ document.querySelectorAll('.game-card').forEach(card=>{ const id = card.getAttribute('href') || card.dataset.gameId || card.dataset.href; if(!id) return; card.dataset.gameId = id; if(card.querySelector('.fav-star')) return; const btn = document.createElement('button'); btn.className = 'fav-star'; btn.type='button'; btn.title='Favorite'; btn.dataset.gameId = id; btn.textContent = isFav(id)?'★':'☆'; btn.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); toggleFavorite(id); }); card.style.position = card.style.position || 'relative'; card.appendChild(btn); }); }
-
-  function renderFavorites(){ const container = document.getElementById('favorites-grid'); if(!container) return; container.innerHTML=''; const favs = getFavorites(); if(favs.length===0){ container.innerHTML = '<p style="opacity:.8;text-align:center">You have no favourites yet. Click the ☆ on a game card to add a favourite.</p>'; return; } favs.forEach(id=>{ const orig = document.querySelector(`.game-card[href="${id}"]`); let card; if(orig){ card = orig.cloneNode(true); // remove any cloned star buttons so the page's own buttons control state
-      const s = card.querySelector('.fav-star'); if(s) s.remove();
-    } else {
-      card = document.createElement('a'); card.className='game-card'; card.href = id; const title = document.createElement('h3'); title.textContent = id.replace(/\//g,' ').replace(/_/g,' '); card.appendChild(title);
-    }
-    container.appendChild(card);
-  }); }
-
-  document.addEventListener('DOMContentLoaded', ()=>{
-    // insert a Your Favorites section right after the Featured section
-    const featured = document.querySelector('.featured');
-    if(featured){
-      const favSection = document.createElement('section'); favSection.className='featured favorites-section';
-      favSection.innerHTML = '<h2>Your Favorites</h2><div id="favorites-grid" class="game-grid"></div>';
-      featured.parentNode.insertBefore(favSection, featured.nextSibling);
-    }
-
-    initStarsOnCards();
-    updateStars();
-    renderFavorites();
-
-    // observe for dynamic cards added later
-    const obs = new MutationObserver(()=>{ initStarsOnCards(); updateStars(); });
-    obs.observe(document.body, { childList: true, subtree: true });
-  });
-})();
-</script>
-
+<script src="favorites.js"></script>
 </body>
 </html>

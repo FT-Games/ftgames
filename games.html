@@ -158,6 +158,87 @@ body.dark-mode .game-card {
 body.dark-mode .game-card-thumbnail {
     background: #333333;
 }
+.fav-star {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.95);
+    color: #333;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+.fav-star.active {
+    background: #ffd24d;
+    color: #111;
+    box-shadow: 0 4px 18px rgba(255,210,77,0.35);
+}
+
+.favorites-section {
+    max-width: 1100px;
+    margin: 24px auto 18px auto;
+    padding: 22px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,0.08);
+}
+body.dark-mode .favorites-section {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.14);
+}
+.favorites-section h2 {
+    margin: 0 0 16px;
+    font-size: 1.3rem;
+}
+.favorites-list {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.favorite-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.08);
+}
+body.dark-mode .favorite-card {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.12);
+}
+.favorite-card-link {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+}
+.favorite-card-thumb {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+.favorite-card-content {
+    padding: 12px 14px 14px;
+}
+.favorite-card-content h3 {
+    margin: 0 0 8px;
+    font-size: 1rem;
+}
+.favorite-card-content p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    opacity: 0.85;
+}
+.favorites-empty {
+    opacity: .8;
+    font-size: .96rem;
+    text-align: center;
+}
+
 #splash-screen {
     position: fixed;
     inset: 0;
@@ -380,6 +461,12 @@ window.addEventListener("load", () => {
     </a>
     <div class="ad-label">AD</div>
 </div>
+
+    <section id="favorites-section" class="favorites-section" aria-labelledby="favorites-heading">
+      <h2 id="favorites-heading">⭐ Favorite Games</h2>
+      <div id="favorites-list" class="favorites-list"></div>
+    </section>
+
     <section class="game-card-grid" aria-label="Games">
       <a class="game-card" href="/platformer_game">
         <img class="game-card-thumbnail" src="thumbnails/platformer-game-thumbnail.png" alt="Platformer Game thumbnail">
@@ -608,5 +695,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         </stripe-buy-button>
     </div>
 </div>
+
+<script src="favorites.js"></script>
   </body>
 </html>
