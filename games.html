@@ -186,9 +186,20 @@ body.dark-mode .fav-star {
 }
 .favorites-section {
     margin-top: 32px;
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 210, 77, 0.35);
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 20px rgba(255, 210, 77, 0.22);
 }
 .favorites-section h2 {
     margin-bottom: 12px;
+    text-align: center;
+}
+body.dark-mode .favorites-section {
+    background: rgba(25, 25, 25, 0.6);
+    border-color: rgba(255, 210, 77, 0.45);
+    box-shadow: 0 10px 26px rgba(255, 210, 77, 0.2);
 }
 .favorites-empty-message {
     opacity: .8;
@@ -713,6 +724,23 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
     });
   }
 
+  function createFavoriteToggleButton(id, title){
+    const button = document.createElement('button');
+    button.className = 'fav-star active';
+    button.type = 'button';
+    button.dataset.gameId = id;
+    button.textContent = '★';
+    button.setAttribute('aria-label', `Toggle favorite for ${title}`);
+    button.setAttribute('aria-pressed', 'true');
+    button.title = 'Remove from favorites';
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleFavorite(id);
+    });
+    return button;
+  }
+
   function renderFavorites(){
     const container = document.getElementById('favorites-grid');
     if (!container) return;
@@ -739,6 +767,8 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         const clone = original.cloneNode(true);
         const star = clone.querySelector('.fav-star');
         if (star) star.remove();
+        const title = clone.querySelector('.game-card-title')?.textContent?.trim() || formatFallbackTitle(id);
+        clone.appendChild(createFavoriteToggleButton(id, title));
         container.appendChild(clone);
         return;
       }
@@ -773,6 +803,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         }
 
         card.appendChild(content);
+        card.appendChild(createFavoriteToggleButton(id, entry.title || formatFallbackTitle(id)));
         container.appendChild(card);
       } else {
         const card = document.createElement('a');
@@ -788,6 +819,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         content.appendChild(title);
 
         card.appendChild(content);
+        card.appendChild(createFavoriteToggleButton(id, formatFallbackTitle(id)));
         container.appendChild(card);
       }
     });

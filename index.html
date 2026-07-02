@@ -581,14 +581,6 @@ footer a:hover{
     card.className = 'game-card';
     card.href = id;
 
-    if (catalogEntry && catalogEntry.thumbnail) {
-      const img = document.createElement('img');
-      img.className = 'game-card-thumbnail';
-      img.src = catalogEntry.thumbnail;
-      img.alt = `${catalogEntry.title || 'Game'} thumbnail`;
-      card.appendChild(img);
-    }
-
     const content = document.createElement('div');
     content.className = 'game-card-content';
 
@@ -604,6 +596,11 @@ footer a:hover{
     }
 
     card.appendChild(content);
+    return card;
+  }
+
+  function stripFavoriteMedia(card){
+    card.querySelectorAll('.game-card-thumbnail, .game-icon').forEach((element) => element.remove());
     return card;
   }
 
@@ -623,7 +620,7 @@ footer a:hover{
 
     const catalog = getCatalog();
     const gameCardsByHref = new Map(
-      Array.from(document.querySelectorAll('.game-card'))
+      Array.from(document.querySelectorAll('.featured:not(.favorites-section) .game-card'))
         .map((card) => [card.getAttribute('href'), card])
         .filter(([href]) => typeof href === 'string')
     );
@@ -631,7 +628,7 @@ footer a:hover{
     favs.forEach((id)=>{
       const featuredCard = gameCardsByHref.get(id);
       if (featuredCard) {
-        container.appendChild(featuredCard.cloneNode(true));
+        container.appendChild(stripFavoriteMedia(featuredCard.cloneNode(true)));
         return;
       }
 
