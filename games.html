@@ -121,14 +121,13 @@ body.dark-mode #themeToggle {
 .game-card {
     color: inherit;
     text-decoration: none;
-    position: relative;
     border: 1px solid #dddddd;
-    position: relative;
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .game-card:hover,
@@ -160,147 +159,42 @@ body.dark-mode .game-card {
 body.dark-mode .game-card-thumbnail {
     background: #333333;
 }
-<<<<<<< Updated upstream
 .fav-star {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 38px;
-    height: 38px;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
     border: none;
     border-radius: 999px;
-    background: rgba(255,255,255,0.95);
-    color: #333;
-    font-size: 1.2rem;
+    background: rgba(0, 0, 0, 0.55);
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 20px;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 .fav-star.active {
-    background: #ffd24d;
-    color: #111;
-    box-shadow: 0 4px 18px rgba(255,210,77,0.35);
+    color: #ffd24d;
+    text-shadow: 0 0 6px rgba(255, 210, 77, 0.5);
 }
-
-.favorites-section {
-    max-width: 1100px;
-    margin: 24px auto 18px auto;
-    padding: 22px;
-    background: rgba(255,255,255,0.9);
-    border-radius: 18px;
-    border: 1px solid rgba(0,0,0,0.08);
-}
-body.dark-mode .favorites-section {
-    background: rgba(255,255,255,0.08);
-    border-color: rgba(255,255,255,0.14);
-}
-.favorites-section h2 {
-    margin: 0 0 16px;
-=======
-.favorite-toggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    border: none;
-    border-radius: 999px;
-    width: 40px;
-    height: 40px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    background: rgba(255,255,255,0.95);
-    color: #f4b400;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 2;
-}
-.favorite-toggle.is-favorite {
-    background: #f4b400;
-    color: white;
+body.dark-mode .fav-star {
+    background: rgba(0, 0, 0, 0.7);
 }
 .favorites-section {
-    margin: 24px auto 12px;
-    padding: 20px;
-    max-width: 1000px;
-    border-radius: 16px;
-    background: rgba(0,0,0,0.04);
-    border: 1px solid rgba(0,0,0,0.08);
-}
-body.dark-mode .favorites-section {
-    background: rgba(255,255,255,0.06);
-    border-color: rgba(255,255,255,0.12);
+    margin-top: 32px;
 }
 .favorites-section h2 {
-    margin-bottom: 14px;
->>>>>>> Stashed changes
-    font-size: 1.3rem;
+    margin-bottom: 12px;
 }
-.favorites-list {
-    display: grid;
-<<<<<<< Updated upstream
-    gap: 16px;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-.favorite-card {
-    background: rgba(255,255,255,0.95);
-=======
-    gap: 14px;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-.favorite-card {
-    background: rgba(255,255,255,0.7);
->>>>>>> Stashed changes
-    border-radius: 14px;
-    overflow: hidden;
-    border: 1px solid rgba(0,0,0,0.08);
-}
-body.dark-mode .favorite-card {
-    background: rgba(255,255,255,0.08);
-    border-color: rgba(255,255,255,0.12);
-}
-.favorite-card-link {
-    color: inherit;
-    text-decoration: none;
-    display: block;
-}
-.favorite-card-thumb {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    display: block;
-}
-.favorite-card-content {
-<<<<<<< Updated upstream
-    padding: 12px 14px 14px;
-}
-.favorite-card-content h3 {
-    margin: 0 0 8px;
-    font-size: 1rem;
-}
-.favorite-card-content p {
-    margin: 0;
-    font-size: 0.92rem;
-    line-height: 1.45;
-    opacity: 0.85;
-}
-.favorites-empty {
+.favorites-empty-message {
     opacity: .8;
-    font-size: .96rem;
     text-align: center;
+    grid-column: 1 / -1;
 }
-
-=======
-    padding: 12px;
-}
-.favorite-card-content h3 {
-    margin-bottom: 6px;
-    font-size: 1rem;
-}
-.favorite-card-content p {
-    font-size: 0.9rem;
-    line-height: 1.45;
-}
-.favorites-empty {
-    opacity: 0.75;
-}
->>>>>>> Stashed changes
 #splash-screen {
     position: fixed;
     inset: 0;
@@ -319,12 +213,6 @@ body.dark-mode .favorite-card {
     height: 100%;
     object-fit: cover;
 }
-
-#splash-screen.is-hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
 #homebaseFooter {
     position: fixed;
     bottom: 6px;
@@ -423,54 +311,24 @@ body.dark-mode .modal-content {
     margin-top: 2px;
 }
 
- #scroll{
-    animation: scroll 1s ease-out;
-    animation-timeline: view();
-    animation-range: entry 0% cover 40%;
-}
-
-@keyframes scroll{
-
-    from{
-        opacity:0;
-        transform:translateY(100px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-
-}
-  
  
 </style>
 
 <script>
-function dismissSplash() {
-    const splash = document.getElementById("splash-screen");
-
-    if (!splash) return;
-
-    splash.classList.add("is-hidden");
-
-    setTimeout(() => {
-        if (splash.parentNode) {
-            splash.remove();
-        }
-    }, 400);
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', dismissSplash, { once: true });
-} else {
-    dismissSplash();
-}
-
-window.addEventListener("load", dismissSplash);
-setTimeout(dismissSplash, 800);
-
 window.addEventListener("load", () => {
+
+    // Splash screen
+    setTimeout(() => {
+        const splash = document.getElementById("splash-screen");
+
+        if (splash) {
+            splash.style.opacity = "0";
+
+            setTimeout(() => {
+                splash.remove();
+            }, 500);
+        }
+    }, 3000);
 
     // Cookies
     function setCookie(name, value, days) {
@@ -559,18 +417,6 @@ window.addEventListener("load", () => {
     </a>
     <div class="ad-label">AD</div>
 </div>
-<<<<<<< Updated upstream
-<div id="scroll">
-=======
->>>>>>> Stashed changes
-    <section id="favorites-section" class="favorites-section" aria-labelledby="favorites-heading">
-      <h2 id="favorites-heading">⭐ Favorite Games</h2>
-      <div id="favorites-list" class="favorites-list"></div>
-    </section>
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
     <section class="game-card-grid" aria-label="Games">
       <a class="game-card" href="/platformer_game">
         <img class="game-card-thumbnail" src="thumbnails/platformer-game-thumbnail.png" alt="Platformer Game thumbnail">
@@ -782,7 +628,10 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         </div>
       </a>
     </section>
-</div>
+    <section class="favorites-section" aria-label="Favorited games quick access">
+      <h2>Your Favorites</h2>
+      <div id="favorites-grid" class="game-card-grid"></div>
+    </section>
     <footer id="homebaseFooter">
     Powered by Homebase
 </footer>
@@ -800,11 +649,194 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         </stripe-buy-button>
     </div>
 </div>
-<<<<<<< Updated upstream
+<script>
+(function(){
+  const STORAGE_KEY = 'ftgames:favorites';
+  const CATALOG_KEY = 'ftgames:gameCatalog';
 
-<script src="favorites.js"></script>
-=======
-  <script src="favorites.js"></script>
->>>>>>> Stashed changes
+  function getFavorites(){
+    try {
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      return Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string') : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function setFavorites(favorites){
+    const unique = Array.from(new Set(favorites)).filter((id) => typeof id === 'string');
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(unique));
+    return unique;
+  }
+
+  function getCatalog(){
+    try {
+      const parsed = JSON.parse(localStorage.getItem(CATALOG_KEY) || '{}');
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function formatFallbackTitle(id){
+    return String(id || '').replace(/\//g, ' ').replace(/_/g, ' ').trim();
+  }
+
+  function saveCatalogEntry(id, entry){
+    const catalog = getCatalog();
+    const current = catalog[id];
+    if (current && current.title === entry.title && current.description === entry.description && current.thumbnail === entry.thumbnail) {
+      return;
+    }
+    catalog[id] = entry;
+    localStorage.setItem(CATALOG_KEY, JSON.stringify(catalog));
+  }
+
+  function isFavorite(id){
+    return getFavorites().includes(id);
+  }
+
+  function updateStars(){
+    document.querySelectorAll('.fav-star').forEach((button) => {
+      const id = button.dataset.gameId;
+      const active = isFavorite(id);
+      button.textContent = active ? '★' : '☆';
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+      button.title = active ? 'Remove from favorites' : 'Add to favorites';
+    });
+  }
+
+  function renderFavorites(){
+    const container = document.getElementById('favorites-grid');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const favorites = getFavorites();
+    const catalog = getCatalog();
+    const gameCardsByHref = new Map(
+      Array.from(document.querySelectorAll('.game-card-grid[aria-label="Games"] .game-card'))
+        .map((card) => [card.getAttribute('href'), card])
+        .filter(([href]) => typeof href === 'string')
+    );
+    if (favorites.length === 0) {
+      const message = document.createElement('p');
+      message.className = 'favorites-empty-message';
+      message.textContent = 'You have no favorites yet. Click the ☆ on a game card to add one.';
+      container.appendChild(message);
+      return;
+    }
+
+    favorites.forEach((id) => {
+      const original = gameCardsByHref.get(id);
+      if (original) {
+        const clone = original.cloneNode(true);
+        const star = clone.querySelector('.fav-star');
+        if (star) star.remove();
+        container.appendChild(clone);
+        return;
+      }
+
+      const entry = catalog[id];
+      if (entry) {
+        const card = document.createElement('a');
+        card.className = 'game-card';
+        card.href = id;
+
+        if (entry.thumbnail) {
+          const image = document.createElement('img');
+          image.className = 'game-card-thumbnail';
+          image.src = entry.thumbnail;
+          image.alt = `${entry.title || 'Game'} thumbnail`;
+          card.appendChild(image);
+        }
+
+        const content = document.createElement('div');
+        content.className = 'game-card-content';
+
+        const title = document.createElement('h2');
+        title.className = 'game-card-title';
+        title.textContent = entry.title || formatFallbackTitle(id);
+        content.appendChild(title);
+
+        if (entry.description) {
+          const description = document.createElement('p');
+          description.className = 'game-card-description';
+          description.textContent = entry.description;
+          content.appendChild(description);
+        }
+
+        card.appendChild(content);
+        container.appendChild(card);
+      } else {
+        const card = document.createElement('a');
+        card.className = 'game-card';
+        card.href = id;
+
+        const content = document.createElement('div');
+        content.className = 'game-card-content';
+
+        const title = document.createElement('h2');
+        title.className = 'game-card-title';
+        title.textContent = formatFallbackTitle(id);
+        content.appendChild(title);
+
+        card.appendChild(content);
+        container.appendChild(card);
+      }
+    });
+  }
+
+  function toggleFavorite(id){
+    const current = getFavorites();
+    const index = current.indexOf(id);
+    if (index > -1) {
+      current.splice(index, 1);
+    } else {
+      current.push(id);
+    }
+
+    setFavorites(current);
+    updateStars();
+    renderFavorites();
+  }
+
+  function initGameCardFavorites(){
+    document.querySelectorAll('.game-card-grid[aria-label="Games"] .game-card').forEach((card) => {
+      const id = card.getAttribute('href');
+      if (!id) return;
+      card.dataset.gameId = id;
+
+      const title = card.querySelector('.game-card-title')?.textContent?.trim() || formatFallbackTitle(id);
+      const description = card.querySelector('.game-card-description')?.textContent?.trim() || '';
+      const thumbnail = card.querySelector('.game-card-thumbnail')?.getAttribute('src') || '';
+      saveCatalogEntry(id, { title, description, thumbnail });
+
+      if (card.querySelector('.fav-star')) return;
+
+      const button = document.createElement('button');
+      button.className = 'fav-star';
+      button.type = 'button';
+      button.dataset.gameId = id;
+      button.setAttribute('aria-label', `Toggle favorite for ${title}`);
+
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleFavorite(id);
+      });
+
+      card.appendChild(button);
+    });
+
+    updateStars();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initGameCardFavorites();
+    renderFavorites();
+  });
+})();
+</script>
   </body>
 </html>

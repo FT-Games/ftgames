@@ -249,7 +249,6 @@ body.light-mode .navbar{
 
 }
 
-<<<<<<< Updated upstream
 /* =========================
       FEATURED GAMES
 ========================= */
@@ -257,66 +256,6 @@ body.light-mode .navbar{
 .featured{
 
     padding:90px 30px;
-=======
-.favorites-section {
-    width: min(1100px, calc(100% - 32px));
-    margin: 0 auto 48px;
-    padding: 24px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.12);
-}
-
-.favorites-section h2 {
-    margin-bottom: 16px;
-    font-size: 1.5rem;
-}
-
-.favorites-list {
-    display: grid;
-    gap: 16px;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.favorite-card {
-    background: rgba(255,255,255,0.08);
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.12);
-}
-
-.favorite-card-link {
-    color: inherit;
-    text-decoration: none;
-    display: block;
-}
-
-.favorite-card-thumb {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    display: block;
-}
-
-.favorite-card-content {
-    padding: 12px 14px 14px;
-}
-
-.favorite-card-content h3 {
-    margin-bottom: 6px;
-    font-size: 1rem;
-}
-
-.favorite-card-content p {
-    font-size: 0.92rem;
-    line-height: 1.45;
-}
-
-.favorites-empty {
-    opacity: 0.75;
-    font-size: 1rem;
-}
->>>>>>> Stashed changes
 
 }
 
@@ -401,20 +340,10 @@ body.light-mode .game-card{
     line-height:1.6;
 
 }
-
-/* favorite star */
-.fav-star{
-    position:absolute;
-    top:12px;
-    right:12px;
-    background:transparent;
-    border:none;
-    font-size:1.4rem;
-    cursor:pointer;
-    color:rgba(255,255,255,.9);
-    padding:6px;
+.favorites-empty-message{
+    opacity:.8;
+    text-align:center;
 }
-.fav-star.active{ color: #ffd24d; text-shadow: 0 0 6px rgba(255,210,77,.5); }
 
 /* =========================
         FOOTER
@@ -503,7 +432,6 @@ footer a:hover{
 
             <div class="hero-content">
 
-<<<<<<< Updated upstream
                 <h1>Made by students,<br>for students.</h1>
 
                 <p>
@@ -615,27 +543,130 @@ footer a:hover{
     });
     </script>
 
-=======
-    <a
-        href="https://donate.stripe.com/4gMeVd0Hd65z6Gs10FaAw00"
-        class="donate-button"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-        Donate
-    </a>
-        <br>
-        <br>
-   
-</div>
+<script>
+(function(){
+  const STORAGE_KEY = 'ftgames:favorites';
+  const CATALOG_KEY = 'ftgames:gameCatalog';
 
-<section id="favorites-section" class="favorites-section" aria-labelledby="favorites-heading">
-    <h2 id="favorites-heading">⭐ Favorite Games</h2>
-    <div id="favorites-list" class="favorites-list"></div>
-</section>
-</main>
+  function getFavorites(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      return Array.isArray(parsed) ? parsed.filter((id)=>typeof id === 'string') : [];
+    }catch(e){
+      return [];
+    }
+  }
 
->>>>>>> Stashed changes
-<script src="favorites.js"></script>
+  function getCatalog(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(CATALOG_KEY) || '{}');
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    }catch(e){
+      return {};
+    }
+  }
+
+  function formatFallbackTitle(id){
+    return String(id || '').replace(/\//g,' ').replace(/_/g,' ').trim();
+  }
+
+  function buildFavoriteCard(id, catalogEntry){
+    const card = document.createElement('a');
+    card.className = 'game-card';
+    card.href = id;
+
+    if (catalogEntry && catalogEntry.thumbnail) {
+      const img = document.createElement('img');
+      img.className = 'game-card-thumbnail';
+      img.src = catalogEntry.thumbnail;
+      img.alt = `${catalogEntry.title || 'Game'} thumbnail`;
+      card.appendChild(img);
+    }
+
+    const content = document.createElement('div');
+    content.className = 'game-card-content';
+
+    const title = document.createElement('h2');
+    title.className = 'game-card-title';
+    title.textContent = (catalogEntry && catalogEntry.title) ? catalogEntry.title : formatFallbackTitle(id);
+    content.appendChild(title);
+
+    if (catalogEntry && catalogEntry.description) {
+      const description = document.createElement('p');
+      description.textContent = catalogEntry.description;
+      content.appendChild(description);
+    }
+
+    card.appendChild(content);
+    return card;
+  }
+
+  function renderFavorites(){
+    const container = document.getElementById('favorites-grid');
+    if(!container) return;
+    container.innerHTML = '';
+
+    const favs = getFavorites();
+    if(favs.length === 0){
+      const message = document.createElement('p');
+      message.className = 'favorites-empty-message';
+      message.textContent = 'You have no favorites yet. Favorite a game on the games page to add it here.';
+      container.appendChild(message);
+      return;
+    }
+
+    const catalog = getCatalog();
+    const gameCardsByHref = new Map(
+      Array.from(document.querySelectorAll('.game-card'))
+        .map((card) => [card.getAttribute('href'), card])
+        .filter(([href]) => typeof href === 'string')
+    );
+
+    favs.forEach((id)=>{
+      const featuredCard = gameCardsByHref.get(id);
+      if (featuredCard) {
+        container.appendChild(featuredCard.cloneNode(true));
+        return;
+      }
+
+      const catalogEntry = catalog[id];
+      if (catalogEntry) {
+        container.appendChild(buildFavoriteCard(id, catalogEntry));
+      } else {
+        const fallbackCard = document.createElement('a');
+        fallbackCard.className = 'game-card';
+        fallbackCard.href = id;
+        const content = document.createElement('div');
+        content.className = 'game-card-content';
+        const title = document.createElement('h2');
+        title.className = 'game-card-title';
+        title.textContent = formatFallbackTitle(id);
+        content.appendChild(title);
+        fallbackCard.appendChild(content);
+        container.appendChild(fallbackCard);
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const featured = document.querySelector('.featured');
+    if(featured && !document.getElementById('favorites-grid')){
+      const favSection = document.createElement('section');
+      favSection.className = 'featured favorites-section';
+      favSection.innerHTML = '<h2>Your Favorites</h2><div id="favorites-grid" class="game-grid"></div>';
+      featured.parentNode.insertBefore(favSection, featured.nextSibling);
+    }
+
+    renderFavorites();
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === STORAGE_KEY || event.key === CATALOG_KEY) {
+        renderFavorites();
+      }
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
