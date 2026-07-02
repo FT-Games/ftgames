@@ -599,11 +599,6 @@ footer a:hover{
     return card;
   }
 
-  function stripFavoriteMedia(card){
-    card.querySelectorAll('.game-card-thumbnail, .game-icon').forEach((element) => element.remove());
-    return card;
-  }
-
   function renderFavorites(){
     const container = document.getElementById('favorites-grid');
     if(!container) return;
@@ -628,7 +623,13 @@ footer a:hover{
     favs.forEach((id)=>{
       const featuredCard = gameCardsByHref.get(id);
       if (featuredCard) {
-        container.appendChild(stripFavoriteMedia(featuredCard.cloneNode(true)));
+        const titleEl = featuredCard.querySelector('h3');
+        const descEl = featuredCard.querySelector('p');
+        const entry = {
+          title: titleEl ? titleEl.textContent : null,
+          description: descEl ? descEl.textContent : null,
+        };
+        container.appendChild(buildFavoriteCard(id, entry));
         return;
       }
 
