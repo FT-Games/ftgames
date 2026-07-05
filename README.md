@@ -1,7 +1,7 @@
 [![LICENSE](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/TyCoInnovations/ftgames/blob/main/LICENSE.md)
 
 # Welcome to the ftgames repository!
-This is the code used for the FT Games website, here's a lil' map to help you navigate it.
+This is the code used for the FT Games website, here's a lil' map to help you navigate it!
 
 ### Code (You are here)
 This is the source code used for the FT Games website, accessible at https://ftgames.xyz. You can't contribute to this code, but you can create issues and send messages in discussions if you have a GitHub account, otherwise you can just look around.
