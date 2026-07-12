@@ -167,7 +167,7 @@ This is a template for an instructions page. You need this for every game.
 ### Game Card Code (Paste just before the Suggestion Box game card.)
 This is the code used in games.html, it redirects to your game's page. Make sure to replace all of the placeholders with your actual game resources directory.
 ```
-    <a class="game-card" href="/my_game">
+      <a class="game-card" href="/my_game">
         <img class="game-card-thumbnail" src="thumbnails/my-game-thumbnail.png" alt="My Game thumbnail">
         <div class="game-card-content">
           <h2 class="game-card-title">My Game</h2>
@@ -177,7 +177,7 @@ This is the code used in games.html, it redirects to your game's page. Make sure
             <span class="game-tag game-tag-difficulty">Difficulty: TBD</span>
           </div>
         </div>
-    </a>
+      </a>
 ```
 ## Favicon Code
 This makes our logo show up in tabs on browsers. It's required on every page.
