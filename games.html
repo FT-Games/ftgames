@@ -155,6 +155,36 @@ body.dark-mode #themeToggle {
     line-height: 1.5;
     margin: 0;
 }
+.game-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+.game-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+.game-tag-genre {
+    background: #e0eaff;
+    color: #3056d3;
+}
+.game-tag-difficulty {
+    background: #e6f4ea;
+    color: #2e7d32;
+}
+body.dark-mode .game-tag-genre {
+    background: #1e2e5c;
+    color: #a0b8ff;
+}
+body.dark-mode .game-tag-difficulty {
+    background: #1a3320;
+    color: #81c784;
+}
 body.dark-mode .game-card {
     border-color: #444444;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
@@ -463,6 +493,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Platformer Game</h2>
           <p class="game-card-description">A fun platformer game, avoid lava while going into the blue portals, will you reach the end?</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -471,6 +502,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">F111 Game</h2>
           <p class="game-card-description">Survive the MIG23 encounter for as long as you can without being shot by the deadly MIG. 💀</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -479,6 +511,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Scratch Playground</h2>
           <p class="game-card-description">Roam around and enjoy this fun Scratch sandbox game, build anything you can imagine and have fun!</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -487,6 +520,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Among Us Platformer</h2>
           <p class="game-card-description">Work your way through the obstacles to make it to the end in this fun platformer game. Credits to -Mirano- for the original game on scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
       
@@ -495,6 +529,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Modern Dogfights</h2>
           <p class="game-card-description">Fight with a friend, one is in a SU27, the other is in an F15. Fight to the death in this fun modern dogfights simulator!</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
        
@@ -503,6 +538,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Chess</h2>
           <p class="game-card-description">Play a fun game of chess with your friends, will you be the one to claim checkmate? Thanks to Alex Burton for the original game.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -510,7 +546,8 @@ window.addEventListener("load", () => {
         <img class="game-card-thumbnail" src="thumbnails/igr-thumbnail.png" alt="Gacha Roller thumbnail">
         <div class="game-card-content">
           <h2 class="game-card-title">Idle Gacha Roller</h2>
-          <p class="game-card-description">This game originated in Project Jeff, which was since degraded and replaced with FT Games! Push your luck and earn your digital fortune with this fun Ga[...]
+          <p class="game-card-description">This game originated in Project Jeff, which was since degraded and replaced with FT Games! Push your luck and earn your digital fortune with this fun Ga[...]</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -519,6 +556,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Snake.ft</h2>
           <p class="game-card-description">Like Snake.io, but better. Slither around and earn points to get your highest score! How long will you last? Thanks to NicholasGG601 for the original project on scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -527,6 +565,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Minesweeper</h2>
           <p class="game-card-description">Uncover squares and use numbered clues to find all the hidden mines without detonating any. A classic puzzle game that sharpens your strategic thinking! Credits to Hobson-TV for this game on scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
        
@@ -535,6 +574,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Flappy Duck</h2>
           <p class="game-card-description">Flap your way through this tricky obstacle course with this classic infinite runner game. Please note that this game is pretty chunky and may not work on all devices.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -543,6 +583,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Vent Crawlers Beta</h2>
           <p class="game-card-description">Beta game, subject to change. Please note that by clicking on this game card, you will be taken to an external website that is not operated by FT Games.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -551,6 +592,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Polytrack</h2>
           <p class="game-card-description">Race your way through a wide variety of tracks in this fun racing simulator. Thanks to Kodub for the original game and to Static for the original port.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -559,6 +601,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Minecraft Classic</h2>
           <p class="game-card-description">Build, explore, and create in this iconic sandbox game. Let your imagination run wild as you construct anything you can dream up!</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -567,6 +610,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Arrow Battles</h2>
           <p class="game-card-description">Beta game, subject to change. Please note that by clicking on this game card, you will be taken to an external website that is not operated by FT Games.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -575,6 +619,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Block Blast!</h2>
           <p class="game-card-description">Blast colored bricks to get your high score in this fun strategy game. Remember to break your high score not your computer in a rage. Thanks to Bwenedia for the original project on scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -583,6 +628,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Crossy Road</h2>
           <p class="game-card-description">Help your character cross the busy road and avoid obstacles in this classic arcade game. Try not to get hit by cars! and there are many other dangers to watch out for. Thanks to HipsterWhale for the original project on scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
       
@@ -591,6 +637,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Tetris</h2>
           <p class="game-card-description">Tetris is a classic puzzle game where you manipulate falling, four-block shapes (Tetrominoes) to build and clear solid horizontal lines. Thanks to The_M for the original project on scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
    
@@ -599,6 +646,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">🏀Flappy Dunk</h2>
           <p class="game-card-description">Tap to keep the basketball in the air and guide it through hoops to score points. Master your timing, avoid missing hoops, and build the highest score possible. Thanks to AnimationsScratch for the original project on scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -607,6 +655,7 @@ window.addEventListener("load", () => {
         <div class="game-card-content">
           <h2 class="game-card-title">Money Mines</h2>
           <p class="game-card-description">Place your bet and choose your mines! Click tiles to reveal money and build your multiplier, but watch out—hit a mine and lose it all. Cash out before greed takes over! Thanks to alphawolf6612 for the original project on scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>     
       
@@ -617,6 +666,7 @@ window.addEventListener("load", () => {
           <h2 class="game-card-title">👾 SPACE INVADERS 👾</h2>
           <p class="game-card-description">🚀 DEFEND EARTH, blast the invading alien fleet before they destroy you.
 Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to RokCoder for the orginal project on scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -625,6 +675,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <div class="game-card-content">
           <h2 class="game-card-title">Retro Pong</h2>
           <p class="game-card-description">The original Pong video game from the early 1970s, truly a retro classic! A simple arcade video game released by Atari. Players control paddles on opposite sides of the screen to hit a ball back and forth.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -633,6 +684,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <div class="game-card-content">
           <h2 class="game-card-title">✈️Pacific Dogfights✈️</h2>
           <p class="game-card-description">Pilot your fighter aircraft through intense WWII Pacific battles. Dodge enemy fire, shoot down opposing planes, and survive each wave to become a legendary ace pilot! This is a remixed scratch project by Jcubas02 which Blabby_axolotl2 (one of our developers) tweaked a few settings and made it slightly easier.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -641,6 +693,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <div class="game-card-content">
           <h2 class="game-card-title">Pac-Man Platformer</h2>
           <p class="game-card-description">Guide Pac-Man through challenging platformer levels while collecting pellets and avoiding enemies. Navigate the maze carefully to beat all levels! Credits to atomicmagicnumber for the original project on scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
        
@@ -649,6 +702,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <div class="game-card-content">
           <h2 class="game-card-title">2D Platformer</h2>
           <p class="game-card-description">Parkour your way to the finish in this fun 2D platformer.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -657,6 +711,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <div class="game-card-content">
           <h2 class="game-card-title">World of Warships Legends</h2>
           <p class="game-card-description">Command your fleet and engage in epic naval battles in this game. Thanks to TitanRovan-99 for the original project on Scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -665,6 +720,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <div class="game-card-content">
           <h2 class="game-card-title">My Tiny Shop</h2>
           <p class="game-card-description">Manage your own tiny shop and serve customers efficiently. Thanks to pirateollie for the original project on Scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -674,6 +730,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <div class="game-card-content">
           <h2 class="game-card-title">Paper Minecraft</h2>
           <p class="game-card-description">Minecraft... now in 2D! Enjoy this fun classic with one dimension removed. Thanks to griffpatch for the original project on Scratch.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -682,6 +739,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <div class="game-card-content">
           <h2 class="game-card-title">Brain Test</h2>
           <p class="game-card-description">Test your brain with this challenging puzzle game. Can you solve them all?</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -691,6 +749,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <div class="game-card-content">
           <h2 class="game-card-title">Pangolin Love</h2>
           <p class="game-card-description">Celebrate Valentine's Day with this adorable pangolin-themed game. Fresh from the suggestion box.</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
 
@@ -699,6 +758,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <div class="game-card-content">
           <h2 class="game-card-title">Suggestion Box</h2>
           <p class="game-card-description">This is where you can suggest games for us to add to our website. Just fill out a quick form and we'll get right on it. Try it today!</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
       </a>
     </section>
@@ -773,6 +833,20 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
       button.setAttribute('aria-pressed', active ? 'true' : 'false');
       button.title = active ? 'Remove from favorites' : 'Add to favorites';
     });
+  }
+
+  function createTagsElement(){
+    const tags = document.createElement('div');
+    tags.className = 'game-card-tags';
+    const genreTag = document.createElement('span');
+    genreTag.className = 'game-tag game-tag-genre';
+    genreTag.textContent = 'Genre: TBD';
+    const difficultyTag = document.createElement('span');
+    difficultyTag.className = 'game-tag game-tag-difficulty';
+    difficultyTag.textContent = 'Difficulty: TBD';
+    tags.appendChild(genreTag);
+    tags.appendChild(difficultyTag);
+    return tags;
   }
 
   function createFavoriteToggleButton(id, title){
@@ -853,6 +927,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
           content.appendChild(description);
         }
 
+        content.appendChild(createTagsElement());
         card.appendChild(content);
         card.appendChild(createFavoriteToggleButton(id, entry.title || formatFallbackTitle(id)));
         container.appendChild(card);
@@ -869,6 +944,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         title.textContent = formatFallbackTitle(id);
         content.appendChild(title);
 
+        content.appendChild(createTagsElement());
         card.appendChild(content);
         card.appendChild(createFavoriteToggleButton(id, formatFallbackTitle(id)));
         container.appendChild(card);
