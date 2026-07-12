@@ -172,6 +172,7 @@ This is the code used in games.html, it redirects to your game's page. Make sure
         <div class="game-card-content">
           <h2 class="game-card-title">My Game</h2>
           <p class="game-card-description">My description</p>
+          <div class="game-card-tags"><span class="game-tag game-tag-genre">Genre: TBD</span><span class="game-tag game-tag-difficulty">Difficulty: TBD</span></div>
         </div>
     </a>
 ```
