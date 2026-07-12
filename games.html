@@ -4,7 +4,7 @@
     <!-- Google Analytics is loaded only after the user consents (see analytics-consent.js) -->
     <title>FT Games - Games</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="icon" type="image/x-icon" href="../images/favicon.png">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 <script async src="https://js.stripe.com/v3/buy-button.js"></script>
@@ -1095,12 +1095,6 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
   });
 })();
 </script>
-<script type="module">
-import { syncUsernameCookieFromAuth, renderUsernameBadge } from "./firebase-auth.js";
-
-syncUsernameCookieFromAuth();
-renderUsernameBadge("usernameBadge");
-</script>
-  <script src="analytics-consent.js"></script>
+  <script src="/analytics-consent.js"></script>
   </body>
 </html>
