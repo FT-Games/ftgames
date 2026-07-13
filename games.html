@@ -406,7 +406,7 @@ window.addEventListener("load", () => {
     }
 
     const savedTheme = getCookie("theme");
-    applyTheme(savedTheme === "dark" ? "dark" : "light");
+    applyTheme(savedTheme === "light" ? "light" : "dark");
 
     themeButton.addEventListener("click", () => {
         if (document.body.classList.contains("dark-mode")) {
