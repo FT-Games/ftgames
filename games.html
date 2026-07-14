@@ -245,6 +245,62 @@ body.dark-mode .favorites-section {
     text-align: center;
     grid-column: 1 / -1;
 }
+.game-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid rgba(48, 86, 211, 0.25);
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 20px rgba(48, 86, 211, 0.12);
+}
+.game-filter-bar input[type="search"],
+.game-filter-bar select {
+    flex: 1 1 200px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+}
+.game-filter-bar input[type="search"]:focus,
+.game-filter-bar select:focus {
+    outline: none;
+    border-color: #3056d3;
+    box-shadow: 0 0 0 3px rgba(48, 86, 211, 0.2);
+}
+body.dark-mode .game-filter-bar {
+    background: rgba(25, 25, 25, 0.6);
+    border-color: rgba(160, 184, 255, 0.35);
+    box-shadow: 0 10px 26px rgba(160, 184, 255, 0.15);
+}
+body.dark-mode .game-filter-bar input[type="search"],
+body.dark-mode .game-filter-bar select {
+    background: rgba(50, 50, 50, 0.9);
+    border-color: #444444;
+    color: white;
+}
+body.dark-mode .game-filter-bar input[type="search"]:focus,
+body.dark-mode .game-filter-bar select:focus {
+    border-color: #a0b8ff;
+    box-shadow: 0 0 0 3px rgba(160, 184, 255, 0.25);
+}
+.is-hidden {
+    display: none !important;
+}
+@media (max-width: 600px) {
+    .game-filter-bar {
+        flex-direction: column;
+    }
+    .game-filter-bar input[type="search"],
+    .game-filter-bar select {
+        flex-basis: auto;
+    }
+}
 #splash-screen {
     position: fixed;
     inset: 0;
@@ -492,6 +548,15 @@ window.addEventListener("load", () => {
     <section class="favorites-section" aria-label="Favorited games quick access">
       <h2>⭐Your Favorites⭐</h2>
       <div id="favorites-grid" class="game-card-grid"></div>
+    </section>
+    <section class="game-filter-bar" aria-label="Search and filter games">
+      <input type="search" id="gameSearchInput" placeholder="Search games..." aria-label="Search games by title or description">
+      <select id="genreFilter" aria-label="Filter by genre">
+        <option value="">All genres</option>
+      </select>
+      <select id="difficultyFilter" aria-label="Filter by difficulty">
+        <option value="">All difficulties</option>
+      </select>
     </section>
     <section class="game-card-grid" aria-label="Games">
       <a class="game-card" href="/platformer_game">
@@ -1099,6 +1164,98 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
     renderFavorites();
   });
 })();
+</script>
+<script>
+  (() => {
+    const searchInput = document.getElementById('gameSearchInput');
+    const genreFilter = document.getElementById('genreFilter');
+    const difficultyFilter = document.getElementById('difficultyFilter');
+    const grid = document.querySelector('.game-card-grid[aria-label="Games"]');
+
+    const DIFFICULTY_ORDER = ['Easy', 'Medium', 'Hard'];
+    const games = [];
+    let noResultsMessage;
+    let suggestionBoxCard;
+
+    const stripPrefix = (text, prefix) =>
+      text.startsWith(prefix) ? text.slice(prefix.length).trim() : text.trim();
+
+    function buildGameIndex(){
+      grid.querySelectorAll('.game-card').forEach((card) => {
+        const href = card.getAttribute('href');
+        if (!href || href === '/suggestion_box') return;
+
+        const title = card.querySelector('.game-card-title')?.textContent?.trim() || '';
+        const description = card.querySelector('.game-card-description')?.textContent?.trim() || '';
+        const genre = stripPrefix(card.querySelector('.game-tag-genre')?.textContent?.trim() || '', 'Genre:');
+        const difficulty = stripPrefix(card.querySelector('.game-tag-difficulty')?.textContent?.trim() || '', 'Difficulty:');
+
+        games.push({ el: card, title, description, genre, difficulty });
+      });
+    }
+
+    function populateFilterOptions(){
+      const genres = [...new Set(games.map((g) => g.genre).filter(Boolean))].sort();
+      genres.forEach((genre) => {
+        const option = document.createElement('option');
+        option.value = genre;
+        option.textContent = genre;
+        genreFilter.appendChild(option);
+      });
+
+      const difficulties = [...new Set(games.map((g) => g.difficulty).filter(Boolean))];
+      const ordered = DIFFICULTY_ORDER.filter((d) => difficulties.includes(d));
+      const extra = difficulties.filter((d) => !DIFFICULTY_ORDER.includes(d)).sort();
+      [...ordered, ...extra].forEach((difficulty) => {
+        const option = document.createElement('option');
+        option.value = difficulty;
+        option.textContent = difficulty;
+        difficultyFilter.appendChild(option);
+      });
+    }
+
+    function applyFilters(){
+      const query = searchInput.value.trim().toLowerCase();
+      const genre = genreFilter.value;
+      const difficulty = difficultyFilter.value;
+      const filtersActive = Boolean(query || genre || difficulty);
+      let visibleCount = 0;
+
+      games.forEach((game) => {
+        const matchesSearch = !query || `${game.title} ${game.description}`.toLowerCase().includes(query);
+        const matchesGenre = !genre || game.genre === genre;
+        const matchesDifficulty = !difficulty || game.difficulty === difficulty;
+        const visible = matchesSearch && matchesGenre && matchesDifficulty;
+        game.el.classList.toggle('is-hidden', !visible);
+        if (visible) visibleCount++;
+      });
+
+      if (suggestionBoxCard) {
+        suggestionBoxCard.classList.toggle('is-hidden', filtersActive);
+      }
+
+      noResultsMessage.classList.toggle('is-hidden', visibleCount > 0);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!searchInput || !genreFilter || !difficultyFilter || !grid) return;
+
+      noResultsMessage = document.createElement('p');
+      noResultsMessage.id = 'noGameResultsMessage';
+      noResultsMessage.className = 'favorites-empty-message is-hidden';
+      noResultsMessage.textContent = 'No games match your search or filters.';
+      grid.appendChild(noResultsMessage);
+
+      suggestionBoxCard = grid.querySelector('.game-card[href="/suggestion_box"]');
+
+      buildGameIndex();
+      populateFilterOptions();
+
+      searchInput.addEventListener('input', applyFilters);
+      genreFilter.addEventListener('change', applyFilters);
+      difficultyFilter.addEventListener('change', applyFilters);
+    });
+  })();
 </script>
   <script src="/analytics-consent.js"></script>
   </body>
