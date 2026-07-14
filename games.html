@@ -984,6 +984,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
       const original = gameCardsByHref.get(id);
       if (original) {
         const clone = original.cloneNode(true);
+        clone.classList.remove('is-hidden');
         const star = clone.querySelector('.fav-star');
         if (star) star.remove();
         const title = clone.querySelector('.game-card-title')?.textContent?.trim() || formatFallbackTitle(id);
