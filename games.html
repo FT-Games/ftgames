@@ -12,10 +12,6 @@
 <script async src="https://js.stripe.com/v3/buy-button.js"></script>
   </head>
   <body>
-    <div id="splash-screen">
-    <img src="images/splash.png" alt="Splash Screen">
-</div>
-     
 <nav class="navbar">
     <a href="/" class="logo">FT Games</a>
 
@@ -253,6 +249,8 @@ body.dark-mode .fav-star {
 .favorites-section h2 {
     margin-bottom: 12px;
     text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
 }
 body.dark-mode .favorites-section {
     background: rgba(25, 25, 25, 0.6);
@@ -319,24 +317,6 @@ body.dark-mode .game-filter-bar select:focus {
     .game-filter-bar select {
         flex-basis: auto;
     }
-}
-#splash-screen {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 100001;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: black;
-    transition: opacity 0.5s ease;
-}
-
-#splash-screen img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 #homebaseFooter {
     position: fixed;
@@ -481,28 +461,16 @@ body.dark-mode .username-badge {
     margin-bottom: 10px;
 }
 
-.favorites-section h2 {
-    font-size: 1.8rem;
-    font-weight: 700;
+@media (max-width: 600px) {
+    .page-container {
+        padding: 24px 16px 60px;
+    }
 }
 
 </style>
 
 <script>
 window.addEventListener("load", () => {
-
-    // Splash screen
-    setTimeout(() => {
-        const splash = document.getElementById("splash-screen");
-
-        if (splash) {
-            splash.style.opacity = "0";
-
-            setTimeout(() => {
-                splash.remove();
-            }, 500);
-        }
-    }, 3000);
 
     // Cookies
     function setCookie(name, value, days) {
@@ -964,7 +932,6 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
           <h2 class="game-card-title">Suggestion Box</h2>
           <p class="game-card-description">This is where you can suggest games for us to add to our website. Just fill out a quick form and we'll get right on it. Try it today!</p>
           <!--Please note that game tags should NOT be applied to suggestion box. This is NOT a bug.-->
-          </div>
         </div>
       </a>
     </section>
@@ -1303,6 +1270,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
       searchInput.addEventListener('input', applyFilters);
       genreFilter.addEventListener('change', applyFilters);
       difficultyFilter.addEventListener('change', applyFilters);
+      applyFilters();
     });
   })();
 </script>
