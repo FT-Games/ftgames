@@ -83,6 +83,7 @@
     id = id.replace(/[^a-zA-Z0-9_\/-]/g, '');
     id = id.replace(/^\//, '');
     let genre = '';
+    const genreEl = card.querySelector('.game-tag-genre');
     if (genreEl) {
       const txt = genreEl.textContent || '';
       const m = txt.match(/:\s*(.*)/);
