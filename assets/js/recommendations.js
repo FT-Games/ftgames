@@ -78,8 +78,10 @@
     const card = e.target.closest && e.target.closest('.game-card');
     if (!card) return;
     const prefs = readPrefs();
-    const id = (card.getAttribute('href') || card.dataset.gameId || '').replace(/^\//, '');
-    const genreEl = card.querySelector('.game-tag-genre');
+    const href = card.getAttribute('href') || card.dataset.gameId || '';
+    let id = href.replace(/^https?:\/\//, '');
+    id = id.replace(/[^a-zA-Z0-9_\/-]/g, '');
+    id = id.replace(/^\//, '');
     let genre = '';
     if (genreEl) {
       const txt = genreEl.textContent || '';
