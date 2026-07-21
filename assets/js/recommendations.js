@@ -1,31 +1,27 @@
 (function () {
   // Config
-  const COOKIE_NAME = 'ftgames_prefs_v1';
-  const COOKIE_DAYS = 365;
+  const STORAGE_KEY = 'ftgames:recommendationPrefs';
   const MAX_RECOMMENDATIONS = 6;
+  const SUGGESTION_BOX_ID = 'suggestion_box';
 
-  // Cookie helpers (simple JSON in cookie)
-  function setCookie(name, value, days) {
-    const d = new Date();
-    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-    const expires = "expires=" + d.toUTCString();
-    document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/;SameSite=Lax" + (location.protocol === 'https:' ? ';Secure' : '');
+  function normalizeGameId(href) {
+    let id = String(href || '').replace(/^https?:\/\//, '');
+    id = id.replace(/[^a-zA-Z0-9_\/-]/g, '');
+    id = id.replace(/^\//, '');
+    return id;
   }
 
-  function getCookie(name) {
-    const nameEQ = name + "=";
-    const ca = document.cookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i].trim();
-      if (c.indexOf(nameEQ) === 0) {
-        return decodeURIComponent(c.substring(nameEQ.length));
-      }
-    }
-    return null;
+  function isTrackableGame(id) {
+    return id && id !== SUGGESTION_BOX_ID;
   }
 
   function readPrefs() {
-    const raw = getCookie(COOKIE_NAME);
+    let raw = null;
+    try {
+      raw = localStorage.getItem(STORAGE_KEY);
+    } catch (e) {
+      return { counts: {}, genres: {} };
+    }
     if (!raw) return { counts: {}, genres: {} };
     try {
       return JSON.parse(raw);
@@ -37,9 +33,9 @@
 
   function savePrefs(prefs) {
     try {
-      setCookie(COOKIE_NAME, JSON.stringify(prefs), COOKIE_DAYS);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
     } catch (e) {
-      console.warn('Could not save preferences cookie', e);
+      console.warn('Could not save recommendation preferences', e);
     }
   }
 
@@ -50,10 +46,7 @@
     const nodes = document.querySelectorAll('a.game-card[href]');
     const games = Array.from(nodes).map(node => {
       const href = node.getAttribute('href') || '#';
-      // derive an id from href (strip leading slash and query)
-      let id = href.replace(/^https?:\/\//, '');
-      id = id.replace(/[^a-zA-Z0-9_\/-]/g, '');
-      id = id.replace(/^\//, '');
+      const id = normalizeGameId(href);
       // title
       const titleEl = node.querySelector('.game-card-title') || node.querySelector('h2') || node.querySelector('h3');
       const title = titleEl ? titleEl.textContent.trim() : id || href;
@@ -67,7 +60,7 @@
       }
 
       return { id: id || href, url: href, title: title, genre: genre };
-    });
+    }).filter(game => isTrackableGame(game.id));
 
     return games;
   }
@@ -79,9 +72,7 @@
     if (!card) return;
     const prefs = readPrefs();
     const href = card.getAttribute('href') || card.dataset.gameId || '';
-    let id = href.replace(/^https?:\/\//, '');
-    id = id.replace(/[^a-zA-Z0-9_\/-]/g, '');
-    id = id.replace(/^\//, '');
+    const id = normalizeGameId(href);
     let genre = '';
     const genreEl = card.querySelector('.game-tag-genre');
     if (genreEl) {
@@ -90,7 +81,7 @@
       genre = m ? m[1].trim().toLowerCase() : txt.trim().toLowerCase();
     }
 
-    if (!id) return;
+    if (!isTrackableGame(id)) return;
 
     prefs.counts = prefs.counts || {};
     prefs.genres = prefs.genres || {};
@@ -153,7 +144,7 @@
       const otherGames = games.filter(g => !seen.has(g.id));
       for (const g of otherGames) {
         if (recommended.length >= MAX_RECOMMENDATIONS) break;
-        recommended.push({ reason: 'Popular on the site', game: g });
+        recommended.push({ reason: 'More games to explore', game: g });
         seen.add(g.id);
       }
     }
@@ -234,7 +225,14 @@
   window.FTGamesRecs = {
     readPrefs,
     savePrefs,
-    resetPrefs: function () { setCookie(COOKIE_NAME, '', -1); renderRecommendations(); },
+    resetPrefs: function () {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {
+        // ignore
+      }
+      renderRecommendations();
+    },
     renderRecommendations
   };
 
