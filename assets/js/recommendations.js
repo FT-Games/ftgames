@@ -97,6 +97,19 @@
     prefs.counts[id] = (prefs.counts[id] || 0) + 1;
     if (genre) prefs.genres[genre] = (prefs.genres[genre] || 0) + 1;
 
+    // Prevent cookie bloat: keep only the most-clicked items
+    const MAX_STORED_GAMES = 50;
+    const topCounts = Object.entries(prefs.counts)
+      .sort((a, b) => (b[1] || 0) - (a[1] || 0))
+      .slice(0, MAX_STORED_GAMES);
+    prefs.counts = topCounts.reduce((acc, [k, v]) => { acc[k] = v; return acc; }, {});
+
+    const MAX_STORED_GENRES = 20;
+    const topGenres = Object.entries(prefs.genres)
+      .sort((a, b) => (b[1] || 0) - (a[1] || 0))
+      .slice(0, MAX_STORED_GENRES);
+    prefs.genres = topGenres.reduce((acc, [k, v]) => { acc[k] = v; return acc; }, {});
+
     savePrefs(prefs);
     // live update
     renderRecommendations();
