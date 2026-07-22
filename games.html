@@ -134,37 +134,287 @@ body.dark-mode {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     margin: 24px 0;
 }
+/* ===== FT Games Modern Card ===== */
+
 .game-card {
+    position: relative;
+    overflow: hidden;
+
     color: inherit;
     text-decoration: none;
+
     background: white;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0,0,0,.08);
     border-radius: 18px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
-    transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.8s ease-in-out, border-color 0.8s ease-in-out;
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease,
+        border-color .35s ease,
+        background .35s ease;
 }
+
 body.dark-mode .game-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    background: rgba(255,255,255,.05);
+    border-color: rgba(255,255,255,.08);
 }
-.game-card:hover,
-.game-card:focus {
-    box-shadow: 0 0 30px rgba(124, 58, 237, 0.35);
-    transform: translateY(-8px);
+
+.game-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    padding:2px;
+
+    background:linear-gradient(
+        135deg,
+        #00e5ff,
+        #00ff99,
+        #00e5ff
+    );
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;
+            mask-composite:exclude;
+
+    opacity:0;
+    transition:.35s;
+
+    pointer-events:none;
+    z-index:2;
 }
-a.game-card[href="/suggestion_box"] {
-    border: 2px dotted #dddddd;
+
+.game-card::after{
+    content:"";
+    position:absolute;
+    top:-120%;
+    left:-50%;
+
+    width:60%;
+    height:300%;
+
+    background:linear-gradient(
+        rgba(255,255,255,0),
+        rgba(255,255,255,.15),
+        rgba(255,255,255,0)
+    );
+
+    transform:rotate(25deg);
+    transition:.7s;
+
+    pointer-events:none;
 }
-.game-card-thumbnail {
-    background: #eeeeee;
-    height: 160px;
-    object-fit: cover;
-    width: 100%;
+
+.game-card:hover{
+    transform:translateY(-10px) scale(1.03);
+
+    box-shadow:
+        0 0 18px rgba(0,229,255,.35),
+        0 0 45px rgba(0,255,153,.25),
+        0 12px 30px rgba(0,0,0,.25);
+
+    border-color:transparent;
+}
+
+.game-card:hover::before{
+    opacity:1;
+}
+
+.game-card:hover::after{
+    left:140%;
+}
+
+.fav-glow{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:2;
+    border-radius:inherit;
+    pointer-events:none;
+
+    background: radial-gradient(
+        circle at 28px 28px,
+        #fff6d6 0%,
+        #ffd24d 30%,
+        #ffb300 55%,
+        rgba(255,179,0,0) 78%
+    );
+
+    opacity:0;
+    clip-path: circle(0% at 28px 28px);
+}
+
+.game-card.fav-burst .fav-glow{
+    animation: favGlowPulse .9s ease-out;
+}
+
+@keyframes favGlowPulse{
+    0%   { opacity:0;   clip-path: circle(0% at 28px 28px); }
+    35%  { opacity:.9;  clip-path: circle(75% at 28px 28px); }
+    65%  { opacity:.6;  clip-path: circle(140% at 28px 28px); }
+    100% { opacity:0;   clip-path: circle(140% at 28px 28px); }
+}
+
+.game-card.fav-burst{
+    z-index: 5;
+}
+
+/* Ghost that visually travels from a favorited card to the favorites section */
+.fav-flying-ghost{
+    position: fixed;
+    z-index: 100010;
+    border-radius: 18px;
+    pointer-events: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: rgba(255,255,255,.95);
+
+    background: radial-gradient(circle at 30% 28%, #fff6d6, #ffd24d 45%, #ffb300 100%);
+    box-shadow: 0 10px 26px rgba(255, 179, 0, .55);
+
+    transition:
+        top .55s cubic-bezier(.28,.85,.32,1.15),
+        left .55s cubic-bezier(.28,.85,.32,1.15),
+        width .55s cubic-bezier(.28,.85,.32,1.15),
+        height .55s cubic-bezier(.28,.85,.32,1.15),
+        opacity .35s ease .2s;
+}
+
+/* Gold "blank" cover shown while a newly favorited card blooms in */
+.fav-card-cover{
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    border-radius: inherit;
+    pointer-events: none;
+
+    background: radial-gradient(circle at 50% 38%, #fff6d6, #ffd24d 55%, #ffb300 100%);
+    opacity: 0;
+}
+
+@keyframes favBloopIn{
+    0%   { transform: scale(.3); opacity: 0; }
+    55%  { transform: scale(1.08); opacity: 1; }
+    75%  { transform: scale(.96); }
+    100% { transform: scale(1); }
+}
+
+.game-card.fav-enter{
+    animation: favBloopIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+
+.game-card.fav-enter .fav-card-cover{
+    opacity: 1;
+    animation: favCoverFade .45s ease-out .35s forwards;
+}
+
+@keyframes favCoverFade{
+    to { opacity: 0; }
+}
+
+.game-card.fav-enter .game-card-thumbnail,
+.game-card.fav-enter .game-card-content{
+    opacity: 0;
+    animation: favContentFade .5s ease-out .35s forwards;
+}
+
+@keyframes favContentFade{
+    to { opacity: 1; }
+}
+
+.game-card-thumbnail{
+    width:100%;
+    height:160px;
+    object-fit:cover;
+
+    transition:
+        transform .35s ease,
+        filter .35s ease;
+}
+
+.game-card:hover .game-card-thumbnail{
+    transform:scale(1.08);
+    filter:brightness(1.08) saturate(1.1);
+}
+
+.game-card-title{
+    transition:
+        color .3s ease,
+        text-shadow .3s ease;
+}
+
+.game-card:hover .game-card-title{
+    color:#00e5ff;
+    text-shadow:0 0 12px rgba(0,229,255,.45);
+}
+
+.game-card-description{
+    transition:opacity .3s;
+}
+
+.game-card:hover .game-card-description{
+    opacity:.95;
+}
+  /* Make titles and descriptions glow FT Games blue on hover */
+.game-card-title,
+.game-card-description {
+    transition:
+        color .3s ease,
+        text-shadow .3s ease,
+        opacity .3s ease;
+}
+
+.game-card:hover .game-card-title,
+.game-card:hover .game-card-description {
+    color: #00e5ff;
+    text-shadow: 0 0 12px rgba(0,229,255,.45);
+}
+
+/* Works in dark mode too */
+body.dark-mode .game-card:hover .game-card-title,
+body.dark-mode .game-card:hover .game-card-description {
+    color: #00e5ff;
+    text-shadow: 0 0 14px rgba(0,229,255,.6);
+}
+
+/* Cards inside the favorites section glow gold on hover instead of blue,
+   brighter than the section's own muted gold background so it still pops. */
+#favorites-grid .game-card::before{
+    background: linear-gradient(135deg, #ffe37a, #ffb300, #ffe37a);
+}
+
+#favorites-grid .game-card:hover{
+    box-shadow:
+        0 0 22px rgba(255, 200, 0, .6),
+        0 0 55px rgba(255, 170, 0, .45),
+        0 12px 30px rgba(0,0,0,.25);
+}
+
+#favorites-grid .game-card:hover .game-card-title,
+#favorites-grid .game-card:hover .game-card-description{
+    color: #ffb300;
+    text-shadow: 0 0 12px rgba(255, 179, 0, .55);
+}
+
+body.dark-mode #favorites-grid .game-card:hover .game-card-title,
+body.dark-mode #favorites-grid .game-card:hover .game-card-description{
+    color: #ffd24d;
+    text-shadow: 0 0 14px rgba(255, 179, 0, .7);
+}
+
+.game-card-content{
+    position:relative;
+    z-index:3;
+}
+
+.game-card-thumbnail{
+    position:relative;
+    z-index:1;
 }
 .game-card-content {
     padding: 16px;
@@ -243,7 +493,7 @@ body.dark-mode .fav-star {
     padding: 20px;
     border-radius: 18px;
     border: 1px solid rgba(255, 210, 77, 0.35);
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 196, 0, 0.10);
     box-shadow: 0 8px 20px rgba(255, 210, 77, 0.22);
 }
 .favorites-section h2 {
@@ -253,7 +503,7 @@ body.dark-mode .fav-star {
     font-weight: 700;
 }
 body.dark-mode .favorites-section {
-    background: rgba(25, 25, 25, 0.6);
+    background: rgba(255, 178, 36, 0.08);
     border-color: rgba(255, 210, 77, 0.45);
     box-shadow: 0 10px 26px rgba(255, 210, 77, 0.2);
 }
@@ -318,6 +568,22 @@ body.dark-mode .recommendations-section {
 body.dark-mode .recommended-item {
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(255, 255, 255, 0.12);
+}
+.favorites-tip {
+    display: none;
+    margin: 24px auto;
+    padding: 10px 18px;
+    max-width: fit-content;
+    text-align: center;
+    font-size: 13px;
+    opacity: .75;
+    border-radius: 999px;
+    border: 1px dashed rgba(255, 210, 77, 0.45);
+    background: rgba(255, 210, 77, 0.08);
+}
+body.dark-mode .favorites-tip {
+    border-color: rgba(255, 210, 77, 0.35);
+    background: rgba(255, 210, 77, 0.06);
 }
 .game-filter-bar {
     display: flex;
@@ -523,7 +789,6 @@ body.dark-mode .username-badge {
         padding: 24px 16px 60px;
     }
 }
-
 </style>
 
 <script>
@@ -617,7 +882,7 @@ window.addEventListener("load", () => {
     </a>
     <div class="ad-label">AD</div>
 </div>
-    <section class="favorites-section" aria-label="Favorited games quick access">
+    <section class="favorites-section" id="favoritesSection" aria-label="Favorited games quick access">
       <h2>⭐Your Favorites⭐</h2>
       <div id="favorites-grid" class="game-card-grid"></div>
     </section>
@@ -627,6 +892,7 @@ window.addEventListener("load", () => {
         <li class="recommended-empty-message">Loading recommendations...</li>
       </ul>
     </section>
+    <p class="favorites-tip" id="favoritesTip">💡 TIP: Click the ☆ icon to favourite a game for easy access!</p>
     <section class="game-filter-bar" aria-label="Search and filter games">
       <input type="search" id="gameSearchInput" placeholder="Search games..." aria-label="Search games by title or description">
       <select id="genreFilter" aria-label="Filter by genre">
@@ -931,7 +1197,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         <img class="game-card-thumbnail" src="thumbnails/wow-thumbnail.png" alt="World of Warships Legends thumbnail">
         <div class="game-card-content">
           <h2 class="game-card-title">World of Warships Legends</h2>
-          <p class="game-card-description">Command your fleet and engage in epic naval battles in this game. Thanks to TitanRovan-99 for the original project on Scratch.</p>
+          <p class="game-card-description">TARGET 11 O'CLOCK, RANGE 1345 METRES. FIRE!!!.Command your naval fleet as you fight the enemy fleet in this fun PvE game.. Thanks to TitanRovan-99 for the original project on Scratch.</p>
           <div class="game-card-tags">
             <span class="game-tag game-tag-genre">Genre: Action</span>
             <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
@@ -1110,9 +1376,31 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
     button.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
-      toggleFavorite(id);
+      toggleFavorite(id, button.closest('.game-card'));
     });
     return button;
+  }
+
+  function playFavoriteBurst(cardEl){
+    if (!cardEl) return;
+    cardEl.classList.remove('fav-burst');
+    void cardEl.offsetWidth;
+    cardEl.classList.add('fav-burst');
+    window.setTimeout(() => cardEl.classList.remove('fav-burst'), 900);
+  }
+
+  function addFavCardCover(card){
+    const cover = document.createElement('span');
+    cover.className = 'fav-card-cover';
+    cover.setAttribute('aria-hidden', 'true');
+    card.appendChild(cover);
+  }
+
+  function updateFavoritesVisibility(hasFavorites){
+    const section = document.getElementById('favoritesSection');
+    const tip = document.getElementById('favoritesTip');
+    if (section) section.style.display = hasFavorites ? '' : 'none';
+    if (tip) tip.style.display = hasFavorites ? 'none' : 'block';
   }
 
   function renderFavorites(){
@@ -1121,28 +1409,26 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
     container.innerHTML = '';
 
     const favorites = getFavorites();
+    updateFavoritesVisibility(favorites.length > 0);
+    if (favorites.length === 0) return;
+
     const catalog = getCatalog();
     const gameCardsByHref = new Map(
       Array.from(document.querySelectorAll('.game-card-grid[aria-label="Games"] .game-card'))
         .map((card) => [card.getAttribute('href'), card])
         .filter(([href]) => typeof href === 'string')
     );
-    if (favorites.length === 0) {
-      const message = document.createElement('p');
-      message.className = 'favorites-empty-message';
-      message.textContent = 'You have no favorites yet. Click the ☆ on a game card to add one.';
-      container.appendChild(message);
-      return;
-    }
 
     favorites.forEach((id) => {
       const original = gameCardsByHref.get(id);
       if (original) {
         const clone = original.cloneNode(true);
-        clone.classList.remove('is-hidden');
+        clone.classList.remove('is-hidden', 'fav-burst', 'fav-enter');
+        clone.dataset.gameId = id;
         const star = clone.querySelector('.fav-star');
         if (star) star.remove();
         const title = clone.querySelector('.game-card-title')?.textContent?.trim() || formatFallbackTitle(id);
+        addFavCardCover(clone);
         clone.appendChild(createFavoriteToggleButton(id, title));
         container.appendChild(clone);
         return;
@@ -1153,6 +1439,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
         const card = document.createElement('a');
         card.className = 'game-card';
         card.href = id;
+        card.dataset.gameId = id;
 
         if (entry.thumbnail) {
           const image = document.createElement('img');
@@ -1179,12 +1466,14 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
 
         content.appendChild(createTagsElement(entry.genre, entry.difficulty));
         card.appendChild(content);
+        addFavCardCover(card);
         card.appendChild(createFavoriteToggleButton(id, entry.title || formatFallbackTitle(id)));
         container.appendChild(card);
       } else {
         const card = document.createElement('a');
         card.className = 'game-card';
         card.href = id;
+        card.dataset.gameId = id;
 
         const content = document.createElement('div');
         content.className = 'game-card-content';
@@ -1196,16 +1485,138 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
 
         content.appendChild(createTagsElement());
         card.appendChild(content);
+        addFavCardCover(card);
         card.appendChild(createFavoriteToggleButton(id, formatFallbackTitle(id)));
         container.appendChild(card);
       }
     });
   }
 
-  function toggleFavorite(id){
+  function cssEscapeId(value){
+    return window.CSS && typeof CSS.escape === 'function'
+      ? CSS.escape(value)
+      : String(value).replace(/[^a-zA-Z0-9_-]/g, (char) => `\\${char}`);
+  }
+
+  function getFavoritesRectMap(container){
+    const map = new Map();
+    container.querySelectorAll(':scope > .game-card').forEach((el) => {
+      const id = el.dataset.gameId;
+      if (id) map.set(id, el.getBoundingClientRect());
+    });
+    return map;
+  }
+
+  // FLIP animation: shifts/resizes the existing favorite cards smoothly
+  // to make room for a newly inserted one.
+  function flipFavoritesGrid(container, oldRects){
+    container.querySelectorAll(':scope > .game-card').forEach((el) => {
+      const id = el.dataset.gameId;
+      const oldRect = id && oldRects.get(id);
+      if (!oldRect) return;
+
+      const newRect = el.getBoundingClientRect();
+      const dx = oldRect.left - newRect.left;
+      const dy = oldRect.top - newRect.top;
+      const sx = oldRect.width / newRect.width;
+      const sy = oldRect.height / newRect.height;
+      if (!dx && !dy && sx === 1 && sy === 1) return;
+
+      el.style.transition = 'none';
+      el.style.transformOrigin = 'top left';
+      el.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+      void el.offsetWidth;
+      el.style.transition = 'transform .45s cubic-bezier(.22,.8,.28,1)';
+      el.style.transform = '';
+
+      el.addEventListener('transitionend', function handler(event){
+        if (event.propertyName !== 'transform') return;
+        el.style.transition = '';
+        el.style.transformOrigin = '';
+        el.removeEventListener('transitionend', handler);
+      });
+    });
+  }
+
+  function bloomFavoriteCard(cardEl){
+    cardEl.classList.add('fav-enter');
+    cardEl.addEventListener('animationend', function handler(event){
+      if (event.animationName !== 'favBloopIn') return;
+      cardEl.classList.remove('fav-enter');
+      cardEl.removeEventListener('animationend', handler);
+    });
+  }
+
+  function flyGhostIntoFavorites(startRect, targetRect, onArrive){
+    const ghost = document.createElement('div');
+    ghost.className = 'fav-flying-ghost';
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.textContent = '★';
+    ghost.style.top = `${startRect.top}px`;
+    ghost.style.left = `${startRect.left}px`;
+    ghost.style.width = `${startRect.width}px`;
+    ghost.style.height = `${startRect.height}px`;
+    document.body.appendChild(ghost);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        ghost.style.top = `${targetRect.top}px`;
+        ghost.style.left = `${targetRect.left}px`;
+        ghost.style.width = `${targetRect.width}px`;
+        ghost.style.height = `${targetRect.height}px`;
+        ghost.style.opacity = '0';
+      });
+    });
+
+    window.setTimeout(() => {
+      ghost.remove();
+      onArrive();
+    }, 560);
+  }
+
+  function flyIntoFavorites(id, sourceCardEl){
+    const grid = document.getElementById('favorites-grid');
+    if (!grid) {
+      renderFavorites();
+      return;
+    }
+
+    const oldRects = getFavoritesRectMap(grid);
+    const startRect = sourceCardEl ? sourceCardEl.getBoundingClientRect() : null;
+
+    renderFavorites();
+
+    const newCard = grid.querySelector(`.game-card[data-game-id="${cssEscapeId(id)}"]`);
+    if (!newCard) return;
+
+    flipFavoritesGrid(grid, oldRects);
+
+    if (!startRect) {
+      bloomFavoriteCard(newCard);
+      return;
+    }
+
+    const targetRect = newCard.getBoundingClientRect();
+    newCard.style.visibility = 'hidden';
+
+    flyGhostIntoFavorites(startRect, targetRect, () => {
+      newCard.style.visibility = '';
+      bloomFavoriteCard(newCard);
+    });
+  }
+
+  function animateFavoriteAddition(id, sourceCardEl){
+    playFavoriteBurst(sourceCardEl);
+    window.setTimeout(() => {
+      flyIntoFavorites(id, sourceCardEl);
+    }, 850);
+  }
+
+  function toggleFavorite(id, cardEl){
     const current = getFavorites();
     const index = current.indexOf(id);
-    if (index > -1) {
+    const added = index === -1;
+    if (!added) {
       current.splice(index, 1);
     } else {
       current.push(id);
@@ -1213,7 +1624,12 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
 
     setFavorites(current);
     updateStars();
-    renderFavorites();
+
+    if (added) {
+      animateFavoriteAddition(id, cardEl);
+    } else {
+      renderFavorites();
+    }
   }
 
   function initGameCardFavorites(){
@@ -1230,6 +1646,13 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
       const difficulty = card.querySelector('.game-tag-difficulty')?.textContent?.trim() || '';
       saveCatalogEntry(id, { title, description, thumbnail, genre, difficulty });
 
+      if (!card.querySelector('.fav-glow')) {
+        const glow = document.createElement('span');
+        glow.className = 'fav-glow';
+        glow.setAttribute('aria-hidden', 'true');
+        card.appendChild(glow);
+      }
+
       if (card.querySelector('.fav-star')) return;
 
       const button = document.createElement('button');
@@ -1241,7 +1664,7 @@ Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to Ro
       button.addEventListener('click', (event) => {
         event.preventDefault();
         event.stopPropagation();
-        toggleFavorite(id);
+        toggleFavorite(id, card);
       });
 
       card.appendChild(button);

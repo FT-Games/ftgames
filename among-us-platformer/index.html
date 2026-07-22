@@ -2,7 +2,6 @@
 
 <html>
 <head>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
@@ -186,65 +185,18 @@
         box-shadow:0 0 18px rgba(0,255,170,.45);
         transform:translateY(-2px);
     }
-      #addFav{
-
-position:fixed;
-top:10px;
-right:70px;
-
-width:48px;
-height:48px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-border-radius:16px;
-
-background:#111;
-
-border:2px solid #00e5ff;
-
-color:#ffd84d;
-
-font-size:24px;
-
-cursor:pointer;
-
-transition:.25s;
-
-z-index:999999;
-
-}
-
-#addFav:hover{
-
-background:linear-gradient(90deg,#00e5ff,#00ff99);
-
-color:black;
-
-}
   </style>
   <meta name="theme-color" content="#000000">
   
 </head>
 <body>
- <div id="addFav" title="Add to Favourites">☆</div>
+  <a id="homeButton" href="/games" aria-label="Go to games homepage">
+🏠 Home
+</a>
 
-<div id="favButton" title="Show Favourites">⭐</div>
-
-<div id="favSidebar">
-    <div id="favHeader">
-        ⭐ Your Favourites
-        <span id="closeFav">&times;</span>
-    </div>
-
-    <div id="favList">
-        <div class="emptyFavs">No favourites yet.</div>
-    </div>
-</div>
-
-<div id="favOverlay"></div>
+<button id="instructionsButton" type="button" aria-label="Open instructions popup">
+📖 Instructions
+</button>
   <div id="app"></div>
 
   <div id="launch" class="screen" hidden title="Click to start">
@@ -451,6 +403,5 @@ color:black;
         );
     });
   </script>
-  <script src="/analytics-consent.js"></script>
 </body>
 </html>
