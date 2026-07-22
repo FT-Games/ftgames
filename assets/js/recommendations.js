@@ -3,6 +3,8 @@
   const STORAGE_KEY = 'ftgames:recommendationPrefs';
   const MAX_RECOMMENDATIONS = 6;
   const SUGGESTION_BOX_ID = 'suggestion_box';
+  const GAME_GRID_SELECTOR = '.game-card-grid[aria-label="Games"]';
+  const RECOMMENDED_LINK_SELECTOR = '#recommended-list .recommended-link';
 
   function normalizeGameId(href) {
     let id = String(href || '').replace(/^https?:\/\//, '');
@@ -15,6 +17,25 @@
     return id && id !== SUGGESTION_BOX_ID;
   }
 
+  function parseGenre(text) {
+    const cleaned = String(text || '').trim();
+    if (!cleaned) return '';
+    const match = cleaned.match(/:\s*(.*)/);
+    return match ? match[1].trim().toLowerCase() : cleaned.toLowerCase();
+  }
+
+  function sanitizeCountMap(value) {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+    const result = {};
+    Object.entries(value).forEach(([key, count]) => {
+      if (typeof key !== 'string') return;
+      const normalized = Math.max(0, Number(count) || 0);
+      if (!normalized) return;
+      result[key] = normalized;
+    });
+    return result;
+  }
+
   function readPrefs() {
     let raw = null;
     try {
@@ -24,7 +45,14 @@
     }
     if (!raw) return { counts: {}, genres: {} };
     try {
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+        return { counts: {}, genres: {} };
+      }
+      return {
+        counts: sanitizeCountMap(parsed.counts),
+        genres: sanitizeCountMap(parsed.genres)
+      };
     } catch (e) {
       // Corrupt stored data; reset
       return { counts: {}, genres: {} };
@@ -43,7 +71,9 @@
   function getAllGames() {
     // The site uses <a class="game-card" href="/some_path"> with nested h2.game-card-title
     // and a <span class="game-tag game-tag-genre"> containing text like "Genre: Platformer".
-    const nodes = document.querySelectorAll('a.game-card[href]');
+    const grid = document.querySelector(GAME_GRID_SELECTOR);
+    if (!grid) return [];
+    const nodes = grid.querySelectorAll('a.game-card[href]');
     const games = Array.from(nodes).map(node => {
       const href = node.getAttribute('href') || '#';
       const id = normalizeGameId(href);
@@ -54,9 +84,7 @@
       let genre = '';
       const genreEl = node.querySelector('.game-tag-genre');
       if (genreEl) {
-        const txt = genreEl.textContent || '';
-        const m = txt.match(/:\s*(.*)/);
-        genre = m ? m[1].trim().toLowerCase() : txt.trim().toLowerCase();
+        genre = parseGenre(genreEl.textContent);
       }
 
       return { id: id || href, url: href, title: title, genre: genre };
@@ -67,20 +95,30 @@
 
   // Update preferences when a game is clicked
   function handleGameClick(e) {
-    // clicks on anchors are enough; look for a.closest('.game-card')
-    const card = e.target.closest && e.target.closest('.game-card');
-    if (!card) return;
-    const prefs = readPrefs();
-    const href = card.getAttribute('href') || card.dataset.gameId || '';
-    const id = normalizeGameId(href);
+    if (!(e.target instanceof Element)) return;
+    if (e.target.closest('.fav-star')) return;
+
+    let href = '';
     let genre = '';
-    const genreEl = card.querySelector('.game-tag-genre');
-    if (genreEl) {
-      const txt = genreEl.textContent || '';
-      const m = txt.match(/:\s*(.*)/);
-      genre = m ? m[1].trim().toLowerCase() : txt.trim().toLowerCase();
+    const card = e.target.closest(`${GAME_GRID_SELECTOR} .game-card`);
+    if (card) {
+      href = card.getAttribute('href') || card.dataset.gameId || '';
+      const genreEl = card.querySelector('.game-tag-genre');
+      if (genreEl) {
+        genre = parseGenre(genreEl.textContent);
+      }
+    } else {
+      const recommendedLink = e.target.closest(RECOMMENDED_LINK_SELECTOR);
+      if (!recommendedLink) return;
+      href = recommendedLink.getAttribute('href') || '';
+      const allGames = getAllGames();
+      const idFromHref = normalizeGameId(href);
+      const match = allGames.find(game => game.id === idFromHref || game.url === href);
+      genre = match ? match.genre : '';
     }
 
+    const prefs = readPrefs();
+    const id = normalizeGameId(href);
     if (!isTrackableGame(id)) return;
 
     prefs.counts = prefs.counts || {};
@@ -135,6 +173,7 @@
       const sameGenre = games.filter(g => (g.genre || '') === genre && !seen.has(g.id));
       for (const g of sameGenre) {
         if (recommended.length >= MAX_RECOMMENDATIONS) break;
+        if (seen.has(g.id)) continue;
         recommended.push({ reason: `Because you like ${genre}`, game: g });
         seen.add(g.id);
       }
@@ -154,17 +193,17 @@
 
   // Render into #recommended-list or create the section dynamically
   function renderRecommendations() {
-    let container = document.getElementById('recommended-list');
-    if (!container) {
-      const recSection = document.getElementById('recommendations') || createRecommendationsSection();
-      container = recSection.querySelector('#recommended-list');
-    }
+    const recSection = document.getElementById('recommendations') || createRecommendationsSection();
+    const container = recSection.querySelector('#recommended-list');
     if (!container) return;
 
     const recs = buildRecommendations();
     container.innerHTML = '';
     if (!recs.length) {
-      container.innerHTML = '<li>No recommendations yet — play some games to get personalized suggestions!</li>';
+      const empty = document.createElement('li');
+      empty.className = 'recommended-empty-message';
+      empty.textContent = 'No recommendations yet — play some games to get personalized suggestions!';
+      container.appendChild(empty);
       return;
     }
 
@@ -188,9 +227,10 @@
     const section = document.createElement('section');
     section.id = 'recommendations';
     section.className = 'recommendations-section';
+    section.setAttribute('aria-label', 'Personalized game recommendations');
     section.innerHTML = `\n      <h2>Recommended for you</h2>\n      <ul id="recommended-list" class="recommended-list"></ul>\n    `;
 
-    // Insert after favorites-section if present, otherwise prepend to page-container
+    // Insert after favorites-section if present, otherwise prepend to page-container.
     const fav = document.querySelector('.favorites-section');
     if (fav && fav.parentNode) {
       fav.parentNode.insertBefore(section, fav.nextSibling);
@@ -199,11 +239,6 @@
       container.insertBefore(section, container.firstChild);
     }
 
-    // minimal styles for the list
-    const style = document.createElement('style');
-    style.textContent = '\n.recommendations-section { margin-top: 24px; padding: 18px; border-radius: 12px; background: rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.06); }\n.recommendations-section h2 { margin: 0 0 10px 0; }\n.recommended-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 12px; }\n.recommended-item { padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.9); }\n.recommended-link { font-weight:700; color: inherit; text-decoration: none; }\n.recommended-reason { font-size: 12px; opacity: 0.8; margin-top: 6px; }\n';
-    document.head.appendChild(style);
-
     return section;
   }
 
@@ -211,13 +246,9 @@
     // Delegate clicks on anchors to capture counts
     document.addEventListener('click', handleGameClick, true);
 
-    // Render on DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', function () {
-      renderRecommendations();
-    });
-
-    // If already loaded
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderRecommendations);
+    } else {
       renderRecommendations();
     }
   }
