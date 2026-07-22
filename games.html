@@ -262,6 +262,63 @@ body.dark-mode .favorites-section {
     text-align: center;
     grid-column: 1 / -1;
 }
+.recommendations-section {
+    margin-top: 24px;
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid rgba(48, 86, 211, 0.25);
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 20px rgba(48, 86, 211, 0.12);
+}
+.recommendations-section h2 {
+    margin: 0 0 12px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+.recommended-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.recommended-item {
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.recommended-link {
+    display: inline-block;
+    font-weight: 700;
+    color: inherit;
+    text-decoration: none;
+}
+.recommended-link:hover,
+.recommended-link:focus {
+    text-decoration: underline;
+}
+.recommended-reason {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 6px;
+}
+.recommended-empty-message {
+    opacity: .8;
+    text-align: center;
+    grid-column: 1 / -1;
+}
+body.dark-mode .recommendations-section {
+    background: rgba(25, 25, 25, 0.6);
+    border-color: rgba(160, 184, 255, 0.35);
+    box-shadow: 0 10px 26px rgba(160, 184, 255, 0.15);
+}
+body.dark-mode .recommended-item {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+}
 .game-filter-bar {
     display: flex;
     flex-wrap: wrap;
@@ -563,6 +620,12 @@ window.addEventListener("load", () => {
     <section class="favorites-section" aria-label="Favorited games quick access">
       <h2>⭐Your Favorites⭐</h2>
       <div id="favorites-grid" class="game-card-grid"></div>
+    </section>
+    <section id="recommendations" class="recommendations-section" aria-label="Personalized game recommendations">
+      <h2>Recommended for you</h2>
+      <ul id="recommended-list" class="recommended-list">
+        <li class="recommended-empty-message">Loading recommendations...</li>
+      </ul>
     </section>
     <section class="game-filter-bar" aria-label="Search and filter games">
       <input type="search" id="gameSearchInput" placeholder="Search games..." aria-label="Search games by title or description">
