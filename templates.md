@@ -10,6 +10,8 @@ These are injected into new code for better user experience and accessibility. M
 
 [Favicon Code](#favicon-code)
 
+[Preview Command](#preview-command)
+
 ## Tips & Tricks
 - Make sure to test your code before commiting, you can do that using [ScriptView](https://ftgames.xyz/scriptview). Our dedicated HTML test viewer.
 - Package Scratch projects using the [TurboWarp Packager](https://packager.turbowarp.org/), if the project is too big to import via GitHub, boot up a [Codespace](https://github.com/codespaces/new?hide_repo_select=true&repo=1256556385&skip_quickstart=true&ref=main) and upload it through Source Control.
@@ -167,13 +169,17 @@ This is a template for an instructions page. You need this for every game.
 ### Game Card Code (Paste just before the Suggestion Box game card.)
 This is the code used in games.html, it redirects to your game's page. Make sure to replace all of the placeholders with your actual game resources directory.
 ```
-    <a class="game-card" href="/my_game">
+      <a class="game-card" href="/my_game">
         <img class="game-card-thumbnail" src="thumbnails/my-game-thumbnail.png" alt="My Game thumbnail">
         <div class="game-card-content">
           <h2 class="game-card-title">My Game</h2>
           <p class="game-card-description">My description</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: TBD</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: TBD</span>
+          </div>
         </div>
-    </a>
+      </a>
 ```
 ## Favicon Code
 This makes our logo show up in tabs on browsers. It's required on every page.
@@ -181,3 +187,11 @@ This makes our logo show up in tabs on browsers. It's required on every page.
 ```
 <link rel="icon" type="image/x-icon" href="/images/favicon.png">
 ```
+## Preview Command
+This command, when executed in the terminal, will allow you to preview the website from a browser Codespace instance. It's useful as it allows easy previews of code without download clutter.
+### Preview Command (Paste inside terminal)
+```bash .dev/preview.sh```
+then enter
+```8080```
+or another port number if neccessary.
+Once you have completed these steps, a notification should appear in your codespace with a button that says "Open in Browser", click on that button and it will connect to the port. Once you're done, use Ctrl+C or kill the terminal with the 🗑️ icon.

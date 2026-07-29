@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Analytics is loaded only after the user consents (see analytics-consent.js) -->
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="/images/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +10,6 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
-    
-    
     <style>
     /* =========================
    FT Games - style.css
@@ -105,6 +103,27 @@ body.light-mode .navbar{
     border-radius:8px;
 
     padding:8px 14px;
+}
+
+.username-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #2D7CFF;
+  color: white;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(45,124,255,.45);
+}
+
+body.light-mode .username-badge {
+  background: #1D4ED8;
+}
+
+.hidden {
+  display: none;
 }
 
 /* =========================
@@ -400,8 +419,7 @@ footer a:hover{
 }
 
 }
-    
-    
+
     
     </style>
 </head>
@@ -418,6 +436,7 @@ footer a:hover{
             <a href="/games">Games</a>
             <a href="/about">About</a>
             <a href="/sign_up" class="signup-btn">Sign Up</a>
+          <span id="usernameBadge" class="username-badge hidden" aria-label="Logged in user"></span>
 
             <button id="themeToggle" class="theme-button">
                 🌙
@@ -483,16 +502,6 @@ footer a:hover{
 
                 </a>
 
-                <a href="/minecraft_classic" class="game-card">
-
-                    <div class="game-icon">⛏️</div>
-
-                    <h3>Minecraft Classic</h3>
-
-                    <p>Build anything your imagination can think of.</p>
-
-                </a>
-
                 <a href="/flappy_dunk" class="game-card">
 
                     <div class="game-icon">🏀</div>
@@ -500,6 +509,16 @@ footer a:hover{
                     <h3>Flappy Dunk</h3>
 
                     <p>Score as many baskets as possible without hitting the top.</p>
+
+                </a>
+
+                <a href="/minesweeper" class="game-card">
+
+                    <div class="game-icon">💣</div>
+
+                    <h3>Minesweeper</h3>
+
+                    <p>Clear the minefield without detonating any mines.</p>
 
                 </a>
 
@@ -512,7 +531,7 @@ footer a:hover{
     </main>
 
     <footer>
-
+        Powered by Homebase - 
         <a href="https://tyco.it.com/privacy-policy" target="_blank" rel="noopener noreferrer">
             Privacy Policy
         </a>
@@ -526,7 +545,27 @@ footer a:hover{
     const themeToggle = document.getElementById("themeToggle");
     const body = document.body;
 
-    const savedTheme = localStorage.getItem("theme");
+    function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+      document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+    }
+
+    function getCookie(name) {
+      const cookieName = `${name}=`;
+      const cookies = document.cookie.split(";");
+
+      for (let c of cookies) {
+        c = c.trim();
+        if (c.indexOf(cookieName) === 0) {
+          return c.substring(cookieName.length);
+        }
+      }
+
+      return "";
+    }
+
+    const savedTheme = getCookie("theme");
 
     if (savedTheme === "light") {
       body.classList.add("light-mode");
@@ -540,10 +579,10 @@ footer a:hover{
 
       if (body.classList.contains("light-mode")) {
         themeToggle.textContent = "☀️";
-        localStorage.setItem("theme", "light");
+        setCookie("theme", "light", 365);
       } else {
         themeToggle.textContent = "🌙";
-        localStorage.setItem("theme", "dark");
+        setCookie("theme", "dark", 365);
       }
     });
     </script>
@@ -671,5 +710,6 @@ footer a:hover{
 })();
 </script>
 
+  <script src="/analytics-consent.js"></script>
 </body>
 </html>

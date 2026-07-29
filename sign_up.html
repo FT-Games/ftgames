@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Analytics is loaded only after the user consents (see analytics-consent.js) -->
     <link rel="icon" type="image/x-icon" href="/images/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -125,6 +126,32 @@ input[type="password"]:focus {
     display: inline;
     font-weight: normal;
     line-height: 1.5;
+}
+
+.captcha-group {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.button-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.login-button {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: none;
+}
+
+.status-message {
+    min-height: 22px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #D1D5DB;
+    margin-top: 6px;
 }
 
 /* Button */
@@ -272,12 +299,62 @@ a:hover {
 
         </p>
 
+        <div class="captcha-group">
+            <div
+                class="cf-turnstile"
+                data-sitekey="0x4AAAAAADvuiPgjWUgSEA56"
+                data-theme="dark"></div>
+        </div>
+
         
-        <p>
+        <div class="button-row">
             <button type="submit">Create Account</button>
-        </p>
+            <button type="button" id="loginButton" class="login-button">Log In</button>
+        </div>
+
+        <p id="authStatus" class="status-message"></p>
 
     </form>
 
+    <script>
+        const registrationForm = document.querySelector("form");
+        const loginButton = document.getElementById("loginButton");
+        const authStatus = document.getElementById("authStatus");
+
+        function genderCode(value) {
+            if (value === "male") return "m";
+            if (value === "female") return "f";
+            if (value === "other") return "o";
+            return "";
+        }
+
+        registrationForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (!registrationForm.reportValidity()) {
+                return;
+            }
+
+            const formData = new FormData(registrationForm);
+            const registrationData = {
+                username: (formData.get("username") || "").toString().trim(),
+                email: (formData.get("email") || "").toString().trim(),
+                pass: (formData.get("password") || "").toString(),
+                gender: genderCode((formData.get("gender") || "").toString())
+            };
+
+            authStatus.textContent = "Redirecting...";
+            authStatus.style.color = "#86EFAC";
+
+            sessionStorage.setItem("ftgames:pendingRegistration", JSON.stringify(registrationData));
+            window.location.href = "/submit-registration";
+        });
+
+        loginButton.addEventListener("click", function () {
+            window.location.href = "/";
+        });
+    </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="/analytics-consent.js"></script>
 </body>
 </html>
