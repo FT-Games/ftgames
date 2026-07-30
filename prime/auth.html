@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authorising...</title>
+</head>
+<body>
+    <h1>Logging you in...</h1>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+
+        if(code) {
+            document.body.innerHTML = `
+                <h1>Discord Login Successful</h1>
+                <p>Authorization code received.</p>
+                <p>${code}</p>
+            `;
+        }
+        else {
+            document.body.innerHTML = `
+                <h1>Login Failed</h1>
+                <p>No authorization code found.</p>
+            `;
+        }
+    </script>
+</body>
+</html>

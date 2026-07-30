@@ -1,0 +1,18 @@
+{
+  "name": "Claude Code",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "postCreateCommand": "curl -fsSL https://claude.ai/install.sh | bash",
+  "postCreateCommandUser": "root",
+  "postAttachCommand": "claude",
+  "customizations": {
+    "vscode": {
+      "extensions": []
+    }
+  },
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:${containerEnv:HOME}/.local/bin"
+  }
+}

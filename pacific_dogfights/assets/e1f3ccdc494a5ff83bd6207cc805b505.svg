@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="92.0009994506836" height="55.672000885009766" viewBox="-0.3310000002384186 0.3199999928474426 92.0009994506836 55.672000885009766">
+  <defs>
+    <linearGradient id="grad_1" x1="27.1699" y1="75.8438" x2="118.1699" y2="75.8438" gradientUnits="userSpaceOnUse">
+      <stop offset="0.012" stop-color="#A7A9AC"/>
+      <stop offset="1" stop-color="#414042"/>
+    </linearGradient>
+    <linearGradient id="grad_2" x1="30.583" y1="75.8447" x2="114.7559" y2="75.8447" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D1D2D3"/>
+      <stop offset="1" stop-color="#A4A5A8"/>
+    </linearGradient>
+  <linearGradient id="grad_1-,0,0,1,-27,-40" x1="0.1699" y1="35.8438" x2="91.1699" y2="35.8438" gradientUnits="userSpaceOnUse">
+      <stop offset="0.012" stop-color="#A7A9AC"/>
+      <stop offset="1" stop-color="#414042"/>
+    </linearGradient><linearGradient id="grad_2-,0,0,1,-27,-40" x1="3.583" y1="35.8447" x2="87.7559" y2="35.8447" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D1D2D3"/>
+      <stop offset="1" stop-color="#A4A5A8"/>
+    </linearGradient></defs>
+  <!-- Exported by Scratch - http://scratch.mit.edu/ -->
+  <g id="ID0.98551084427163">
+    <path id="ID0.6608286434784532" fill="url(#grad_1-,0,0,1,-27,-40)" d="M 91.17 46.887 C 91.17 51.639 87.316 55.492 82.565 55.492 L 8.773 55.492 C 4.021 55.492 0.169 51.638 0.169 46.887 L 0.169 9.424 C 0.169 4.672 4.021 0.82 8.773 0.82 L 82.564 0.82 C 87.318 0.82 91.169 4.672 91.169 9.424 L 91.169 46.887 L 91.17 46.887 Z " stroke-width="1"/>
+    <path id="ID0.13088352978229523" fill="url(#grad_2-,0,0,1,-27,-40)" d="M 82.564 4.233 L 8.773 4.233 C 5.912 4.233 3.583 6.561 3.583 9.423 L 3.583 46.886 C 3.583 49.748 5.912 52.076 8.773 52.076 L 82.564 52.076 C 85.428 52.076 87.755 49.748 87.755 46.886 L 87.755 9.424 C 87.755 6.562 85.428 4.233 82.564 4.233 Z " stroke-width="1"/>
+  </g>
+  <text id="ID0.08345886506140232" fill="#000000" text-anchor="start" font-family="Sans Serif" font-size="22" transform="matrix(1 0 0 1 13.75 9.4)" stroke-width="1" alignment-baseline="text-before-edge" xml:space="preserve"><tspan x="0" style="white-space: pre" dy="1.13em">Back</tspan></text>
+</svg>

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics is loaded only after the user consents (see analytics-consent.js) -->
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FT Games</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+    /* =========================
+   FT Games - style.css
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+
+    background: linear-gradient(135deg, #0A0A0A 0%, #5B21B6 50%, #111827 100%);
+    color: white;
+
+    min-height: 100vh;
+
+    transition:
+        background 0.8s ease-in-out,
+        color 0.8s ease-in-out;
+}
+
+/* LIGHT MODE */
+
+body.light-mode {
+    background: linear-gradient(135deg, #F8FAFC 0%, #DDD6FE 50%, #E2E8F0 100%);
+    color: #111827;
+}
+
+/* =========================
+        NAVBAR
+========================= */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 40px;
+
+    background: rgba(20,20,20,0.85);
+
+    backdrop-filter: blur(10px);
+
+    border-bottom: 1px solid rgba(255,255,255,.08);
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    transition: .8s ease;
+}
+
+body.light-mode .navbar{
+    background: rgba(255,255,255,.8);
+}
+
+.logo{
+    color: inherit;
+    text-decoration: none;
+
+    font-size:1.8rem;
+    font-weight:700;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.nav-links a{
+    color:inherit;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.nav-links a:hover{
+    opacity:.7;
+}
+
+.signup-btn{
+
+    border:1px solid currentColor;
+    border-radius:8px;
+
+    padding:8px 14px;
+}
+
+.username-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #2D7CFF;
+  color: white;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(45,124,255,.45);
+}
+
+body.light-mode .username-badge {
+  background: #1D4ED8;
+}
+
+.hidden {
+  display: none;
+}
+
+/* =========================
+      THEME BUTTON
+========================= */
+
+.theme-button{
+
+    width:45px;
+    height:45px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#2D7CFF;
+    color:white;
+
+    cursor:pointer;
+
+    font-size:1rem;
+
+    transition:.3s;
+
+    box-shadow:0 0 20px rgba(45,124,255,.4);
+
+}
+
+.theme-button:hover{
+
+    transform:rotate(20deg) scale(1.08);
+
+}
+
+/* =========================
+        HERO
+========================= */
+
+.hero{
+
+    min-height:90vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:40px 20px;
+
+}
+
+.hero-content{
+
+    max-width:800px;
+
+}
+
+.hero h1{
+
+    font-size:clamp(3rem,7vw,5.5rem);
+
+    margin-bottom:25px;
+
+}
+
+.hero p{
+
+    font-size:1.2rem;
+
+    line-height:1.8;
+
+    opacity:.85;
+
+    margin-bottom:40px;
+
+}
+
+/* =========================
+      BUTTONS
+========================= */
+
+.button-group{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+}
+
+.play-button,
+.donate-button{
+
+    text-decoration:none;
+
+    color:white;
+
+    padding:16px 42px;
+
+    border-radius:14px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.play-button{
+
+    background:#2D7CFF;
+
+    box-shadow:0 0 20px rgba(45,124,255,.45);
+
+}
+
+.play-button:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+    0 0 30px rgba(45,124,255,.8);
+
+}
+
+.donate-button{
+
+    background:#7C3AED;
+
+    box-shadow:0 0 20px rgba(124,58,237,.4);
+
+}
+
+.donate-button:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+    0 0 30px rgba(124,58,237,.8);
+
+}
+
+/* =========================
+      FEATURED GAMES
+========================= */
+
+.featured{
+
+    padding:90px 30px;
+
+}
+
+.featured h2{
+
+    text-align:center;
+
+    margin-bottom:50px;
+
+    font-size:2.5rem;
+
+}
+
+.game-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(240px,1fr));
+
+    gap:30px;
+
+    max-width:1100px;
+
+    margin:auto;
+
+}
+
+.game-card{
+
+    text-decoration:none;
+
+    color:inherit;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:30px;
+
+    transition:.35s;
+
+    position:relative; /* allow star positioning */
+
+}
+
+body.light-mode .game-card{
+
+    background:white;
+
+}
+
+.game-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 0 30px rgba(124,58,237,.35);
+
+}
+
+.game-icon{
+
+    font-size:3rem;
+
+    margin-bottom:20px;
+
+}
+
+.game-card h3{
+
+    margin-bottom:12px;
+
+}
+
+.game-card p{
+
+    opacity:.75;
+
+    line-height:1.6;
+
+}
+.favorites-empty-message{
+    opacity:.8;
+    text-align:center;
+}
+
+/* =========================
+        FOOTER
+========================= */
+
+footer{
+
+    text-align:center;
+
+    padding:30px;
+
+    opacity:.7;
+
+}
+
+footer a{
+
+    color:inherit;
+
+    text-decoration:none;
+
+}
+
+footer a:hover{
+
+    text-decoration:underline;
+
+}
+
+/* =========================
+        MOBILE
+========================= */
+
+@media (max-width:700px){
+
+.navbar{
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.hero h1{
+
+    font-size:3rem;
+
+}
+
+.hero p{
+
+    font-size:1rem;
+
+}
+
+}
+
+    
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+
+        <a href="/" class="logo">
+            FT Games
+        </a>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/games">Games</a>
+            <a href="/about">About</a>
+            <a href="/sign_up" class="signup-btn">Sign Up</a>
+          <span id="usernameBadge" class="username-badge hidden" aria-label="Logged in user"></span>
+
+            <button id="themeToggle" class="theme-button">
+                🌙
+            </button>
+        </div>
+
+    </nav>
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <h1>Made by students,<br>for students.</h1>
+
+                <p>
+                    FT Games is a growing collection of games put on to this website by students. Play instantly, let your boredom dissapear,
+                    and enjoy fun games anywhere.
+                </p>
+
+                <div id="stats">
+                    <p> 👥 Over 25 fun games to choose from</p> <br>
+                    <p> 🌐 Playable from almost anywhere! </p> <br>
+                    <p> 🔄 New updates to our website every week! </p>
+                    </div>
+
+                <div class="button-group">
+
+                    <a href="/games" class="play-button">
+                        ▶ Play Now
+                    </a>
+
+                    <a
+                        href="https://donate.stripe.com/4gMeVd0Hd65z6Gs10FaAw00"
+                        class="donate-button"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
+                        ❤️ Donate
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="featured">
+
+            <h2>Featured Games</h2>
+
+            <div class="game-grid">
+
+                <a href="/polytrack" class="game-card">
+
+                    <div class="game-icon">🏎️</div>
+
+                    <h3>Polytrack</h3>
+
+                    <p>Race around fast-paced tracks and beat your best time.</p>
+
+                </a>
+
+                <a href="/flappy_dunk" class="game-card">
+
+                    <div class="game-icon">🏀</div>
+
+                    <h3>Flappy Dunk</h3>
+
+                    <p>Score as many baskets as possible without hitting the top.</p>
+
+                </a>
+
+                <a href="/minesweeper" class="game-card">
+
+                    <div class="game-icon">💣</div>
+
+                    <h3>Minesweeper</h3>
+
+                    <p>Clear the minefield without detonating any mines.</p>
+
+                </a>
+
+            </div>
+
+        </section>
+
+        
+
+    </main>
+
+    <footer>
+        Powered by Homebase - 
+        <a href="https://tyco.it.com/privacy-policy" target="_blank" rel="noopener noreferrer">
+            Privacy Policy
+        </a>
+
+    </footer>
+
+    <script>
+    // ==========================
+    // FT Games - Theme Toggle
+    // ==========================
+    const themeToggle = document.getElementById("themeToggle");
+    const body = document.body;
+
+    function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+      document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+    }
+
+    function getCookie(name) {
+      const cookieName = `${name}=`;
+      const cookies = document.cookie.split(";");
+
+      for (let c of cookies) {
+        c = c.trim();
+        if (c.indexOf(cookieName) === 0) {
+          return c.substring(cookieName.length);
+        }
+      }
+
+      return "";
+    }
+
+    const savedTheme = getCookie("theme");
+
+    if (savedTheme === "light") {
+      body.classList.add("light-mode");
+      themeToggle.textContent = "☀️";
+    } else {
+      themeToggle.textContent = "🌙";
+    }
+
+    themeToggle.addEventListener("click", () => {
+      body.classList.toggle("light-mode");
+
+      if (body.classList.contains("light-mode")) {
+        themeToggle.textContent = "☀️";
+        setCookie("theme", "light", 365);
+      } else {
+        themeToggle.textContent = "🌙";
+        setCookie("theme", "dark", 365);
+      }
+    });
+    </script>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'ftgames:favorites';
+  const CATALOG_KEY = 'ftgames:gameCatalog';
+
+  function getFavorites(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      return Array.isArray(parsed) ? parsed.filter((id)=>typeof id === 'string') : [];
+    }catch(e){
+      return [];
+    }
+  }
+
+  function getCatalog(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(CATALOG_KEY) || '{}');
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    }catch(e){
+      return {};
+    }
+  }
+
+  function formatFallbackTitle(id){
+    return String(id || '').replace(/\//g,' ').replace(/_/g,' ').trim();
+  }
+
+  function buildFavoriteCard(id, catalogEntry){
+    const card = document.createElement('a');
+    card.className = 'game-card';
+    card.href = id;
+
+    const content = document.createElement('div');
+    content.className = 'game-card-content';
+
+    const title = document.createElement('h2');
+    title.className = 'game-card-title';
+    title.textContent = (catalogEntry && catalogEntry.title) ? catalogEntry.title : formatFallbackTitle(id);
+    content.appendChild(title);
+
+    if (catalogEntry && catalogEntry.description) {
+      const description = document.createElement('p');
+      description.textContent = catalogEntry.description;
+      content.appendChild(description);
+    }
+
+    card.appendChild(content);
+    return card;
+  }
+
+  function renderFavorites(){
+    const container = document.getElementById('favorites-grid');
+    if(!container) return;
+    container.innerHTML = '';
+
+    const favs = getFavorites();
+    if(favs.length === 0){
+      const message = document.createElement('p');
+      message.className = 'favorites-empty-message';
+      message.textContent = 'You have no favorites yet. Favorite a game on the games page to add it here.';
+      container.appendChild(message);
+      return;
+    }
+
+    const catalog = getCatalog();
+    const gameCardsByHref = new Map(
+      Array.from(document.querySelectorAll('.featured:not(.favorites-section) .game-card'))
+        .map((card) => [card.getAttribute('href'), card])
+        .filter(([href]) => typeof href === 'string')
+    );
+
+    favs.forEach((id)=>{
+      const featuredCard = gameCardsByHref.get(id);
+      if (featuredCard) {
+        const titleEl = featuredCard.querySelector('h3');
+        const descEl = featuredCard.querySelector('p');
+        const entry = {
+          title: titleEl ? titleEl.textContent : null,
+          description: descEl ? descEl.textContent : null,
+        };
+        container.appendChild(buildFavoriteCard(id, entry));
+        return;
+      }
+
+      const catalogEntry = catalog[id];
+      if (catalogEntry) {
+        container.appendChild(buildFavoriteCard(id, catalogEntry));
+      } else {
+        const fallbackCard = document.createElement('a');
+        fallbackCard.className = 'game-card';
+        fallbackCard.href = id;
+        const content = document.createElement('div');
+        content.className = 'game-card-content';
+        const title = document.createElement('h2');
+        title.className = 'game-card-title';
+        title.textContent = formatFallbackTitle(id);
+        content.appendChild(title);
+        fallbackCard.appendChild(content);
+        container.appendChild(fallbackCard);
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const featured = document.querySelector('.featured');
+    if(featured && !document.getElementById('favorites-grid')){
+      const favSection = document.createElement('section');
+      favSection.className = 'featured favorites-section';
+      favSection.innerHTML = '<h2>Your Favorites</h2><div id="favorites-grid" class="game-grid"></div>';
+      featured.parentNode.insertBefore(favSection, featured.nextSibling);
+    }
+
+    renderFavorites();
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === STORAGE_KEY || event.key === CATALOG_KEY) {
+        renderFavorites();
+      }
+    });
+  });
+})();
+</script>
+
+  <script src="/analytics-consent.js"></script>
+</body>
+</html>
