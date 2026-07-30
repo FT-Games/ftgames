@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Google Analytics is loaded only after the user consents (see analytics-consent.js) -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - Totally Math</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script async src="https://js.stripe.com/v3/buy-button.js"></script>
+  </head>
+  <body>
+<nav class="navbar">
+    <a href="/" class="logo">FT Games</a>
+
+    <div class="nav-right">
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/games">Games</a>
+            <a href="/about">About</a>
+        </div>
+
+      <span id="usernameBadge" class="username-badge hidden" aria-label="Logged in user"></span>
+
+        <button id="supportButton">❤</button>
+        <button id="themeToggle">🌙</button>
+    </div>
+</nav>
+
+<style>
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 40px;
+
+    background: rgba(255,255,255,.8);
+    backdrop-filter: blur(10px);
+
+    border-bottom: 1px solid rgba(0,0,0,.08);
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    transition: .8s ease;
+  }
+body.dark-mode .navbar {
+    background: rgba(20,20,20,0.85);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.logo,
+.nav-links a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    transition: opacity 0.2s;
+}
+
+.nav-links a:hover {
+    opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .nav-links {
+        gap: 16px;
+    }
+}
+ #themeToggle {
+    width: 45px;
+    height: 45px;
+
+    border: none;
+    border-radius: 50%;
+
+    font-size: 1rem;
+    cursor: pointer;
+
+    background: #2D7CFF;
+    color: white;
+    box-shadow: 0 0 20px rgba(45,124,255,.4);
+
+    transition: .3s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#themeToggle:hover {
+    transform: rotate(20deg) scale(1.08);
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+
+    background: linear-gradient(135deg, #F8FAFC 0%, #DDD6FE 50%, #E2E8F0 100%);
+    color: #111827;
+
+    min-height: 100vh;
+
+    transition:
+        background 0.8s ease-in-out,
+        color 0.8s ease-in-out;
+}
+
+body.dark-mode {
+    background: linear-gradient(135deg, #0A0A0A 0%, #5B21B6 50%, #111827 100%);
+    color: white;
+}
+.game-card-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    margin: 24px 0;
+}
+/* ===== FT Games Modern Card ===== */
+
+.game-card {
+    position: relative;
+    overflow: hidden;
+
+    color: inherit;
+    text-decoration: none;
+
+    background: white;
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 18px;
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease,
+        border-color .35s ease,
+        background .35s ease;
+}
+
+body.dark-mode .game-card {
+    background: rgba(255,255,255,.05);
+    border-color: rgba(255,255,255,.08);
+}
+
+.game-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    padding:2px;
+
+    background:linear-gradient(
+        135deg,
+        #00e5ff,
+        #00ff99,
+        #00e5ff
+    );
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;
+            mask-composite:exclude;
+
+    opacity:0;
+    transition:.35s;
+
+    pointer-events:none;
+    z-index:2;
+}
+
+.game-card::after{
+    content:"";
+    position:absolute;
+    top:-120%;
+    left:-50%;
+
+    width:60%;
+    height:300%;
+
+    background:linear-gradient(
+        rgba(255,255,255,0),
+        rgba(255,255,255,.15),
+        rgba(255,255,255,0)
+    );
+
+    transform:rotate(25deg);
+    transition:.7s;
+
+    pointer-events:none;
+}
+
+.game-card:hover{
+    transform:translateY(-10px) scale(1.03);
+
+    box-shadow:
+        0 0 18px rgba(0,229,255,.35),
+        0 0 45px rgba(0,255,153,.25),
+        0 12px 30px rgba(0,0,0,.25);
+
+    border-color:transparent;
+}
+
+.game-card:hover::before{
+    opacity:1;
+}
+
+.game-card:hover::after{
+    left:140%;
+}
+
+.fav-glow{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:2;
+    border-radius:inherit;
+    pointer-events:none;
+
+    background: radial-gradient(
+        circle at 28px 28px,
+        #fff6d6 0%,
+        #ffd24d 30%,
+        #ffb300 55%,
+        rgba(255,179,0,0) 78%
+    );
+
+    opacity:0;
+    clip-path: circle(0% at 28px 28px);
+}
+
+.game-card.fav-burst .fav-glow{
+    animation: favGlowPulse .9s ease-out;
+}
+
+@keyframes favGlowPulse{
+    0%   { opacity:0;   clip-path: circle(0% at 28px 28px); }
+    35%  { opacity:.9;  clip-path: circle(75% at 28px 28px); }
+    65%  { opacity:.6;  clip-path: circle(140% at 28px 28px); }
+    100% { opacity:0;   clip-path: circle(140% at 28px 28px); }
+}
+
+.game-card.fav-burst{
+    z-index: 5;
+}
+
+/* Ghost that visually travels from a favorited card to the favorites section */
+.fav-flying-ghost{
+    position: fixed;
+    z-index: 100010;
+    border-radius: 18px;
+    pointer-events: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: rgba(255,255,255,.95);
+
+    background: radial-gradient(circle at 30% 28%, #fff6d6, #ffd24d 45%, #ffb300 100%);
+    box-shadow: 0 10px 26px rgba(255, 179, 0, .55);
+
+    transition:
+        top .55s cubic-bezier(.28,.85,.32,1.15),
+        left .55s cubic-bezier(.28,.85,.32,1.15),
+        width .55s cubic-bezier(.28,.85,.32,1.15),
+        height .55s cubic-bezier(.28,.85,.32,1.15),
+        opacity .35s ease .2s;
+}
+
+/* Gold "blank" cover shown while a newly favorited card blooms in */
+.fav-card-cover{
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    border-radius: inherit;
+    pointer-events: none;
+
+    background: radial-gradient(circle at 50% 38%, #fff6d6, #ffd24d 55%, #ffb300 100%);
+    opacity: 0;
+}
+
+@keyframes favBloopIn{
+    0%   { transform: scale(.3); opacity: 0; }
+    55%  { transform: scale(1.08); opacity: 1; }
+    75%  { transform: scale(.96); }
+    100% { transform: scale(1); }
+}
+
+.game-card.fav-enter{
+    animation: favBloopIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+
+.game-card.fav-enter .fav-card-cover{
+    opacity: 1;
+    animation: favCoverFade .45s ease-out .35s forwards;
+}
+
+@keyframes favCoverFade{
+    to { opacity: 0; }
+}
+
+.game-card.fav-enter .game-card-thumbnail,
+.game-card.fav-enter .game-card-content{
+    opacity: 0;
+    animation: favContentFade .5s ease-out .35s forwards;
+}
+
+@keyframes favContentFade{
+    to { opacity: 1; }
+}
+
+.game-card-thumbnail{
+    width:100%;
+    height:160px;
+    object-fit:cover;
+
+    transition:
+        transform .35s ease,
+        filter .35s ease;
+}
+
+.game-card:hover .game-card-thumbnail{
+    transform:scale(1.08);
+    filter:brightness(1.08) saturate(1.1);
+}
+
+.game-card-title{
+    transition:
+        color .3s ease,
+        text-shadow .3s ease;
+}
+
+.game-card:hover .game-card-title{
+    color:#00e5ff;
+    text-shadow:0 0 12px rgba(0,229,255,.45);
+}
+
+.game-card-description{
+    transition:opacity .3s;
+}
+
+.game-card:hover .game-card-description{
+    opacity:.95;
+}
+  /* Make titles and descriptions glow FT Games blue on hover */
+.game-card-title,
+.game-card-description {
+    transition:
+        color .3s ease,
+        text-shadow .3s ease,
+        opacity .3s ease;
+}
+
+.game-card:hover .game-card-title,
+.game-card:hover .game-card-description {
+    color: #00e5ff;
+    text-shadow: 0 0 12px rgba(0,229,255,.45);
+}
+
+/* Works in dark mode too */
+body.dark-mode .game-card:hover .game-card-title,
+body.dark-mode .game-card:hover .game-card-description {
+    color: #00e5ff;
+    text-shadow: 0 0 14px rgba(0,229,255,.6);
+}
+
+/* Cards inside the favorites section glow gold on hover instead of blue,
+   brighter than the section's own muted gold background so it still pops. */
+#favorites-grid .game-card::before{
+    background: linear-gradient(135deg, #ffe37a, #ffb300, #ffe37a);
+}
+
+#favorites-grid .game-card:hover{
+    box-shadow:
+        0 0 22px rgba(255, 200, 0, .6),
+        0 0 55px rgba(255, 170, 0, .45),
+        0 12px 30px rgba(0,0,0,.25);
+}
+
+#favorites-grid .game-card:hover .game-card-title,
+#favorites-grid .game-card:hover .game-card-description{
+    color: #ffb300;
+    text-shadow: 0 0 12px rgba(255, 179, 0, .55);
+}
+
+body.dark-mode #favorites-grid .game-card:hover .game-card-title,
+body.dark-mode #favorites-grid .game-card:hover .game-card-description{
+    color: #ffd24d;
+    text-shadow: 0 0 14px rgba(255, 179, 0, .7);
+}
+
+.game-card-content{
+    position:relative;
+    z-index:3;
+}
+
+.game-card-thumbnail{
+    position:relative;
+    z-index:1;
+}
+.game-card-content {
+    padding: 16px;
+}
+.game-card-title {
+    font-size: 20px;
+    margin: 0 0 8px;
+}
+.game-card-description {
+    line-height: 1.5;
+    margin: 0;
+}
+.game-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+.game-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+.game-tag-genre {
+    background: #e0eaff;
+    color: #3056d3;
+}
+.game-tag-difficulty {
+    background: #e6f4ea;
+    color: #166534;
+}
+body.dark-mode .game-tag-genre {
+    background: #1e2e5c;
+    color: #a0b8ff;
+}
+body.dark-mode .game-tag-difficulty {
+    background: #1a3320;
+    color: #81c784;
+}
+body.dark-mode a.game-card[href="/suggestion_box"] {
+    border-color: #444444;
+}
+body.dark-mode .game-card-thumbnail {
+    background: #333333;
+}
+.fav-star {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    border: none;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.55);
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 20px;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+.fav-star.active {
+    color: #ffd24d;
+    text-shadow: 0 0 6px rgba(255, 210, 77, 0.5);
+}
+body.dark-mode .fav-star {
+    background: rgba(0, 0, 0, 0.7);
+}
+.favorites-section {
+    margin-top: 32px;
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 210, 77, 0.35);
+    background: rgba(255, 196, 0, 0.10);
+    box-shadow: 0 8px 20px rgba(255, 210, 77, 0.22);
+}
+.favorites-section h2 {
+    margin-bottom: 12px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+body.dark-mode .favorites-section {
+    background: rgba(255, 178, 36, 0.08);
+    border-color: rgba(255, 210, 77, 0.45);
+    box-shadow: 0 10px 26px rgba(255, 210, 77, 0.2);
+}
+.favorites-empty-message {
+    opacity: .8;
+    text-align: center;
+    grid-column: 1 / -1;
+}
+.favorites-tip {
+    display: none;
+    margin: 24px auto;
+    padding: 10px 18px;
+    max-width: fit-content;
+    text-align: center;
+    font-size: 13px;
+    opacity: .75;
+    border-radius: 999px;
+    border: 1px dashed rgba(255, 210, 77, 0.45);
+    background: rgba(255, 210, 77, 0.08);
+}
+body.dark-mode .favorites-tip {
+    border-color: rgba(255, 210, 77, 0.35);
+    background: rgba(255, 210, 77, 0.06);
+}
+.game-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 18px;
+    border: 1px solid rgba(48, 86, 211, 0.25);
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 20px rgba(48, 86, 211, 0.12);
+}
+.game-filter-bar input[type="search"],
+.game-filter-bar select {
+    flex: 1 1 200px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+}
+.game-filter-bar input[type="search"]:focus,
+.game-filter-bar select:focus {
+    outline: none;
+    border-color: #3056d3;
+    box-shadow: 0 0 0 3px rgba(48, 86, 211, 0.2);
+}
+body.dark-mode .game-filter-bar {
+    background: rgba(25, 25, 25, 0.6);
+    border-color: rgba(160, 184, 255, 0.35);
+    box-shadow: 0 10px 26px rgba(160, 184, 255, 0.15);
+}
+body.dark-mode .game-filter-bar input[type="search"],
+body.dark-mode .game-filter-bar select {
+    background: rgba(50, 50, 50, 0.9);
+    border-color: #444444;
+    color: white;
+}
+body.dark-mode .game-filter-bar input[type="search"]:focus,
+body.dark-mode .game-filter-bar select:focus {
+    border-color: #a0b8ff;
+    box-shadow: 0 0 0 3px rgba(160, 184, 255, 0.25);
+}
+.is-hidden {
+    display: none !important;
+}
+@media (max-width: 600px) {
+    .game-filter-bar {
+        flex-direction: column;
+    }
+    .game-filter-bar input[type="search"],
+    .game-filter-bar select {
+        flex-basis: auto;
+    }
+}
+#homebaseFooter {
+    position: fixed;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    font-size: 10px;
+    opacity: 0.6;
+
+    pointer-events: none;
+    user-select: none;
+}
+
+#supportButton {
+    width: 45px;
+    height: 45px;
+
+    border: none;
+    border-radius: 50%;
+
+    font-size: 1rem;
+    cursor: pointer;
+
+    background: #7C3AED;
+    color: white;
+    box-shadow: 0 0 20px rgba(124,58,237,.4);
+
+    transition: .3s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#supportButton:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 30px rgba(124,58,237,.8);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100002;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+}
+
+body.dark-mode .modal-content {
+    background: #222;
+    color: white;
+}
+
+#closeModal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.username-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #2D7CFF;
+    color: white;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 16px rgba(45,124,255,.45);
+}
+
+body.dark-mode .username-badge {
+    background: #2563EB;
+}
+
+.hidden {
+    display: none;
+}
+
+.ad-banner {
+    max-width: 1000px;
+    margin: 20px auto 30px auto;
+    text-align: center;
+}
+
+.ad-banner img {
+    width: 100%;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid rgba(34, 197, 94, 0.5);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.ad-banner img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 32px rgba(34, 197, 94, 0.7);
+}
+
+.ad-label {
+    font-size: 10px;
+    opacity: 0.6;
+    text-align: right;
+    margin-top: 2px;
+}
+
+.page-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 40px 40px 90px;
+}
+
+.page-container > h1 {
+    text-align: center;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+    .page-container {
+        padding: 24px 16px 60px;
+    }
+}
+</style>
+
+<script>
+window.addEventListener("load", () => {
+
+    // Cookies
+    function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+
+        document.cookie =
+            name + "=" + value +
+            "; expires=" + date.toUTCString() +
+            "; path=/";
+    }
+
+    function getCookie(name) {
+        const cookieName = name + "=";
+        const cookies = document.cookie.split(";");
+
+        for (let c of cookies) {
+            c = c.trim();
+
+            if (c.indexOf(cookieName) === 0) {
+                return c.substring(cookieName.length);
+            }
+        }
+
+        return "";
+    }
+
+    // Theme button
+    const themeButton = document.getElementById("themeToggle");
+
+    function applyTheme(theme) {
+        if (theme === "dark") {
+            document.body.classList.add("dark-mode");
+            themeButton.textContent = "☀️";
+        } else {
+            document.body.classList.remove("dark-mode");
+            themeButton.textContent = "🌙";
+        }
+    }
+
+    const savedTheme = getCookie("theme");
+    applyTheme(savedTheme === "light" ? "light" : "dark");
+
+    themeButton.addEventListener("click", () => {
+        if (document.body.classList.contains("dark-mode")) {
+            applyTheme("light");
+            setCookie("theme", "light", 365);
+        } else {
+            applyTheme("dark");
+            setCookie("theme", "dark", 365);
+        }
+    });
+
+    // Support popup
+    const supportButton = document.getElementById("supportButton");
+    const supportModal = document.getElementById("supportModal");
+    const closeModal = document.getElementById("closeModal");
+
+    if (supportButton && supportModal && closeModal) {
+
+        supportButton.addEventListener("click", () => {
+            supportModal.style.display = "flex";
+        });
+
+        closeModal.addEventListener("click", () => {
+            supportModal.style.display = "none";
+        });
+
+        supportModal.addEventListener("click", (e) => {
+            if (e.target === supportModal) {
+                supportModal.style.display = "none";
+            }
+        });
+
+    } else {
+        console.error("Support modal elements not found");
+    }
+
+});
+</script>
+     
+    <div class="page-container">
+    <h1>Welcome to FT Games!</h1>
+    <div class="ad-banner">
+    <a href="https://forms.microsoft.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAYAADQ8dm5URU85MUlUTksxV0E3TDkyRzVCRlFHTENCWC4u" id="adBannerLink">
+        <img src="images/banner-ad.png" alt="Advertisement">
+    </a>
+    <div class="ad-label">AD</div>
+</div>
+    <section class="favorites-section" id="favoritesSection" aria-label="Favorited games quick access">
+      <h2>⭐Your Favorites⭐</h2>
+      <div id="favorites-grid" class="game-card-grid"></div>
+    </section>
+    <p class="favorites-tip" id="favoritesTip">💡 TIP: Click the ☆ icon to favourite a game for easy access!</p>
+    <section class="game-filter-bar" aria-label="Search and filter games">
+      <input type="search" id="gameSearchInput" placeholder="Search games..." aria-label="Search games by title or description">
+      <select id="genreFilter" aria-label="Filter by genre">
+        <option value="">All genres</option>
+      </select>
+      <select id="difficultyFilter" aria-label="Filter by difficulty">
+        <option value="">All difficulties</option>
+      </select>
+    </section>
+    <section class="game-card-grid" aria-label="Games">
+      <a class="game-card" href="/platformer_game">
+        <img class="game-card-thumbnail" src="thumbnails/platformer-game-thumbnail.png" alt="Platformer Game thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Platformer Game</h2>
+          <p class="game-card-description">A fun platformer game, avoid lava while going into the blue portals, will you reach the end?</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Platformer</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Easy</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/f111_game">
+        <img class="game-card-thumbnail" src="thumbnails/f111-game-thumbnail.png" alt="F111 Game thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">F111 Game</h2>
+          <p class="game-card-description">Survive the MIG23 encounter for as long as you can without being shot by the deadly MIG. 💀</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Planes</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Easy</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/scratch_playground">
+        <img class="game-card-thumbnail" src="thumbnails/scratch-playground-thumbnail.png" alt="Scratch Playground thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Scratch Playground</h2>
+          <p class="game-card-description">Roam around and enjoy this fun Scratch sandbox game, build anything you can imagine and have fun!</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Sandbox</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Easy</span>
+          </div>
+        </div>
+      </a>
+
+        <a class="game-card" href="/among-us-platformer">
+        <img class="game-card-thumbnail" src="thumbnails/among-us-platformer-thumbnail.png" alt="Among Us Platformer thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Among Us Platformer</h2>
+          <p class="game-card-description">Work your way through the obstacles to make it to the end in this fun platformer game. Credits to -Mirano- for the original game on scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Platformer</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Easy</span>
+          </div>
+        </div>
+      </a>
+      
+      <a class="game-card" href="/modern_dogfights">
+        <img class="game-card-thumbnail" src="thumbnails/modern-dogfights-thumbnail.png" alt="Modern Dogfights thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Modern Dogfights</h2>
+          <p class="game-card-description">Fight with a friend, one is in a SU27, the other is in an F15. Fight to the death in this fun modern dogfights simulator!</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Planes</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Easy</span>
+          </div>
+        </div>
+      </a>
+       
+      <a class="game-card" href="/chess">
+        <img class="game-card-thumbnail" src="thumbnails/chess-thumbnail.png" alt="Chess thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Chess</h2>
+          <p class="game-card-description">Play a fun game of chess with your friends, will you be the one to claim checkmate? Thanks to Alex Burton for the original game.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Strategy</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/idle_gacha_roller">
+        <img class="game-card-thumbnail" src="thumbnails/igr-thumbnail.png" alt="Gacha Roller thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Idle Gacha Roller</h2>
+          <p class="game-card-description">This game originated in Project Jeff, which was since degraded and replaced with FT Games! Push your luck and earn your digital fortune with this fun Ga[...]</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Idle</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Easy</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/snake_io">
+        <img class="game-card-thumbnail" src="thumbnails/snake-io-thumbnail.png" alt="Snake.ft thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Snake.ft</h2>
+          <p class="game-card-description">Like Snake.io, but better. Slither around and earn points to get your highest score! How long will you last? Thanks to NicholasGG601 for the original project on scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Arcade</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+  <a class="game-card" href="/minesweeper">
+        <img class="game-card-thumbnail" src="thumbnails/minesweeper-thumbnail.png" alt="Minesweeper thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Minesweeper</h2>
+          <p class="game-card-description">Uncover squares and use numbered clues to find all the hidden mines without detonating any. A classic puzzle game that sharpens your strategic thinking! Credits to Hobson-TV for this game on scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Puzzle</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+       
+      <a class="game-card" href="/flappy_duck">
+        <img class="game-card-thumbnail" src="thumbnails/flappy-duck-thumbnail.png" alt="Flappy Duck thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Flappy Duck</h2>
+          <p class="game-card-description">Flap your way through this tricky obstacle course with this classic infinite runner game. Please note that this game is pretty chunky and may not work on all devices.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Arcade</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="https://arcade.makecode.com/S73309-71101-76715-73171">
+        <img class="game-card-thumbnail" src="thumbnails/vent-crawlers-thumbnail.png" alt="Vent Crawlers thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Vent Crawlers Beta</h2>
+          <p class="game-card-description">Beta game, subject to change. Please note that by clicking on this game card, you will be taken to an external website that is not operated by FT Games.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Maze</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/polytrack">
+        <img class="game-card-thumbnail" src="thumbnails/polytrack-thumbnail.png" alt="Polytrack thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Polytrack</h2>
+          <p class="game-card-description">Race your way through a wide variety of tracks in this fun racing simulator. Thanks to Kodub for the original game and to Static for the original port.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Racing</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+       <a class="game-card" href="/minecraft_classic">
+        <img class="game-card-thumbnail" src="thumbnails/minecraft-classic-thumbnail.png" alt="Minecraft Classic thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Minecraft Classic</h2>
+          <p class="game-card-description">Build, explore, and create in this iconic sandbox game. Let your imagination run wild as you construct anything you can dream up!</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Sandbox</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="https://arcade.makecode.com/S05292-48817-56543-81346">
+        <img class="game-card-thumbnail" src="thumbnails/arrow-battles-thumbnail.png" alt="Arrow Battles thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Arrow Battles</h2>
+          <p class="game-card-description">Beta game, subject to change. Please note that by clicking on this game card, you will be taken to an external website that is not operated by FT Games.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Multiplayer</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/block_blast">
+        <img class="game-card-thumbnail" src="thumbnails/block-blast-thumbnail.png" alt="Block Blast thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Block Blast!</h2>
+          <p class="game-card-description">Blast colored bricks to get your high score in this fun strategy game. Remember to break your high score not your computer in a rage. Thanks to Bwenedia for the original project on scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Strategy</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Easy</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/crossy_road">
+        <img class="game-card-thumbnail" src="thumbnails/crossy-road-thumbnail.png" alt="Crossy Road thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Crossy Road</h2>
+          <p class="game-card-description">Help your character cross the busy road and avoid obstacles in this classic arcade game. Try not to get hit by cars! and there are many other dangers to watch out for. Thanks to HipsterWhale for the original project on scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Arcade</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+      
+      <a class="game-card" href="/tetris">
+        <img class="game-card-thumbnail" src="thumbnails/tetris-thumbnail.png" alt="Tetris thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Tetris</h2>
+          <p class="game-card-description">Tetris is a classic puzzle game where you manipulate falling, four-block shapes (Tetrominoes) to build and clear solid horizontal lines. Thanks to The_M for the original project on scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Arcade</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+   
+      <a class="game-card" href="/flappy_dunk">
+        <img class="game-card-thumbnail" src="thumbnails/flappy-dunk-thumbnail.png" alt="Flappy Dunk thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">🏀Flappy Dunk</h2>
+          <p class="game-card-description">Tap to keep the basketball in the air and guide it through hoops to score points. Master your timing, avoid missing hoops, and build the highest score possible. Thanks to AnimationsScratch for the original project on scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Sports</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Easy</span>
+          </div>
+        </div>
+      </a>
+
+       <a class="game-card" href="/money_mines">
+        <img class="game-card-thumbnail" src="thumbnails/money-mines-thumbnail.png" alt="Money Mines thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Money Mines</h2>
+          <p class="game-card-description">Place your bet and choose your mines! Click tiles to reveal money and build your multiplier, but watch out—hit a mine and lose it all. Cash out before greed takes over! Thanks to alphawolf6612 for the original project on scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Strategy</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Easy</span>
+          </div>
+        </div>
+      </a>     
+      
+
+       <a class="game-card" href="/space_invaders">
+        <img class="game-card-thumbnail" src="thumbnails/space-invaders-thumbnail.png" alt="Space Invaders thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">👾 SPACE INVADERS 👾</h2>
+          <p class="game-card-description">🚀 DEFEND EARTH, blast the invading alien fleet before they destroy you.
+Survive each wave, dodge enemy fire, and rack up the highest score! Thanks to RokCoder for the orginal project on scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Arcade</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+<a class="game-card" href="/retro_pong">
+        <img class="game-card-thumbnail" src="thumbnails/retro-pong-thumbnail.png" alt="Retro Pong thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Retro Pong</h2>
+          <p class="game-card-description">The original Pong video game from the early 1970s, truly a retro classic! A simple arcade video game released by Atari. Players control paddles on opposite sides of the screen to hit a ball back and forth.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Arcade</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/pacific_dogfights">
+        <img class="game-card-thumbnail" src="thumbnails/pacific-dogfights-thumbnail.png" alt="Pacific Dogfights thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">✈️Pacific Dogfights✈️</h2>
+          <p class="game-card-description">Pilot your fighter aircraft through intense WWII Pacific battles. Dodge enemy fire, shoot down opposing planes, and survive each wave to become a legendary ace pilot! This is a remixed scratch project by Jcubas02 which Blabby_axolotl2 (one of our developers) tweaked a few settings and made it slightly easier.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Planes</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+        <a class="game-card" href="/pac_man_platformer">
+        <img class="game-card-thumbnail" src="thumbnails/pac-man-platformer-thumbnail.png" alt="Pac-Man Platformer thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Pac-Man Platformer</h2>
+          <p class="game-card-description">Guide Pac-Man through challenging platformer levels while collecting pellets and avoiding enemies. Navigate the maze carefully to beat all levels! Credits to atomicmagicnumber for the original project on scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Platformer</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+       
+      <a class="game-card" href="/2d_platformer/instructions">
+        <img class="game-card-thumbnail" src="thumbnails/2d-platformer-thumbnail.png" alt="2D Platformer thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">2D Platformer</h2>
+          <p class="game-card-description">Parkour your way to the finish in this fun 2D platformer.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Platformer</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/wow">
+        <img class="game-card-thumbnail" src="thumbnails/wow-thumbnail.png" alt="World of Warships Legends thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">World of Warships Legends</h2>
+          <p class="game-card-description">Command your fleet and engage in epic naval battles in this game. Thanks to TitanRovan-99 for the original project on Scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Action</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/tiny_shop_owner">
+        <img class="game-card-thumbnail" src="thumbnails/my-tiny-shop-thumbnail.png" alt="My Tiny Shop thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">My Tiny Shop</h2>
+          <p class="game-card-description">Manage your own tiny shop and serve customers efficiently. Thanks to pirateollie for the original project on Scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Simulation</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Easy</span>
+          </div>
+        </div>
+      </a>
+
+
+      <a class="game-card" href="/paper_minecraft">
+        <img class="game-card-thumbnail" src="thumbnails/paper-minecraft-thumbnail.png" alt="Paper Minecraft Thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Paper Minecraft</h2>
+          <p class="game-card-description">Minecraft... now in 2D! Enjoy this fun classic with one dimension removed. Thanks to griffpatch for the original project on Scratch.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Sandbox</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/brain_test">
+        <img class="game-card-thumbnail" src="thumbnails/brain-test-thumbnail.png" alt="Brain Test thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Brain Test</h2>
+          <p class="game-card-description">Test your brain with this challenging puzzle game. Can you solve them all?</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Puzzle</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Hard</span>
+          </div>
+        </div>
+      </a>
+
+      
+      <a class="game-card" href="https://www.google.com/logos/2017/vday17/vday17-27917071.html">
+        <img class="game-card-thumbnail" src="thumbnails/pangolin-love-thumbnail.png" alt="Pangolin Love thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Pangolin Love</h2>
+          <p class="game-card-description">Celebrate Valentine's Day with this adorable pangolin-themed game. Fresh from the suggestion box.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Arcade</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/ragdoll_archers">
+        <img class="game-card-thumbnail" src="thumbnails/ragdoll-archers-thumbnail.png" alt="Ragdoll Archers thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Ragdoll Archers</h2>
+          <p class="game-card-description">Dodge arrows and defeat your enemies in this action-packed archery game.</p>
+          <div class="game-card-tags">
+            <span class="game-tag game-tag-genre">Genre: Action</span>
+            <span class="game-tag game-tag-difficulty">Difficulty: Medium</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="game-card" href="/suggestion_box">
+        <img class="game-card-thumbnail" src="thumbnails/suggestion-box-thumbnail.png" alt="Suggestion Box thumbnail">
+        <div class="game-card-content">
+          <h2 class="game-card-title">Suggestion Box</h2>
+          <p class="game-card-description">This is where you can suggest games for us to add to our website. Just fill out a quick form and we'll get right on it. Try it today!</p>
+          <!--Please note that game tags should NOT be applied to suggestion box. This is NOT a bug.-->
+        </div>
+      </a>
+    </section>
+    </div>
+    <footer id="homebaseFooter">
+    Powered by Homebase
+</footer>
+    <div id="supportModal" class="modal">
+    <div class="modal-content">
+        <button id="closeModal">✕</button>
+
+        <h2>Support FT Games ❤️</h2>
+
+        <stripe-buy-button
+            buy-button-id="buy_btn_1TfXGhGCnoRB5b5RnCaLI8mq"
+            publishable-key="pk_live_51TfX1NGCnoRB5b5RLmWVpY0oQKf9LBZeHL4DP3ENz2ytEmHmPWuAq7XpEJIBZ66QMdzLy2ji89NT7plkDDyTI4Pm00tppv5RSV">
+        </stripe-buy-button>
+    </div>
+</div>
+<script>
+(function(){
+  const STORAGE_KEY = 'ftgames:favorites';
+  const CATALOG_KEY = 'ftgames:gameCatalog';
+
+  function getFavorites(){
+    try {
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      return Array.isArray(parsed) ? parsed.filter((id) => typeof id === 'string') : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function setFavorites(favorites){
+    const unique = Array.from(new Set(favorites)).filter((id) => typeof id === 'string');
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(unique));
+    return unique;
+  }
+
+  function getCatalog(){
+    try {
+      const parsed = JSON.parse(localStorage.getItem(CATALOG_KEY) || '{}');
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function formatFallbackTitle(id){
+    return String(id || '').replace(/\//g, ' ').replace(/_/g, ' ').trim();
+  }
+
+  function saveCatalogEntry(id, entry){
+    const catalog = getCatalog();
+    const current = catalog[id];
+    if (current && current.title === entry.title && current.description === entry.description && current.thumbnail === entry.thumbnail && current.genre === entry.genre && current.difficulty === entry.difficulty) {
+      return;
+    }
+    catalog[id] = entry;
+    localStorage.setItem(CATALOG_KEY, JSON.stringify(catalog));
+  }
+
+  function isFavorite(id){
+    return getFavorites().includes(id);
+  }
+
+  function updateStars(){
+    document.querySelectorAll('.fav-star').forEach((button) => {
+      const id = button.dataset.gameId;
+      const active = isFavorite(id);
+      button.textContent = active ? '★' : '☆';
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+      button.title = active ? 'Remove from favorites' : 'Add to favorites';
+    });
+  }
+
+  function createTagsElement(genreText, difficultyText){
+    const tags = document.createElement('div');
+    tags.className = 'game-card-tags';
+    const genreTag = document.createElement('span');
+    genreTag.className = 'game-tag game-tag-genre';
+    genreTag.textContent = genreText || 'Genre: TBD';
+    const difficultyTag = document.createElement('span');
+    difficultyTag.className = 'game-tag game-tag-difficulty';
+    difficultyTag.textContent = difficultyText || 'Difficulty: TBD';
+    tags.appendChild(genreTag);
+    tags.appendChild(difficultyTag);
+    return tags;
+  }
+
+  function createFavoriteToggleButton(id, title){
+    const button = document.createElement('button');
+    button.className = 'fav-star active';
+    button.type = 'button';
+    button.dataset.gameId = id;
+    button.textContent = '★';
+    button.setAttribute('aria-label', `Toggle favorite for ${title}`);
+    button.setAttribute('aria-pressed', 'true');
+    button.title = 'Remove from favorites';
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleFavorite(id, button.closest('.game-card'));
+    });
+    return button;
+  }
+
+  function playFavoriteBurst(cardEl){
+    if (!cardEl) return;
+    cardEl.classList.remove('fav-burst');
+    void cardEl.offsetWidth;
+    cardEl.classList.add('fav-burst');
+    window.setTimeout(() => cardEl.classList.remove('fav-burst'), 900);
+  }
+
+  function addFavCardCover(card){
+    const cover = document.createElement('span');
+    cover.className = 'fav-card-cover';
+    cover.setAttribute('aria-hidden', 'true');
+    card.appendChild(cover);
+  }
+
+  function updateFavoritesVisibility(hasFavorites){
+    const section = document.getElementById('favoritesSection');
+    const tip = document.getElementById('favoritesTip');
+    if (section) section.style.display = hasFavorites ? '' : 'none';
+    if (tip) tip.style.display = hasFavorites ? 'none' : 'block';
+  }
+
+  function renderFavorites(){
+    const container = document.getElementById('favorites-grid');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const favorites = getFavorites();
+    updateFavoritesVisibility(favorites.length > 0);
+    if (favorites.length === 0) return;
+
+    const catalog = getCatalog();
+    const gameCardsByHref = new Map(
+      Array.from(document.querySelectorAll('.game-card-grid[aria-label="Games"] .game-card'))
+        .map((card) => [card.getAttribute('href'), card])
+        .filter(([href]) => typeof href === 'string')
+    );
+
+    favorites.forEach((id) => {
+      const original = gameCardsByHref.get(id);
+      if (original) {
+        const clone = original.cloneNode(true);
+        clone.classList.remove('is-hidden', 'fav-burst', 'fav-enter');
+        clone.dataset.gameId = id;
+        const star = clone.querySelector('.fav-star');
+        if (star) star.remove();
+        const title = clone.querySelector('.game-card-title')?.textContent?.trim() || formatFallbackTitle(id);
+        addFavCardCover(clone);
+        clone.appendChild(createFavoriteToggleButton(id, title));
+        container.appendChild(clone);
+        return;
+      }
+
+      const entry = catalog[id];
+      if (entry) {
+        const card = document.createElement('a');
+        card.className = 'game-card';
+        card.href = id;
+        card.dataset.gameId = id;
+
+        if (entry.thumbnail) {
+          const image = document.createElement('img');
+          image.className = 'game-card-thumbnail';
+          image.src = entry.thumbnail;
+          image.alt = `${entry.title || 'Game'} thumbnail`;
+          card.appendChild(image);
+        }
+
+        const content = document.createElement('div');
+        content.className = 'game-card-content';
+
+        const title = document.createElement('h2');
+        title.className = 'game-card-title';
+        title.textContent = entry.title || formatFallbackTitle(id);
+        content.appendChild(title);
+
+        if (entry.description) {
+          const description = document.createElement('p');
+          description.className = 'game-card-description';
+          description.textContent = entry.description;
+          content.appendChild(description);
+        }
+
+        content.appendChild(createTagsElement(entry.genre, entry.difficulty));
+        card.appendChild(content);
+        addFavCardCover(card);
+        card.appendChild(createFavoriteToggleButton(id, entry.title || formatFallbackTitle(id)));
+        container.appendChild(card);
+      } else {
+        const card = document.createElement('a');
+        card.className = 'game-card';
+        card.href = id;
+        card.dataset.gameId = id;
+
+        const content = document.createElement('div');
+        content.className = 'game-card-content';
+
+        const title = document.createElement('h2');
+        title.className = 'game-card-title';
+        title.textContent = formatFallbackTitle(id);
+        content.appendChild(title);
+
+        content.appendChild(createTagsElement());
+        card.appendChild(content);
+        addFavCardCover(card);
+        card.appendChild(createFavoriteToggleButton(id, formatFallbackTitle(id)));
+        container.appendChild(card);
+      }
+    });
+  }
+
+  function cssEscapeId(value){
+    return window.CSS && typeof CSS.escape === 'function'
+      ? CSS.escape(value)
+      : String(value).replace(/[^a-zA-Z0-9_-]/g, (char) => `\\${char}`);
+  }
+
+  function getFavoritesRectMap(container){
+    const map = new Map();
+    container.querySelectorAll(':scope > .game-card').forEach((el) => {
+      const id = el.dataset.gameId;
+      if (id) map.set(id, el.getBoundingClientRect());
+    });
+    return map;
+  }
+
+  // FLIP animation: shifts/resizes the existing favorite cards smoothly
+  // to make room for a newly inserted one.
+  function flipFavoritesGrid(container, oldRects){
+    container.querySelectorAll(':scope > .game-card').forEach((el) => {
+      const id = el.dataset.gameId;
+      const oldRect = id && oldRects.get(id);
+      if (!oldRect) return;
+
+      const newRect = el.getBoundingClientRect();
+      const dx = oldRect.left - newRect.left;
+      const dy = oldRect.top - newRect.top;
+      const sx = oldRect.width / newRect.width;
+      const sy = oldRect.height / newRect.height;
+      if (!dx && !dy && sx === 1 && sy === 1) return;
+
+      el.style.transition = 'none';
+      el.style.transformOrigin = 'top left';
+      el.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+      void el.offsetWidth;
+      el.style.transition = 'transform .45s cubic-bezier(.22,.8,.28,1)';
+      el.style.transform = '';
+
+      el.addEventListener('transitionend', function handler(event){
+        if (event.propertyName !== 'transform') return;
+        el.style.transition = '';
+        el.style.transformOrigin = '';
+        el.removeEventListener('transitionend', handler);
+      });
+    });
+  }
+
+  function bloomFavoriteCard(cardEl){
+    cardEl.classList.add('fav-enter');
+    cardEl.addEventListener('animationend', function handler(event){
+      if (event.animationName !== 'favBloopIn') return;
+      cardEl.classList.remove('fav-enter');
+      cardEl.removeEventListener('animationend', handler);
+    });
+  }
+
+  function flyGhostIntoFavorites(startRect, targetRect, onArrive){
+    const ghost = document.createElement('div');
+    ghost.className = 'fav-flying-ghost';
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.textContent = '★';
+    ghost.style.top = `${startRect.top}px`;
+    ghost.style.left = `${startRect.left}px`;
+    ghost.style.width = `${startRect.width}px`;
+    ghost.style.height = `${startRect.height}px`;
+    document.body.appendChild(ghost);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        ghost.style.top = `${targetRect.top}px`;
+        ghost.style.left = `${targetRect.left}px`;
+        ghost.style.width = `${targetRect.width}px`;
+        ghost.style.height = `${targetRect.height}px`;
+        ghost.style.opacity = '0';
+      });
+    });
+
+    window.setTimeout(() => {
+      ghost.remove();
+      onArrive();
+    }, 560);
+  }
+
+  function flyIntoFavorites(id, sourceCardEl){
+    const grid = document.getElementById('favorites-grid');
+    if (!grid) {
+      renderFavorites();
+      return;
+    }
+
+    const oldRects = getFavoritesRectMap(grid);
+    const startRect = sourceCardEl ? sourceCardEl.getBoundingClientRect() : null;
+
+    renderFavorites();
+
+    const newCard = grid.querySelector(`.game-card[data-game-id="${cssEscapeId(id)}"]`);
+    if (!newCard) return;
+
+    flipFavoritesGrid(grid, oldRects);
+
+    if (!startRect) {
+      bloomFavoriteCard(newCard);
+      return;
+    }
+
+    const targetRect = newCard.getBoundingClientRect();
+    newCard.style.visibility = 'hidden';
+
+    flyGhostIntoFavorites(startRect, targetRect, () => {
+      newCard.style.visibility = '';
+      bloomFavoriteCard(newCard);
+    });
+  }
+
+  function animateFavoriteAddition(id, sourceCardEl){
+    playFavoriteBurst(sourceCardEl);
+    window.setTimeout(() => {
+      flyIntoFavorites(id, sourceCardEl);
+    }, 850);
+  }
+
+  function toggleFavorite(id, cardEl){
+    const current = getFavorites();
+    const index = current.indexOf(id);
+    const added = index === -1;
+    if (!added) {
+      current.splice(index, 1);
+    } else {
+      current.push(id);
+    }
+
+    setFavorites(current);
+    updateStars();
+
+    if (added) {
+      animateFavoriteAddition(id, cardEl);
+    } else {
+      renderFavorites();
+    }
+  }
+
+  function initGameCardFavorites(){
+    document.querySelectorAll('.game-card-grid[aria-label="Games"] .game-card').forEach((card) => {
+      const id = card.getAttribute('href');
+      if (!id) return;
+      if (id === '/suggestion_box') return;
+      card.dataset.gameId = id;
+
+      const title = card.querySelector('.game-card-title')?.textContent?.trim() || formatFallbackTitle(id);
+      const description = card.querySelector('.game-card-description')?.textContent?.trim() || '';
+      const thumbnail = card.querySelector('.game-card-thumbnail')?.getAttribute('src') || '';
+      const genre = card.querySelector('.game-tag-genre')?.textContent?.trim() || '';
+      const difficulty = card.querySelector('.game-tag-difficulty')?.textContent?.trim() || '';
+      saveCatalogEntry(id, { title, description, thumbnail, genre, difficulty });
+
+      if (!card.querySelector('.fav-glow')) {
+        const glow = document.createElement('span');
+        glow.className = 'fav-glow';
+        glow.setAttribute('aria-hidden', 'true');
+        card.appendChild(glow);
+      }
+
+      if (card.querySelector('.fav-star')) return;
+
+      const button = document.createElement('button');
+      button.className = 'fav-star';
+      button.type = 'button';
+      button.dataset.gameId = id;
+      button.setAttribute('aria-label', `Toggle favorite for ${title}`);
+
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleFavorite(id, card);
+      });
+
+      card.appendChild(button);
+    });
+
+    updateStars();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initGameCardFavorites();
+    renderFavorites();
+  });
+})();
+</script>
+<script>
+  (() => {
+    const searchInput = document.getElementById('gameSearchInput');
+    const genreFilter = document.getElementById('genreFilter');
+    const difficultyFilter = document.getElementById('difficultyFilter');
+    const grid = document.querySelector('.game-card-grid[aria-label="Games"]');
+
+    const DIFFICULTY_ORDER = ['Easy', 'Medium', 'Hard'];
+    const games = [];
+    let noResultsMessage;
+    let suggestionBoxCard;
+
+    const stripPrefix = (text, prefix) =>
+      text.startsWith(prefix) ? text.slice(prefix.length).trim() : text.trim();
+
+    function buildGameIndex(){
+      grid.querySelectorAll('.game-card').forEach((card) => {
+        const href = card.getAttribute('href');
+        if (!href || href === '/suggestion_box') return;
+
+        const title = card.querySelector('.game-card-title')?.textContent?.trim() || '';
+        const description = card.querySelector('.game-card-description')?.textContent?.trim() || '';
+        const genre = stripPrefix(card.querySelector('.game-tag-genre')?.textContent?.trim() || '', 'Genre:');
+        const difficulty = stripPrefix(card.querySelector('.game-tag-difficulty')?.textContent?.trim() || '', 'Difficulty:');
+
+        games.push({ el: card, title, description, genre, difficulty });
+      });
+    }
+
+    function populateFilterOptions(){
+      const genres = [...new Set(games.map((g) => g.genre).filter(Boolean))].sort();
+      genres.forEach((genre) => {
+        const option = document.createElement('option');
+        option.value = genre;
+        option.textContent = genre;
+        genreFilter.appendChild(option);
+      });
+
+      const difficulties = [...new Set(games.map((g) => g.difficulty).filter(Boolean))];
+      const ordered = DIFFICULTY_ORDER.filter((d) => difficulties.includes(d));
+      const extra = difficulties.filter((d) => !DIFFICULTY_ORDER.includes(d)).sort();
+      [...ordered, ...extra].forEach((difficulty) => {
+        const option = document.createElement('option');
+        option.value = difficulty;
+        option.textContent = difficulty;
+        difficultyFilter.appendChild(option);
+      });
+    }
+
+    function applyFilters(){
+      const query = searchInput.value.trim().toLowerCase();
+      const genre = genreFilter.value;
+      const difficulty = difficultyFilter.value;
+      const filtersActive = Boolean(query || genre || difficulty);
+      let visibleCount = 0;
+
+      games.forEach((game) => {
+        const matchesSearch = !query || `${game.title} ${game.description}`.toLowerCase().includes(query);
+        const matchesGenre = !genre || game.genre === genre;
+        const matchesDifficulty = !difficulty || game.difficulty === difficulty;
+        const visible = matchesSearch && matchesGenre && matchesDifficulty;
+        game.el.classList.toggle('is-hidden', !visible);
+        if (visible) visibleCount++;
+      });
+
+      if (suggestionBoxCard) {
+        suggestionBoxCard.classList.toggle('is-hidden', filtersActive);
+      }
+
+      noResultsMessage.classList.toggle('is-hidden', visibleCount > 0);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!searchInput || !genreFilter || !difficultyFilter || !grid) return;
+
+      noResultsMessage = document.createElement('p');
+      noResultsMessage.id = 'noGameResultsMessage';
+      noResultsMessage.className = 'favorites-empty-message is-hidden';
+      noResultsMessage.textContent = 'No games match your search or filters.';
+      grid.appendChild(noResultsMessage);
+
+      suggestionBoxCard = grid.querySelector('.game-card[href="/suggestion_box"]');
+
+      buildGameIndex();
+      populateFilterOptions();
+
+      searchInput.addEventListener('input', applyFilters);
+      genreFilter.addEventListener('change', applyFilters);
+      difficultyFilter.addEventListener('change', applyFilters);
+      applyFilters();
+    });
+  })();
+</script>
+  <script src="/analytics-consent.js"></script>
+  </body>
+</html>

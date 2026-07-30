@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Totally Math</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#ff9800,#ffd54f);color:#222}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 40px;background:#fff8;backdrop-filter:blur(10px);position:sticky;top:0}
+.logo{font-size:2rem;font-weight:800;color:#ff6f00}
+nav a{text-decoration:none;color:#333;margin-left:20px;font-weight:700}
+.hero{padding:80px 20px;text-align:center}.hero h1{font-size:4rem}.hero p{margin:15px auto;max-width:700px}
+input{width:min(700px,90%);padding:16px;border:none;border-radius:999px;font-size:1rem}
+.grid{max-width:1300px;margin:auto;padding:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+.card{background:#ffffffc9;border-radius:18px;padding:24px;transition:.25s}
+.card:hover{transform:translateY(-8px)}
+.thumb{height:120px;border:3px dashed #ffb300;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#999;margin-bottom:16px}
+.btn{display:inline-block;background:#ff9800;color:#fff;padding:10px 18px;border-radius:999px;text-decoration:none;margin-top:12px}
+footer{text-align:center;padding:30px}
+</style></head><body>
+<header><div class=logo>🧮 Totally Math</div><nav><a href=#>Home</a><a href=#>Resources</a><a href=#>Practice</a><a href=#>About</a></nav></header>
+<section class=hero><h1>Welcome to Totally Math</h1><p>Explore interactive learning activities and challenges.</p><input id=s placeholder='Search activities...'></section>
+<section class=grid id=g>
+<div class='card'><div class='thumb'>Thumbnail 1</div><h3>Activity 1</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 2</div><h3>Activity 2</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 3</div><h3>Activity 3</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 4</div><h3>Activity 4</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 5</div><h3>Activity 5</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 6</div><h3>Activity 6</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 7</div><h3>Activity 7</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 8</div><h3>Activity 8</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 9</div><h3>Activity 9</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 10</div><h3>Activity 10</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 11</div><h3>Activity 11</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div><div class='card'><div class='thumb'>Thumbnail 12</div><h3>Activity 12</h3><p>Replace this with your own game description.</p><a class='btn' href='#'>Open</a></div></section><footer>©2026 Totally Math</footer>
+<script>
+const s=document.getElementById('s');
+s.oninput=()=>{let q=s.value.toLowerCase();document.querySelectorAll('.card').forEach(c=>c.style.display=c.innerText.toLowerCase().includes(q)?'block':'none');}
+</script></body></html>This page is unavailable, thank you for your patience.
