@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics is loaded only after the user consents (see analytics-consent.js) -->
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FT Games - Register</title>
+
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0A0A0A 0%, #5B21B6 50%, #111827 100%);
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+    padding: 20px;
+}
+
+form {
+    width: 100%;
+    max-width: 500px;
+
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+
+    padding: 35px;
+
+    box-shadow: 0 0 35px rgba(91, 33, 182, 0.35);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+/* Text Boxes */
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 13px 15px;
+
+    background: rgba(255,255,255,0.08);
+    color: white;
+
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+
+    font-size: 1rem;
+
+    transition: all .3s ease;
+}
+
+input::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+
+    border-color: #7C3AED;
+
+    box-shadow: 0 0 18px rgba(124,58,237,.6);
+}
+
+/* Gender */
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-weight: normal;
+    cursor: pointer;
+}
+
+/* Checkbox */
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.checkbox-group input {
+    margin-top: 4px;
+}
+
+.checkbox-group label {
+    display: inline;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
+.captcha-group {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.button-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.login-button {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: none;
+}
+
+.status-message {
+    min-height: 22px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #D1D5DB;
+    margin-top: 6px;
+}
+
+/* Button */
+
+button {
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #2D7CFF;
+    color: white;
+
+    font-size: 1.05rem;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: all .3s ease;
+
+    box-shadow:
+        0 0 20px rgba(45,124,255,.45);
+}
+
+button:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 25px rgba(45,124,255,.8),
+        0 0 50px rgba(45,124,255,.35);
+}
+
+/* Links */
+
+a {
+    color: #B794F4;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    form {
+        padding: 25px;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+    <form action="/submit-registration" method="POST">
+
+        <h2>Create Your Account</h2>
+
+        
+        <p>
+            <label for="username">Username</label>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter your username"
+                required>
+        </p>
+
+        
+        <p>
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="example@email.com"
+                required>
+        </p>
+
+        
+        <p>
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Minimum 8 characters"
+                minlength="8"
+                required>
+        </p>
+
+        
+        <p>
+            <label>Gender</label>
+
+            <div class="radio-group">
+
+                <label>
+                    <input type="radio" name="gender" value="male">
+                    Male
+                </label>
+
+                <label>
+                    <input type="radio" name="gender" value="female">
+                    Female
+                </label>
+
+                <label>
+                    <input type="radio" name="gender" value="other">
+                    Prefer not to say
+                </label>
+
+            </div>
+        </p>
+
+        
+        <p class="checkbox-group">
+
+            <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                required>
+
+            <label for="terms">
+                I agree to the
+                <a href="https://tyco.it.com/privacy-policy?back=https://ftgames.xyz/sign_up" target="_blank" rel="noopener noreferrer">
+                    Privacy Policy
+                </a>.
+            </label>
+
+        </p>
+
+        <div class="captcha-group">
+            <div
+                class="cf-turnstile"
+                data-sitekey="0x4AAAAAADvuiPgjWUgSEA56"
+                data-theme="dark"></div>
+        </div>
+
+        
+        <div class="button-row">
+            <button type="submit">Create Account</button>
+            <button type="button" id="loginButton" class="login-button">Log In</button>
+        </div>
+
+        <p id="authStatus" class="status-message"></p>
+
+    </form>
+
+    <script>
+        const registrationForm = document.querySelector("form");
+        const loginButton = document.getElementById("loginButton");
+        const authStatus = document.getElementById("authStatus");
+
+        function genderCode(value) {
+            if (value === "male") return "m";
+            if (value === "female") return "f";
+            if (value === "other") return "o";
+            return "";
+        }
+
+        registrationForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (!registrationForm.reportValidity()) {
+                return;
+            }
+
+            const formData = new FormData(registrationForm);
+            const registrationData = {
+                username: (formData.get("username") || "").toString().trim(),
+                email: (formData.get("email") || "").toString().trim(),
+                pass: (formData.get("password") || "").toString(),
+                gender: genderCode((formData.get("gender") || "").toString())
+            };
+
+            authStatus.textContent = "Redirecting...";
+            authStatus.style.color = "#86EFAC";
+
+            sessionStorage.setItem("ftgames:pendingRegistration", JSON.stringify(registrationData));
+            window.location.href = "/submit-registration";
+        });
+
+        loginButton.addEventListener("click", function () {
+            window.location.href = "/";
+        });
+    </script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="/analytics-consent.js"></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2D Platformer</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px 16px;
+      font-family: Arial, sans-serif;
+      background: #0f0f12;
+      color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 28px;
+      color: #00e5ff;
+    }
+
+    .step {
+      margin-bottom: 40px;
+      background: #1b1b22;
+      border: 1px solid #2a2a35;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+
+    .step img {
+      width: 100%;
+      max-height: 420px;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .step p {
+      margin: 0;
+      line-height: 1.6;
+      font-size: 16px;
+      color: #e6e6e6;
+    }
+
+    .play-button-wrap {
+      text-align: center;
+      margin: 8px 0 24px;
+    }
+
+    .play-button {
+      display: inline-block;
+      padding: 14px 32px;
+      background: linear-gradient(90deg,#00e5ff,#00ff99,#00e5ff);
+      color: #f5f5f5;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 2px solid #00c4db;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+      box-shadow: 0 8px 20px rgba(0, 229, 255, 0.25);
+    }
+
+    .play-button:hover {
+      background: linear-gradient(90deg,#00e5ff,#00ff99,#00e5ff);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0, 229, 255, 0.32);
+    }
+
+    .play-button:active {
+      transform: translateY(0);
+    }
+
+  
+
+#homeButton{
+    position:fixed;
+    top:10px;
+    right:10px;
+    z-index:9999999;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:10px 18px;
+    border-radius:14px;
+
+    background:rgba(20,20,30,.92);
+    border:2px solid #00e5ff;
+
+    color:#fff !important;
+    font:700 15px Arial,sans-serif;
+    text-decoration:none !important;
+    line-height:1;
+    cursor:pointer;
+
+    box-shadow:
+        0 0 10px rgba(0,229,255,.35),
+        inset 0 0 8px rgba(0,229,255,.15);
+
+    transition:.25s ease;
+    user-select:none;
+}
+
+#homeButton:hover{
+    background:linear-gradient(90deg,#00e5ff,#00ff99);
+    color:#000 !important;
+    box-shadow:0 0 18px rgba(0,255,170,.45);
+    transform:translateY(-2px);
+}
+             
+  </style>
+</head>
+<body>
+    <a id="homeButton" href="https://ftgames.xyz/games">
+🏠 Home
+</a>
+  <div class="container">
+    <h1>How to Start Game</h1>
+
+    <section class="step">
+      <img src="../2d_platformer/instructions/step1.png" alt="Step 1">
+      <p>
+        <strong>Step 1:</strong> Click on this button in the top bar of the tutorial level. Or you can beat it if you want to.
+      </p>
+    </section>
+
+    <section class="step">
+      <img src="../2d_platformer/instructions/step2.png" alt="Step 2">
+      <p>
+        <strong>Step 2:</strong> Click on the last "cartridge" in the game select menu to start the game.
+      </p>
+    </section>
+
+    <div class="play-button-wrap">
+      <a class="play-button" href="https://share.google/KetUWtnXki1S3O1zJ" target="_blank" rel="noopener noreferrer">PLAY</a>
+    </div>
+  </div>
+  <script src="/analytics-consent.js"></script>
+</body>
+</html>
