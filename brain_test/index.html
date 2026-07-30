@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!-- We only include this to explicitly loosen the CSP of various packager environments. It does not provide any security. -->
   <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: blob:">
-  <link rel="icon" type="image/x-icon" href="/images/favicon.png">
-  <title>Tiny Shop Owner - FT Games</title>
+  <title>Brain Test - Totally Math</title>
   <style>
     body {
       color: #ffffff;
@@ -276,7 +275,7 @@
       scaffolding.setAccentColor("#ff4c4c");
 
       try {
-        scaffolding.addCloudProvider(new Scaffolding.Cloud.WebSocketProvider(["wss://clouddata.turbowarp.org","wss://clouddata.turbowarp.xyz"], "1350981284"));
+        scaffolding.addCloudProvider(new Scaffolding.Cloud.WebSocketProvider(["wss://clouddata.turbowarp.org","wss://clouddata.turbowarp.xyz"], "p4-@BRAIN TEST_ TRICKY PUZZLES (remade).sb3"));
       } catch (error) {
         console.error(error);
       }
@@ -328,7 +327,7 @@
       });
 
       vm.setTurboMode(false);
-      if (vm.setInterpolation) vm.setInterpolation(false);
+      if (vm.setInterpolation) vm.setInterpolation(true);
       if (vm.setFramerate) vm.setFramerate(30);
       if (vm.renderer.setUseHighQualityRender) vm.renderer.setUseHighQualityRender(false);
       if (vm.setRuntimeOptions) vm.setRuntimeOptions({
@@ -408,7 +407,7 @@
       await scaffolding.loadProject(projectData);
       setProgress(1);
       loadingScreen.hidden = true;
-      if (true) {
+      if (false) {
         scaffolding.start();
       } else {
         launchScreen.hidden = false;
@@ -424,12 +423,11 @@
   <script>
   document.getElementById("instructionsButton").addEventListener("click", () => {
       window.open(
-          "https://ftgames.xyz/tiny_shop_owner/instructions",
+          "https://ftgames.xyz/brain_test/instructions",
           "instructions",
           "width=800,height=600,resizable=yes,scrollbars=yes"
       );
   });
 </script>
-  <script src="/analytics-consent.js"></script>
 </body>
 </html>
